@@ -4,67 +4,179 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="24dp"
+    android:paddingHorizontal="@dimen/layout_padding_horizontal"
+    android:paddingVertical="@dimen/layout_padding_horizontal"
     tools:context=".login.LoginActivity">
 
-    <ImageView
-        android:id="@+id/logoIV"
+    <TextView
+        android:id="@+id/loginTitleTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@null"
-        app:layout_constraintBottom_toTopOf="@+id/logoNameIV"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:fontFamily="@font/hind_siliguri_bold"
+        android:gravity="start"
+        android:text="@string/login"
+        android:textColor="@color/purple_primary"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/loginInputsCL"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/logoNameIV"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loginInputsCL"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:contentDescription="@null"
-        app:layout_constraintBottom_toTopOf="@+id/sloganTV"
+        app:layout_constraintBottom_toTopOf="@id/loginLoginBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/loginTitleTV"
+        app:layout_constraintTop_toBottomOf="@id/loginTitleTV">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/loginEmailTIL"
+            style="@style/TextInputLayoutStyle"
+            android:layout_marginBottom="26dp"
+            android:hint="@string/email_hint"
+            app:boxBackgroundColor="@color/white"
+            app:boxBackgroundMode="filled"
+            app:layout_constraintBottom_toTopOf="@id/loginPasswordTIL"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:startIconDrawable="@drawable/ic_message"
+            app:startIconTint="@color/ic_gray">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/hind_siliguri_light" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/loginPasswordTIL"
+            style="@style/TextInputLayoutStyle"
+            android:layout_marginBottom="16dp"
+            android:hint="@string/password_hint"
+            app:boxBackgroundColor="@color/white"
+            app:boxBackgroundMode="filled"
+            app:endIconDrawable="@drawable/ic_hide"
+            app:endIconMode="password_toggle"
+            app:layout_constraintBottom_toTopOf="@id/loginForgotPasswordTV"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/loginEmailTIL"
+            app:startIconDrawable="@drawable/ic_lock"
+            app:startIconTint="@color/ic_gray">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/hind_siliguri_light" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/loginForgotPasswordTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/hind_siliguri_light"
+            android:text="@string/forgotPassword"
+            android:textColor="@color/purple_primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/loginPasswordTIL"
+            app:layout_constraintTop_toBottomOf="@id/loginPasswordTIL" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@id/loginLoginBtn"
+        style="@style/customButton"
+        android:text="@string/login"
+        app:layout_constraintBottom_toTopOf="@id/loginOrWithCL"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logoIV"
-        app:srcCompat="@drawable/logoname" />
+        app:layout_constraintTop_toBottomOf="@id/loginInputsCL" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loginOrWithCL"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/loginSocialMediaLL"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loginLoginBtn">
+
+        <View
+            android:id="@+id/loginLineLeft"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/gray_light"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/loginOrWithTV"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/loginOrWithTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/hind_siliguri_light"
+            android:paddingHorizontal="24dp"
+            android:text="@string/orWithText"
+            android:textColor="@color/gray_light"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/loginLineLeft"
+            app:layout_constraintStart_toEndOf="@id/loginLineRight"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/loginLineRight"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/gray_light"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/loginOrWithTV"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/loginSocialMediaLL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/loginSignupTV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loginOrWithCL">
+
+        <ImageView
+            android:id="@+id/loginGoogleIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_google" />
+
+        <ImageView
+            android:id="@+id/loginFacebookIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_facebook" />
+
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/sloganTV"
+        android:id="@+id/loginSignupTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/hind_siliguri_light"
-        android:text="@string/slogan"
-        android:textAlignment="center"
+        android:text="@string/dont_have_account"
         android:textColor="@color/purple_primary"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/loginBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logoNameIV" />
-
-    <Button
-        android:id="@+id/loginBtn"
-        style="@style/customButton"
-        android:layout_width="304dp"
-        android:layout_height="52dp"
-        android:fontFamily="@font/hind_bold"
-        android:text="@string/login"
-        app:layout_constraintBottom_toTopOf="@id/signupTV"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sloganTV" />
-
-    <TextView
-        android:id="@+id/signupTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/signup"
-        android:textColor="@color/purple_primary"
-        android:textSize="16sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

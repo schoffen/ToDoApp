@@ -2,5 +2,10 @@
     <string name="app_name">ToDoApp</string>
     <string name="slogan">Planeje o que você irá fazer para ser mais organizado hoje, amanhã e além</string>
     <string name="login">Login</string>
-    <string name="signup">Sign Up</string>
+    <string name="signup">Cadastre-se</string>
+    <string name="email_hint">seu@email.com</string>
+    <string name="password_hint">minhasenha</string>
+    <string name="forgotPassword">Esqueceu sua senha?</string>
+    <string name="orWithText">ou com</string>
+    <string name="dont_have_account">Não tem uma conta? <b>Cadastre-se</b></string>
 </resources>
