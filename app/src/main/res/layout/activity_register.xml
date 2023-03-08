@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="@dimen/layout_padding_horizontal"
             android:paddingVertical="@dimen/layout_padding_horizontal"
-            tools:context=".login.LoginActivity">
+            tools:context=".login.RegisterActivity">
 
             <TextView
                 android:id="@+id/registerTitleTV"
@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/hind_siliguri_bold"
                 android:gravity="start"
-                android:text="@string/login"
+                android:text="@string/signup"
                 android:textColor="@color/purple_primary"
                 android:textSize="36sp"
                 android:textStyle="bold"
@@ -68,7 +68,7 @@
                     android:hint="@string/password_hint"
                     app:boxBackgroundColor="@color/white"
                     app:endIconMode="password_toggle"
-                    app:layout_constraintBottom_toTopOf="@id/loginForgotPasswordTV"
+                    app:layout_constraintBottom_toTopOf="@id/registerConfirmPasswordTIL"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/registerEmailTIL"
@@ -82,22 +82,33 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView
-                    android:id="@+id/loginForgotPasswordTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/hind_siliguri_light"
-                    android:text="@string/forgotPassword"
-                    android:textColor="@color/purple_primary"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/registerConfirmPasswordTIL"
+                    style="@style/TextInputLayoutStyle"
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/password_confirm_hint"
+                    app:boxBackgroundColor="@color/white"
+                    app:endIconMode="password_toggle"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@id/registerPasswordTIL"
-                    app:layout_constraintTop_toBottomOf="@id/registerPasswordTIL" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/registerPasswordTIL"
+                    app:startIconDrawable="@drawable/ic_lock"
+                    app:startIconTint="@color/ic_gray">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/hind_siliguri_light" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@id/registerSignupBtn"
                 style="@style/customButton"
-                android:text="@string/login"
+                android:text="@string/register"
                 app:layout_constraintBottom_toTopOf="@id/registerOrWithCL"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -181,7 +192,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/hind_siliguri_light"
-                android:text="@string/dont_have_account"
+                android:text="@string/have_account"
                 android:textColor="@color/purple_primary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

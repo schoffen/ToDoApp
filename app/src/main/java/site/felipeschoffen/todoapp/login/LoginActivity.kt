@@ -13,7 +13,5 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.loginLoginBtn.background = AppCompatResources.getDrawable(this, R.drawable.button)
     }
 }

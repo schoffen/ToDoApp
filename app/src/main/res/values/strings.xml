@@ -7,5 +7,8 @@
     <string name="password_hint">senha</string>
     <string name="forgotPassword">Esqueceu sua senha?</string>
     <string name="orWithText">ou com</string>
-    <string name="dont_have_account">Não tem uma conta? <b>Cadastre-se</b></string>
+    <string name="dont_have_account">Não possui uma conta? <b>Cadastre-se</b></string>
+    <string name="have_account">Possui uma conta? <b>Conecte-se</b></string>
+    <string name="register">Cadastrar</string>
+    <string name="password_confirm_hint">confirmar senha</string>
 </resources>
