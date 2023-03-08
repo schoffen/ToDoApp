@@ -22,4 +22,28 @@
         <item name="android:textColorHint">@color/gray_light</item>
     </style>
 
+    <style name="TextViewBlueTitle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">@color/blue_text</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:fontFamily">@font/hind_siliguri_semibold</item>
+    </style>
+
+    <style name="TextViewBlueSubTitle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">@color/blue_text</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/hind_siliguri_semibold</item>
+    </style>
+
+    <style name="TextViewBlueNormal" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">@color/blue_text</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/hind_siliguri_light</item>
+    </style>
+
 </resources>

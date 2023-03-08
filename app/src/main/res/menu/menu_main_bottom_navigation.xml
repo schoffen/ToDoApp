@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menuHome"
+        android:title="@string/home"
+        android:checkable="true"
+        android:icon="@drawable/selector_ic_home" />
+
+    <item android:id="@+id/menuTasksList"
+        android:title="@string/taskslist"
+        android:icon="@drawable/selector_ic_task_list" />
+
+    <item android:id="@+id/menuPlaceHolder"
+        android:title="@string/add" />
+
+    <item android:id="@+id/menuGraphs"
+        android:title="@string/graphs"
+        android:icon="@drawable/selector_ic_graphs" />
+
+    <item android:id="@+id/menuTaskFolder"
+        android:title="@string/taskfolder"
+        android:icon="@drawable/selector_ic_task_folder" />
+</menu>

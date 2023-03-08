@@ -11,4 +11,17 @@
     <string name="have_account">Possui uma conta? <b>Conecte-se</b></string>
     <string name="register">Cadastrar</string>
     <string name="password_confirm_hint">confirmar senha</string>
+    <string name="home">home</string>
+    <string name="taskslist">tasks list</string>
+    <string name="graphs">graphs</string>
+    <string name="taskfolder">task folder</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add">criar</string>
+    <string name="hello_message">Olá, Usuário</string>
+    <string name="hello_desc">Vamos fazer o dia mais produtivo</string>
+    <string name="my_task">Minhas Tarefas</string>
+    <string name="completedTask">Completas</string>
+    <string name="randomNumber">16 Tarefas</string>
+    <string name="pendingTask">Pendentes</string>
 </resources>

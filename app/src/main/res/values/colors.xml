@@ -10,6 +10,8 @@
 
     <color name="purple_primary">#5B67CA</color>
 
+    <color name="blue_text">#12175E</color>
+
     <color name="blue_full">#46C7FE</color>
     <color name="blue_alpha">#EBF9FF</color>
 
@@ -24,6 +26,7 @@
 
     <color name="ic_gray">#A4A4A6</color>
     <color name="gray_light">#C6CEDD</color>
+    <color name="gray_dark">#575757</color>
 
     <color name="mtrl_textinput_default_box_stroke_color">#E3E8F1</color>
 </resources>

@@ -2,4 +2,5 @@
 <resources>
     <dimen name="button_radius">14dp</dimen>
     <dimen name="layout_padding_horizontal">36dp</dimen>
+    <dimen name="main_padding">16dp</dimen>
 </resources>
