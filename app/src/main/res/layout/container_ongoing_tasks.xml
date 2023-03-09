@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@null"
-        android:src="@drawable/background_pending_task"
+        android:src="@drawable/background_ongoing_task"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:contentDescription="@null"
-        android:src="@drawable/ic_clock"
+        android:src="@drawable/ic_progress"
         app:layout_constraintBottom_toTopOf="@id/canceledContainerTaskText"
         app:layout_constraintStart_toStartOf="@id/canceledContainerTaskBackground"
         app:layout_constraintTop_toTopOf="@id/canceledContainerTaskBackground" />
@@ -34,15 +34,13 @@
         android:contentDescription="@null"
         android:src="@drawable/ic_arrow_right"
         app:layout_constraintEnd_toEndOf="@id/canceledContainerTaskBackground"
-        app:layout_constraintTop_toTopOf="@id/canceledContainerTaskBackground"
-        app:tint="@color/white" />
+        app:layout_constraintTop_toTopOf="@id/canceledContainerTaskBackground" />
 
     <TextView
         android:id="@+id/canceledContainerTaskText"
         style="@style/TextViewBlueNormal"
         android:layout_marginHorizontal="16dp"
-        android:text="@string/pendingTask"
-        android:textColor="@color/white"
+        android:text="@string/ongoingTask"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/canceledContainerTaskAmountOnGoingText"
         app:layout_constraintStart_toStartOf="@id/canceledContainerTaskBackground"
@@ -53,7 +51,6 @@
         style="@style/TextViewBlueNormal"
         android:layout_marginHorizontal="16dp"
         android:text="@string/randomNumber"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/canceledContainerTaskBackground"
         app:layout_constraintTop_toBottomOf="@id/canceledContainerTaskText" />

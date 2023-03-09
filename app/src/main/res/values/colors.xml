@@ -28,5 +28,19 @@
     <color name="gray_light">#C6CEDD</color>
     <color name="gray_dark">#575757</color>
 
+    <color name="today_task_background">#F9FAFD</color>
+
+    <color name="tag_background_purple">#ECEAFF</color>
+    <color name="tag_text_purple">#8F81FE</color>
+
+    <color name="tag_background_orange">#FFEFEB</color>
+    <color name="tag_text_orange">#F0A58E</color>
+
+    <color name="tag_background_red">#FFE9ED</color>
+    <color name="tag_text_red">#F57C96</color>
+
+    <color name="tag_background_green">#D1FEFF</color>
+    <color name="tag_text_green">#1EC1C3</color>
+
     <color name="mtrl_textinput_default_box_stroke_color">#E3E8F1</color>
 </resources>

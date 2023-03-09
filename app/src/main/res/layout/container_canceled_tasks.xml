@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@null"
-        android:src="@drawable/background_pending_task"
+        android:src="@drawable/background_canceled_task"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:contentDescription="@null"
-        android:src="@drawable/ic_clock"
+        android:src="@drawable/ic_close"
         app:layout_constraintBottom_toTopOf="@id/canceledContainerTaskText"
         app:layout_constraintStart_toStartOf="@id/canceledContainerTaskBackground"
         app:layout_constraintTop_toTopOf="@id/canceledContainerTaskBackground" />
@@ -41,7 +41,7 @@
         android:id="@+id/canceledContainerTaskText"
         style="@style/TextViewBlueNormal"
         android:layout_marginHorizontal="16dp"
-        android:text="@string/pendingTask"
+        android:text="@string/canceledTask"
         android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/canceledContainerTaskAmountOnGoingText"

@@ -24,4 +24,11 @@
     <string name="completedTask">Completas</string>
     <string name="randomNumber">16 Tarefas</string>
     <string name="pendingTask">Pendentes</string>
+    <string name="ongoingTask">Em Progresso</string>
+    <string name="canceledTask">Canceladas</string>
+    <string name="today_task">Tarefas de Hoje</string>
+    <string name="view_all">Ver todas</string>
+    <string name="task_name_placeholder">Lavar as roupas</string>
+    <string name="task_time_placeholder">07:00 - 07:15</string>
+    <string name="tag_placeholder">Work</string>
 </resources>

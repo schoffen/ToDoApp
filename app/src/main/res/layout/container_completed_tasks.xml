@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/pendingContainerTaskBackground"
+        android:id="@+id/canceledContainerTaskBackground"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@null"
@@ -16,40 +16,43 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/pendingContainerTaskIcon"
+        android:id="@+id/canceledContainerTaskIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginHorizontal="16dp"
         android:contentDescription="@null"
         android:src="@drawable/ic_done_all"
-        app:layout_constraintStart_toStartOf="@id/pendingContainerTaskBackground"
-        app:layout_constraintTop_toTopOf="@id/pendingContainerTaskBackground" />
+        app:layout_constraintBottom_toTopOf="@id/canceledContainerTaskText"
+        app:layout_constraintStart_toStartOf="@id/canceledContainerTaskBackground"
+        app:layout_constraintTop_toTopOf="@id/canceledContainerTaskBackground" />
 
     <ImageView
-        android:id="@+id/pendingContainerTaskArrow"
+        android:id="@+id/canceledContainerTaskArrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:contentDescription="@null"
         android:src="@drawable/ic_arrow_right"
-        app:layout_constraintEnd_toEndOf="@id/pendingContainerTaskBackground"
-        app:layout_constraintTop_toTopOf="@id/pendingContainerTaskBackground" />
+        app:layout_constraintEnd_toEndOf="@id/canceledContainerTaskBackground"
+        app:layout_constraintTop_toTopOf="@id/canceledContainerTaskBackground" />
 
     <TextView
-        android:id="@+id/pendingContainerTaskText"
+        android:id="@+id/canceledContainerTaskText"
         style="@style/TextViewBlueNormal"
         android:layout_marginHorizontal="16dp"
         android:text="@string/completedTask"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@id/pendingContainerTaskBackground"
-        app:layout_constraintTop_toBottomOf="@id/pendingContainerTaskIcon" />
+        app:layout_constraintBottom_toTopOf="@id/canceledContainerTaskAmountOnGoingText"
+        app:layout_constraintStart_toStartOf="@id/canceledContainerTaskBackground"
+        app:layout_constraintTop_toBottomOf="@id/canceledContainerTaskIcon" />
 
     <TextView
-        android:id="@+id/pendingContainerTaskAmountPendingText"
+        android:id="@+id/canceledContainerTaskAmountOnGoingText"
         style="@style/TextViewBlueNormal"
         android:layout_marginHorizontal="16dp"
         android:text="@string/randomNumber"
-        app:layout_constraintStart_toStartOf="@id/pendingContainerTaskBackground"
-        app:layout_constraintTop_toBottomOf="@id/pendingContainerTaskText" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/canceledContainerTaskBackground"
+        app:layout_constraintTop_toBottomOf="@id/canceledContainerTaskText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
