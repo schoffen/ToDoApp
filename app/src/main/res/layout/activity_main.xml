@@ -19,8 +19,9 @@
             android:id="@+id/mainFragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="site.felipeschoffen.todoapp.home.HomeFragment"
-            tools:layout="@layout/fragment_home" />
+            android:name="site.felipeschoffen.todoapp.tasks.TasksFragment"
+            tools:layout="@layout/fragment_tasks"
+            />
 
     </ScrollView>
 

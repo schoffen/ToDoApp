@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/main_padding"
+    tools:context=".tasks.TasksFragment"
+    tools:showIn="@layout/activity_main">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tasksSearchInput"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        app:boxBackgroundColor="@color/search_bar_background"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusTopStart="15dp"
+        app:boxStrokeColor="@color/purple_full"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="1dp"
+        app:endIconMode="clear_text"
+        app:hintEnabled="false"
+        app:layout_constraintBottom_toTopOf="@id/taskTaskText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:startIconDrawable="@drawable/ic_search"
+        app:startIconTint="@color/purple_full">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tasksSearchText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ellipsize="start"
+            android:fontFamily="@font/hind_siliguri_light"
+            android:gravity="center_vertical"
+            android:hint="@string/search_task_hint"
+            android:textColor="@color/purple_full"
+            android:textColorHint="@color/gray_light" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/taskTaskText"
+        style="@style/TextViewBlueTitle"
+        android:text="@string/task"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tasksSearchInput" />
+
+    <Button
+        android:id="@+id/taskDatePickerButton"
+        style="?android:dropDownSpinnerStyle"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="@string/datePlaceHolder"
+        android:textAllCaps="true"
+        android:textColor="@color/purple_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tasksSearchInput" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

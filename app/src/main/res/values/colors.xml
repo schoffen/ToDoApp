@@ -42,5 +42,7 @@
     <color name="tag_background_green">#D1FEFF</color>
     <color name="tag_text_green">#1EC1C3</color>
 
+    <color name="search_bar_background">#F6F6F6</color>
+
     <color name="mtrl_textinput_default_box_stroke_color">#E3E8F1</color>
 </resources>

@@ -15,7 +15,6 @@
     <string name="taskslist">tasks list</string>
     <string name="graphs">graphs</string>
     <string name="taskfolder">task folder</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add">criar</string>
     <string name="hello_message">Olá, Usuário</string>
@@ -31,4 +30,7 @@
     <string name="task_name_placeholder">Lavar as roupas</string>
     <string name="task_time_placeholder">07:00 - 07:15</string>
     <string name="tag_placeholder">Work</string>
+    <string name="search_task_hint">procure por uma tarefa</string>
+    <string name="task">Tarefas</string>
+    <string name="datePlaceHolder">10 set 2023</string>
 </resources>
