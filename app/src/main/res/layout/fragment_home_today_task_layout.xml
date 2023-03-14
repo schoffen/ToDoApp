@@ -30,7 +30,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             tools:itemCount="3"
-            tools:listitem="@layout/item_today_task"
+            tools:listitem="@layout/item_task_wide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

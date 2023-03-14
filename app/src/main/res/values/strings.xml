@@ -33,4 +33,17 @@
     <string name="search_task_hint">procure por uma tarefa</string>
     <string name="task">Tarefas</string>
     <string name="datePlaceHolder">10 set 2023</string>
+    <string name="time_placeholder">06:00</string>
+    <string name="create_folder">Criar Pasta</string>
+    <string name="settings">Configurações</string>
+    <string name="logout">Sair</string>
+    <string name="name_placeholder">Nome Usuario</string>
+    <string name="email_placeholder">usuario@gmail.com</string>
+    <string name="folder_placeholder">Completas</string>
+    <string name="folder_date_placeholder">Jan 2023</string>
+    <string name="folder_date">14 Mar 2013</string>
+    <string name="filter_sort_tag">Classificar por etiqueta</string>
+    <string name="filter_sort_folder">Classificar por pasta</string>
+    <string name="cancel">Cancelar</string>
+    <string name="filter">Filtrar</string>
 </resources>

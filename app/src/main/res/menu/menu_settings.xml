@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".activities.MenuAdsAppCompatActivity">
+
+    <item android:id="@+id/action_notification1"
+        app:showAsAction="always"
+        android:title="action_notification">
+        <menu>
+            <item android:id="@+id/action_share_us"
+                android:icon="@drawable/ic_cog"
+                android:title="@string/settings" />
+            <item android:id="@+id/action_rate_us"
+                android:icon="@drawable/ic_logout"
+                android:title="@string/logout" />
+        </menu>
+    </item>
+</menu>

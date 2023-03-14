@@ -28,6 +28,9 @@
     <color name="gray_light">#C6CEDD</color>
     <color name="gray_dark">#575757</color>
 
+    <color name="orange_light">#FFEFEB</color>
+    <color name="orange_dark">#F0A58E</color>
+
     <color name="today_task_background">#F9FAFD</color>
 
     <color name="tag_background_purple">#ECEAFF</color>

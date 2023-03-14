@@ -4,11 +4,13 @@ import android.app.DatePickerDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import site.felipeschoffen.todoapp.R
+import site.felipeschoffen.todoapp.common.Date
 import site.felipeschoffen.todoapp.databinding.FragmentTasksBinding
 import java.util.Calendar
 
@@ -27,23 +29,25 @@ class TasksFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        changeSelectedDateText(Date.dateToString(Date.todayDay, Date.todayMonth, Date.todayYear))
+
         binding.taskDatePickerButton.setOnClickListener {
-            val calendar = Calendar.getInstance()
-            val year = calendar.get(Calendar.YEAR)
-            val month = calendar.get(Calendar.MONTH)
-            val day = calendar.get(Calendar.DAY_OF_MONTH)
 
             val datePickerDialog =
                 DatePickerDialog(
                     view.context,
-                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                    DatePickerDialog.OnDateSetListener { datePicker, i, i2, i3 -> },
-                    year,
-                    month,
-                    day
+                    { _, year, month, day ->
+                        changeSelectedDateText(Date.dateToString(day, month, year))
+                    },
+                    Date.todayYear,
+                    Date.todayMonth,
+                    Date.todayDay
                 )
-            datePickerDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             datePickerDialog.show()
-            }
+        }
+    }
+
+    private fun changeSelectedDateText(date: String) {
+        binding.taskDatePickerButton.text = date
     }
 }

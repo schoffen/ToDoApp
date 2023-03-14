@@ -3,6 +3,7 @@ package site.felipeschoffen.todoapp.main
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.CalendarContract.Colors
+import android.view.Menu
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.databinding.ActivityMainBinding
 
@@ -14,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.mainBottonNavigation.backgroundTintList = null
-
+        // This remove default gray items color
+        binding.mainBottonNavigation.itemIconTintList = null
     }
 }

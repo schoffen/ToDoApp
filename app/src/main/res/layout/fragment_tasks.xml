@@ -62,4 +62,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tasksSearchInput" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="16dp"
+        tools:listitem="@layout/item_task_day_hour"
+        app:layout_constraintTop_toBottomOf="@id/taskDatePickerButton"
+        android:id="@+id/taskDayTaskRV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
