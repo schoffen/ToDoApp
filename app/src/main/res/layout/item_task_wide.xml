@@ -47,7 +47,7 @@
         tools:listitem="@layout/item_tag" />
 
     <ImageView
-        android:id="@+id/itemTodayTaskItemMenu"
+        android:id="@+id/itemTodayTaskItemSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"

@@ -46,16 +46,16 @@
         tools:itemCount="2"
         tools:listitem="@layout/item_tag" />
 
-    <ImageView
-        android:layout_marginStart="16dp"
-        app:layout_constraintStart_toEndOf="@id/itemTodayTaskName"
-        android:id="@+id/itemTodayTaskItemMenu"
+    <Spinner
+        android:id="@+id/itemTodayTaskItemSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
+        android:background="@drawable/ic_menu_dots"
         android:contentDescription="@null"
-        android:src="@drawable/ic_menu_dots"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/itemTodayTaskName"
         app:layout_constraintTop_toTopOf="@id/itemTodayTaskName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

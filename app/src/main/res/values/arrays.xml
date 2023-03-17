@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="complete_menu">
+        <item>Restaurar</item>
+        <item>Deletar</item>
+    </string-array>
+
+    <string-array name="pending_menu">
+        <item>Ativar</item>
+        <item>Editar</item>
+        <item>Deletar</item>
+    </string-array>
+
+    <string-array name="ongoing_menu">
+        <item>Desativar</item>
+        <item>Editar</item>
+        <item>Deletar</item>
+    </string-array>
+
+    <string-array name="canceled_menu">
+        <item>Editar</item>
+        <item>Restaurar</item>
+        <item>Deletar</item>
+    </string-array>
+</resources>

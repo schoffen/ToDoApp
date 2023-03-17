@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="300dp"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                style="@style/TextViewBlueNormal"
+                android:layout_marginVertical="10dp"
+                android:text="@string/title"
+                android:textColor="@color/gray_dark" />
+
+            <EditText
+                android:fontFamily="@font/hind_siliguri_light"
+                android:hint="@string/your_task"
+                android:id="@+id/createTaskEditText"
+                android:padding="12dp"
+                android:background="@drawable/background_low_round_corners"
+                android:backgroundTint="@color/gray_light_light"
+                android:layout_marginBottom="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:autofillHints="name"
+                android:inputType="text" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/vertical_line"
+                android:backgroundTint="@color/gray_light" />
+
+            <TextView
+                style="@style/TextViewBlueNormal"
+                android:layout_marginVertical="10dp"
+                android:text="@string/hour_and_date"
+                android:textColor="@color/gray_dark" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:contentDescription="@null"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_calendar"
+                    app:tint="@color/purple_primary" />
+
+                <TextView
+                    android:id="@+id/addDatePickerButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/datePlaceHolder"
+                    android:textAllCaps="true"
+                    android:textColor="@color/purple_primary" />
+
+                <ImageView
+                    android:contentDescription="@null"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_clock"
+                    app:tint="@color/purple_primary" />
+
+                <TextView
+                    android:id="@+id/addTimePickerButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/timePickerPlaceholder"
+                    android:textAllCaps="true"
+                    android:textColor="@color/purple_primary" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/vertical_line"
+                android:backgroundTint="@color/gray_light" />
+
+            <TextView
+                style="@style/TextViewBlueNormal"
+                android:layout_marginVertical="10dp"
+                android:text="@string/tag"
+                android:textColor="@color/gray_dark" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_tag" />
+
+            <TextView
+                style="@style/TextViewBlueNormal"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="@string/add_tag"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:id="@+id/createCancelButton"
+                    android:layout_width="91dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/background_filter_button"
+                    android:gravity="center"
+                    android:text="@string/cancel"
+                    android:textAlignment="center"
+                    android:textColor="@color/purple_primary"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/createYesButton"
+                    android:layout_width="91dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/background_filter_button"
+                    android:backgroundTint="@color/purple_primary"
+                    android:gravity="center"
+                    android:text="@string/create"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

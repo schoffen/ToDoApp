@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.provider.CalendarContract.Colors
 import android.view.Menu
 import site.felipeschoffen.todoapp.R
+import site.felipeschoffen.todoapp.common.CreateTaskDialog
 import site.felipeschoffen.todoapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -17,5 +18,11 @@ class MainActivity : AppCompatActivity() {
 
         // This remove default gray items color
         binding.mainBottonNavigation.itemIconTintList = null
+
+        binding.mainCreateTaskButton.setOnClickListener { openCreateTaskDialog() }
+    }
+
+    private fun openCreateTaskDialog() {
+        CreateTaskDialog().show(supportFragmentManager, "")
     }
 }

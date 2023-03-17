@@ -46,4 +46,13 @@
     <string name="filter_sort_folder">Classificar por pasta</string>
     <string name="cancel">Cancelar</string>
     <string name="filter">Filtrar</string>
+    <string name="create_task">Criar Tarefa</string>
+    <string name="title">Título</string>
+    <string name="date">Data</string>
+    <string name="timePickerPlaceholder">07:00</string>
+    <string name="tag">Tag</string>
+    <string name="add_tag">+ criar uma tag</string>
+    <string name="hour_and_date">Data e horário</string>
+    <string name="create">Criar</string>
+    <string name="your_task">minha tarefa...</string>
 </resources>
