@@ -55,4 +55,6 @@
     <string name="hour_and_date">Data e horário</string>
     <string name="create">Criar</string>
     <string name="your_task">minha tarefa...</string>
+    <string name="new_tag">Nova Tag</string>
+    <string name="your_tag">minha tag...</string>
 </resources>

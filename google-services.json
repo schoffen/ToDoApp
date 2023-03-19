@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1021883203523",
+    "project_id": "todo-app-3ea42",
+    "storage_bucket": "todo-app-3ea42.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021883203523:android:e63e69c0a42227ae6a4776",
+        "android_client_info": {
+          "package_name": "site.felipeschoffen.todoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1021883203523-n65v5nsjllpikjs3t67es459adngq84g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIsIo62HUZQak2PLvUARoYji8GrawzfNs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1021883203523-n65v5nsjllpikjs3t67es459adngq84g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,8 +3,8 @@ package site.felipeschoffen.todoapp.folder
 import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import site.felipeschoffen.todoapp.common.CustomDialog
 import site.felipeschoffen.todoapp.common.Date
-import site.felipeschoffen.todoapp.common.FilterDialog
 import site.felipeschoffen.todoapp.databinding.ActivityFolderBinding
 
 class FolderActivity : AppCompatActivity() {
@@ -26,7 +26,7 @@ class FolderActivity : AppCompatActivity() {
     }
 
     private fun openFilterDialog() {
-        FilterDialog().show(supportFragmentManager, null)
+        CustomDialog.FilterDialog().show(supportFragmentManager, null)
     }
 
 }

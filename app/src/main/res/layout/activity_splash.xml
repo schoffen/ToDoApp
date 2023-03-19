@@ -38,13 +38,13 @@
         android:textAlignment="center"
         android:textColor="@color/purple_primary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/registerSignupBtn"
+        app:layout_constraintBottom_toTopOf="@+id/splashLoginBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/splashLogoNameIV" />
 
     <Button
-        android:id="@+id/registerSignupBtn"
+        android:id="@+id/splashLoginBtn"
         style="@style/customButton"
         android:layout_width="304dp"
         android:layout_height="52dp"
@@ -67,5 +67,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerSignupBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/splashLoginBtn" />
 </androidx.constraintlayout.widget.ConstraintLayout>

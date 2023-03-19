@@ -8,8 +8,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:fillViewport="true"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                 android:id="@+id/registerInputsCL"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@id/registerSignupBtn"
+                app:layout_constraintBottom_toTopOf="@id/registerRegisterBtn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/registerTitleTV"
                 app:layout_constraintTop_toBottomOf="@id/registerTitleTV">
@@ -55,9 +55,11 @@
                     app:startIconTint="@color/ic_gray">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/registerEmailET"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:fontFamily="@font/hind_siliguri_light" />
+                        android:fontFamily="@font/hind_siliguri_light"
+                        android:inputType="textEmailAddress" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -76,9 +78,11 @@
                     app:startIconTint="@color/ic_gray">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/registerPasswordET"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:fontFamily="@font/hind_siliguri_light" />
+                        android:fontFamily="@font/hind_siliguri_light"
+                        android:inputType="textPassword" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -97,23 +101,25 @@
                     app:startIconTint="@color/ic_gray">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/registerConfirmPasswordET"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:fontFamily="@font/hind_siliguri_light" />
+                        android:fontFamily="@font/hind_siliguri_light"
+                        android:inputType="textPassword" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@id/registerSignupBtn"
+                android:id="@+id/registerRegisterBtn"
                 style="@style/customButton"
+                android:contentDescription="@null"
                 android:text="@string/register"
                 app:layout_constraintBottom_toTopOf="@id/registerOrWithCL"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/registerInputsCL"
-                android:contentDescription="@null" />
+                app:layout_constraintTop_toBottomOf="@id/registerInputsCL" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/registerOrWithCL"
@@ -122,7 +128,7 @@
                 app:layout_constraintBottom_toTopOf="@id/registerSocialMediaLL"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/registerSignupBtn">
+                app:layout_constraintTop_toBottomOf="@id/registerRegisterBtn">
 
                 <View
                     android:id="@+id/registerLineLeft"
@@ -165,7 +171,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintBottom_toTopOf="@id/registerSignupTV"
+                app:layout_constraintBottom_toTopOf="@id/loginSignupTV"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/registerOrWithCL">
@@ -188,7 +194,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/registerSignupTV"
+                android:id="@+id/loginSignupTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/hind_siliguri_light"
