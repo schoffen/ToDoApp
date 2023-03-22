@@ -2,8 +2,10 @@ package site.felipeschoffen.todoapp.register
 
 interface Register {
     interface View {
-        fun displayEmailError(error: RegisterErrors)
-        fun displayPasswordError(error: RegisterErrors)
+        fun displayEmailError(error: RegisterErrors?)
+        fun displayPasswordError(error: RegisterErrors?)
+
+        fun displayConfirmPasswordError(error: RegisterErrors?)
     }
 
     interface Presenter {
