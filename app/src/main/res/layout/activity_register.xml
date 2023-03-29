@@ -42,6 +42,28 @@
                 app:layout_constraintTop_toBottomOf="@id/registerTitleTV">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/registerNameTIL"
+                    style="@style/TextInputLayoutStyle"
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/name_hint"
+                    app:boxBackgroundColor="@color/white"
+                    app:layout_constraintBottom_toTopOf="@id/registerEmailTIL"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:startIconDrawable="@drawable/ic_tasks_folder"
+                    app:startIconTint="@color/ic_gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/registerNameET"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/hind_siliguri_light"
+                    android:inputType="textEmailAddress" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/registerEmailTIL"
                     style="@style/TextInputLayoutStyle"
                     android:layout_marginBottom="16dp"
@@ -50,7 +72,7 @@
                     app:layout_constraintBottom_toTopOf="@id/registerPasswordTIL"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/registerNameTIL"
                     app:startIconDrawable="@drawable/ic_message"
                     app:startIconTint="@color/ic_gray">
 
@@ -110,6 +132,16 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ProgressBar
+                android:id="@+id/registerProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/registerOrWithCL"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/registerInputsCL" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/registerRegisterBtn"
@@ -171,7 +203,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintBottom_toTopOf="@id/loginSignupTV"
+                app:layout_constraintBottom_toTopOf="@id/registerLoginTV"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/registerOrWithCL">
@@ -194,10 +226,11 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/loginSignupTV"
+                android:id="@+id/registerLoginTV"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:fontFamily="@font/hind_siliguri_light"
+                android:gravity="center"
                 android:text="@string/have_account"
                 android:textColor="@color/purple_primary"
                 app:layout_constraintBottom_toBottomOf="parent"

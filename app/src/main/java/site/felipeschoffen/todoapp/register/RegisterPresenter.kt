@@ -3,67 +3,88 @@ package site.felipeschoffen.todoapp.register
 import android.util.Patterns
 import site.felipeschoffen.todoapp.common.Callback
 import site.felipeschoffen.todoapp.common.Constants
-import site.felipeschoffen.todoapp.common.DataSource
+import site.felipeschoffen.todoapp.common.database.DataSource
+import site.felipeschoffen.todoapp.common.InputErrors
 
-class RegisterPresenter(val view: Register.View?) : Register.Presenter {
+class RegisterPresenter(override val view: Register.View) : Register.Presenter {
 
-    override fun register(email: String, password: String, confirmPassword: String) {
+    override fun register(name: String, email: String, password: String, confirmPassword: String) {
+        view.displayRegisterButtonProgress(true)
 
-        if (validateData(email, password, confirmPassword)) {
-            DataSource.register(email, password, object : Callback{
+        if (validateData(name, email, password, confirmPassword)) {
+            DataSource.register(name, email, password, object : Callback{
                 override fun onSuccess() {
+                    view.goToMainScreen()
                 }
 
                 override fun onFailure(message: String) {
                     if (message == "The email address is already in use by another account.") {
-                        view?.displayEmailError(RegisterErrors.EMAIL_ALREADY_IN_USE)
+                        view.displayEmailError(InputErrors.EMAIL_ALREADY_IN_USE)
                     }
                 }
 
                 override fun onComplete() {
+                    view.displayRegisterButtonProgress(false)
                 }
             })
+        } else {
+            view.displayRegisterButtonProgress(false)
         }
     }
 
-    private fun validateData(email: String, password: String, confirmPassword: String): Boolean {
+    private fun validateData(name: String, email: String, password: String, confirmPassword: String): Boolean {
+        val nameValid = validateName(name)
         val emailValid = validateEmail(email)
-        val passwordsValid = validatePasswords(password, confirmPassword)
+        val passwordValid = validatePassword(password, view::displayPasswordError)
+        val confirmPasswordValid = validatePassword(confirmPassword, view::displayConfirmPasswordError)
+        val passwordMatch = if (passwordValid && confirmPasswordValid) isPasswordsEqual(password, confirmPassword) else false
 
-        return emailValid && passwordsValid
+        return nameValid && emailValid && passwordMatch
+    }
+
+    private fun validateName(name: String): Boolean {
+        return if (name.isEmpty()) {
+            view.displayNameError(InputErrors.FIELD_EMPTY)
+            false
+        } else if (name.length < Constants.NAME_MIN_LENGTH) {
+            view.displayNameError(InputErrors.NAME_SHORT_LENGHT)
+            false
+        } else {
+            true
+        }
     }
 
     private fun validateEmail(email: String): Boolean {
         return if (email.isEmpty()) {
-            view?.displayEmailError(RegisterErrors.FIELD_EMPTY)
+            view.displayEmailError(InputErrors.FIELD_EMPTY)
             false
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            view?.displayEmailError(RegisterErrors.EMAIL_FORMAT_INVALID)
+            view.displayEmailError(InputErrors.EMAIL_FORMAT_INVALID)
             false
         } else {
             true
         }
     }
 
-    private fun validatePasswords(password: String, confirmPassword: String): Boolean {
+    private fun validatePassword(password: String, viewDisplayError: (InputErrors) -> Unit): Boolean {
         return if (password.isEmpty()) {
-            view?.displayPasswordError(RegisterErrors.FIELD_EMPTY)
-            false
-        } else if (confirmPassword.isEmpty()) {
-            view?.displayConfirmPasswordError(RegisterErrors.FIELD_EMPTY)
+            viewDisplayError(InputErrors.FIELD_EMPTY)
             false
         } else if (password.length < Constants.PASSWORD_MIN_LENGTH) {
-            view?.displayPasswordError(RegisterErrors.PASSWORD_SHORT_LENGTH)
-            false
-        } else if (confirmPassword.length < Constants.PASSWORD_MIN_LENGTH) {
-            view?.displayConfirmPasswordError(RegisterErrors.PASSWORD_SHORT_LENGTH)
-            false
-        } else if (password != confirmPassword) {
-            view?.displayPasswordError(RegisterErrors.PASSWORD_NOT_MATCH)
-            view?.displayConfirmPasswordError(RegisterErrors.PASSWORD_NOT_MATCH)
+            viewDisplayError(InputErrors.PASSWORD_SHORT_LENGTH)
             false
         } else {
             true
+        }
+    }
+
+    private fun isPasswordsEqual(password: String, confirmPassword: String): Boolean {
+        return if (password == confirmPassword) {
+            true
+        } else {
+            view.displayPasswordError(InputErrors.PASSWORD_NOT_MATCH)
+            view.displayConfirmPasswordError(InputErrors.PASSWORD_NOT_MATCH)
+            false
         }
     }
 

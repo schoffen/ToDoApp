@@ -7,64 +7,65 @@
     tools:context=".main.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/mainAppBarLayout"
-        app:elevation="0dp"
-        android:backgroundTint="?android:attr/statusBarColor"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:backgroundTint="?android:attr/statusBarColor"
+        app:elevation="0dp"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:paddingStart="8dp"
-            app:logo="@drawable/logoname"
-            app:menu="@menu/menu_settings"
             android:id="@+id/mainTB"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            app:logo="@drawable/logoname"
+            app:menu="@menu/menu_settings" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
+        android:paddingHorizontal="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/mainBottonNavigation"
-        app:layout_constraintTop_toBottomOf="@id/mainAppBarLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
+        app:layout_constraintTop_toBottomOf="@id/mainAppBarLayout">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/mainFragmentContainer"
+            android:name="site.felipeschoffen.todoapp.home.HomeFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="site.felipeschoffen.todoapp.profile.ProfileFragment"
-            tools:layout="@layout/fragment_profile"
-            />
+            tools:layout="@layout/fragment_home" />
 
     </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/mainBottonNavigation"
-        android:paddingVertical="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
         android:layout_marginBottom="16dp"
-        android:elevation="8dp"
         android:background="@drawable/bottom_navigation_background"
-        app:menu="@menu/menu_main_bottom_navigation"
+        android:elevation="8dp"
+        android:paddingVertical="8dp"
         app:labelVisibilityMode="unlabeled"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" >
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/menu_main_bottom_navigation">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-
-            android:contentDescription="@null"
+            android:importantForAccessibility="no"
             android:id="@+id/mainCreateTaskButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:clickable="true"
+            android:contentDescription="@null"
+            android:labelFor="@null"
             app:srcCompat="@drawable/ic_add_cross" />
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>

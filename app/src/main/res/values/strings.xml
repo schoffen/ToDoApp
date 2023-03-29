@@ -17,7 +17,7 @@
     <string name="taskfolder">task folder</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add">criar</string>
-    <string name="hello_message">Olá, Usuário</string>
+    <string name="hello_message">Olá, %1$s</string>
     <string name="hello_desc">Vamos fazer o dia mais produtivo</string>
     <string name="my_task">Minhas Tarefas</string>
     <string name="completedTask">Completas</string>
@@ -57,4 +57,14 @@
     <string name="your_task">minha tarefa...</string>
     <string name="new_tag">Nova Tag</string>
     <string name="your_tag">minha tag...</string>
+
+    <string name="empty_field">Campo não pode estar vazio</string>
+    <string name="invalid_email">Formato de email inválido</string>
+    <string name="email_in_use">Email já cadastrado</string>
+    <string name="password_not_match">Senhas não conferem</string>
+    <string name="password_short_length">Senha deve conter 8 caracteres ou mais</string>
+    <string name="incorrect_info">Dados incorretos</string>
+    <string name="no_tasks_to_show">Você não possuí tarefas hoje!</string>
+    <string name="name_hint">nome</string>
+    <string name="name_short_error">Nome não pode ser menor que 3 caracteres</string>
 </resources>

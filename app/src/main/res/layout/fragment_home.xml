@@ -19,6 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
+        android:layout_marginVertical="24dp"
         android:id="@+id/homeMyTasksLayout"
         layout="@layout/fragment_home_my_task_layout"
         android:layout_width="match_parent"
