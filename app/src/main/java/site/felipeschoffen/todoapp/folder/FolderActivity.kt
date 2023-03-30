@@ -3,7 +3,7 @@ package site.felipeschoffen.todoapp.folder
 import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import site.felipeschoffen.todoapp.common.CustomDialog
+import site.felipeschoffen.todoapp.common.dialogs.CustomDialog
 import site.felipeschoffen.todoapp.common.Date
 import site.felipeschoffen.todoapp.databinding.ActivityFolderBinding
 

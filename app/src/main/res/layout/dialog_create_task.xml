@@ -3,13 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_dialog"
+    android:padding="8dp">
 
     <FrameLayout
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="300dp"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,17 +29,17 @@
                 android:textColor="@color/gray_dark" />
 
             <EditText
-                android:fontFamily="@font/hind_siliguri_light"
-                android:hint="@string/your_task"
                 android:id="@+id/createTaskEditText"
-                android:padding="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:autofillHints="name"
                 android:background="@drawable/background_low_round_corners"
                 android:backgroundTint="@color/gray_light_light"
-                android:layout_marginBottom="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:autofillHints="name"
-                android:inputType="text" />
+                android:fontFamily="@font/hind_siliguri_light"
+                android:hint="@string/your_task"
+                android:inputType="text"
+                android:padding="12dp" />
 
             <View
                 android:layout_width="match_parent"
@@ -60,16 +62,17 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:contentDescription="@null"
+                    android:id="@+id/addDatePickerButton"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_calendar"
                     app:tint="@color/purple_primary" />
 
                 <TextView
-                    android:id="@+id/addDatePickerButton"
+                    android:id="@+id/addDatePickerText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -82,16 +85,17 @@
                     android:textColor="@color/purple_primary" />
 
                 <ImageView
-                    android:contentDescription="@null"
+                    android:id="@+id/addTimePickerButton"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_clock"
                     app:tint="@color/purple_primary" />
 
                 <TextView
-                    android:id="@+id/addTimePickerButton"
+                    android:id="@+id/addTimePickerText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -112,11 +116,13 @@
 
             <TextView
                 style="@style/TextViewBlueNormal"
-                android:layout_marginVertical="10dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/tag"
                 android:textColor="@color/gray_dark" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/createTagsRV"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -127,6 +133,15 @@
                 tools:listitem="@layout/item_tag" />
 
             <TextView
+                android:id="@+id/createNoTagsTV"
+                style="@style/TextViewBlueNormal"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="@string/no_tags_info"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/createTagButton"
                 style="@style/TextViewBlueNormal"
                 android:layout_gravity="center"
                 android:layout_marginTop="8dp"

@@ -67,4 +67,5 @@
     <string name="no_tasks_to_show">Você não possuí tarefas hoje!</string>
     <string name="name_hint">nome</string>
     <string name="name_short_error">Nome não pode ser menor que 3 caracteres</string>
+    <string name="no_tags_info">Você não possui tags, crie uma</string>
 </resources>

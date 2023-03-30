@@ -3,12 +3,10 @@ package site.felipeschoffen.todoapp.main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import site.felipeschoffen.todoapp.R
-import site.felipeschoffen.todoapp.common.CustomDialog
+import site.felipeschoffen.todoapp.common.dialogs.CustomDialog
 import site.felipeschoffen.todoapp.databinding.ActivityMainBinding
 import site.felipeschoffen.todoapp.home.HomeFragment
 import site.felipeschoffen.todoapp.profile.ProfileFragment
@@ -73,7 +71,7 @@ class MainActivity : AppCompatActivity(), Main.View {
     }
 
     private fun openCreateTaskDialog() {
-        CustomDialog.CreateTaskDialog().show(supportFragmentManager, "")
+        CustomDialog.CreateTaskDialog(supportFragmentManager).show(supportFragmentManager, "")
     }
 
     private fun initFragments() {

@@ -13,12 +13,10 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 object DataSource {
-    init {
-        setUserInfo(null)
-    }
 
     var currentUser = FirebaseAuth.getInstance().currentUser
     var userInfo = UserInfo("", "", "")
+    val db = FirebaseFirestore.getInstance()
 
     fun login(email: String, password: String, callback: DatabaseCallback) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
@@ -71,7 +69,7 @@ object DataSource {
                     "uid" to currentUser?.uid
                 )
 
-                FirebaseFirestore.getInstance().collection("/users")
+                db.collection("/users")
                     .document(currentUser?.uid.toString())
                     .set(user)
 
@@ -105,7 +103,7 @@ object DataSource {
         val email = currentUser?.email.toString()
         var name = ""
 
-        FirebaseFirestore.getInstance().collection("/users").document(uid).get()
+        db.collection("/users").document(uid).get()
             .addOnSuccessListener {
                 if (it != null) {
                     name = it.data?.get("name").toString()
@@ -117,6 +115,25 @@ object DataSource {
                     callback?.onComplete()
                 } else
                     callback?.onFailure("Falhou ao alocar nome")
+            }
+    }
+
+    fun createTag(tag: Tag) {
+        db.collection("/users").document(currentUser!!.uid).collection("tags")
+            .document(tag.name).set(tag)
+    }
+
+    fun getUserTags(callback: (List<Tag>) -> Unit) {
+        val tags = mutableListOf<Tag>()
+
+        db.collection("/users").document(currentUser!!.uid).collection("tags").get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val tag = Tag(document.data["name"].toString())
+                    tags.add(tag)
+                }
+
+                callback(tags)
             }
     }
 }

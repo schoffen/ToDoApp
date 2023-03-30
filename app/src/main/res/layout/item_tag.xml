@@ -9,7 +9,7 @@
     android:paddingVertical="2dp">
 
     <TextView
-        android:textSize="11sp"
+        android:textSize="14sp"
         android:id="@+id/itemTagName"
         style="@style/TextViewBlueNormal"
         android:text="@string/tag_placeholder"

@@ -6,6 +6,8 @@ object Date {
     val todayDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
     val todayMonth = Calendar.getInstance().get(Calendar.MONTH)
     val todayYear = Calendar.getInstance().get(Calendar.YEAR)
+    val todayHour = Calendar.getInstance().get(Calendar.HOUR)
+    val todayMinute = Calendar.getInstance().get(Calendar.MINUTE)
 
     fun dateToString(day: Int, month: Int, year: Int) : String {
         val monthString = when(month) {
