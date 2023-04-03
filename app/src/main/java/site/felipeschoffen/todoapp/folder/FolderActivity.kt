@@ -4,7 +4,7 @@ import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import site.felipeschoffen.todoapp.common.dialogs.CustomDialog
-import site.felipeschoffen.todoapp.common.Date
+import site.felipeschoffen.todoapp.common.CustomDate
 import site.felipeschoffen.todoapp.databinding.ActivityFolderBinding
 
 class FolderActivity : AppCompatActivity() {
@@ -21,7 +21,7 @@ class FolderActivity : AppCompatActivity() {
 
     private fun openCalendar() {
         val datePickerDialog =
-            DatePickerDialog(this, null, Date.todayYear, Date.todayMonth, Date.todayDay)
+            DatePickerDialog(this, null, CustomDate.todayYear, CustomDate.todayMonth, CustomDate.todayDay)
         datePickerDialog.show()
     }
 

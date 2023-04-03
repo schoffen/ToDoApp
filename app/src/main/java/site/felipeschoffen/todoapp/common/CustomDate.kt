@@ -2,15 +2,15 @@ package site.felipeschoffen.todoapp.common
 
 import java.util.Calendar
 
-object Date {
+object CustomDate {
     val todayDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
     val todayMonth = Calendar.getInstance().get(Calendar.MONTH)
     val todayYear = Calendar.getInstance().get(Calendar.YEAR)
-    val todayHour = Calendar.getInstance().get(Calendar.HOUR)
+    val todayHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
     val todayMinute = Calendar.getInstance().get(Calendar.MINUTE)
 
-    fun dateToString(day: Int, month: Int, year: Int) : String {
-        val monthString = when(month) {
+    fun dateToString(day: Int, month: Int, year: Int): String {
+        val monthString = when (month) {
             0 -> "JAN"
             1 -> "FEV"
             2 -> "MAR"
@@ -28,4 +28,6 @@ object Date {
 
         return "$day $monthString $year"
     }
+
+    fun timeToString(hour: Int, minute: Int) = "$hour:$minute"
 }

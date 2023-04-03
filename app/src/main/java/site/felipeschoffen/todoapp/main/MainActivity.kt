@@ -71,7 +71,8 @@ class MainActivity : AppCompatActivity(), Main.View {
     }
 
     private fun openCreateTaskDialog() {
-        CustomDialog.CreateTaskDialog(supportFragmentManager).show(supportFragmentManager, "")
+        CustomDialog.CreateTaskDialog(supportFragmentManager)
+            .show(supportFragmentManager, "")
     }
 
     private fun initFragments() {

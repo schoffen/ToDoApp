@@ -1,4 +1,4 @@
-package site.felipeschoffen.todoapp.common.database
+package site.felipeschoffen.todoapp.common.datas
 
 data class UserInfo(
     var uid: String,

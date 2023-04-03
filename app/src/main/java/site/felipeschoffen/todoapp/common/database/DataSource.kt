@@ -1,22 +1,19 @@
 package site.felipeschoffen.todoapp.common.database
 
-import android.os.Build
 import android.util.Log
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.firestore.FirebaseFirestore
 import site.felipeschoffen.todoapp.common.Callback
-import java.time.LocalDate
-import java.time.LocalDateTime
+import site.felipeschoffen.todoapp.common.datas.Tag
+import site.felipeschoffen.todoapp.common.datas.Task
+import site.felipeschoffen.todoapp.common.datas.UserInfo
 
 object DataSource {
 
     var currentUser = FirebaseAuth.getInstance().currentUser
     var userInfo = UserInfo("", "", "")
-    val db = FirebaseFirestore.getInstance()
 
     fun login(email: String, password: String, callback: DatabaseCallback) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
@@ -69,7 +66,7 @@ object DataSource {
                     "uid" to currentUser?.uid
                 )
 
-                db.collection("/users")
+                FirebaseFirestore.getInstance().collection("/users")
                     .document(currentUser?.uid.toString())
                     .set(user)
 
@@ -103,7 +100,7 @@ object DataSource {
         val email = currentUser?.email.toString()
         var name = ""
 
-        db.collection("/users").document(uid).get()
+        FirebaseFirestore.getInstance().collection("/users").document(uid).get()
             .addOnSuccessListener {
                 if (it != null) {
                     name = it.data?.get("name").toString()
@@ -118,22 +115,33 @@ object DataSource {
             }
     }
 
-    fun createTag(tag: Tag) {
-        db.collection("/users").document(currentUser!!.uid).collection("tags")
+    fun createTag(tag: Tag, callback: Callback) {
+        FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid).collection("tags")
             .document(tag.name).set(tag)
+            .addOnSuccessListener { callback.onSuccess() }
+            .addOnFailureListener { callback.onFailure("Não foi possível adicionar tag") }
     }
 
     fun getUserTags(callback: (List<Tag>) -> Unit) {
         val tags = mutableListOf<Tag>()
 
-        db.collection("/users").document(currentUser!!.uid).collection("tags").get()
+        FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid).collection("tags").get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
-                    val tag = Tag(document.data["name"].toString())
+                    val tag =
+                        Tag(document.data["uid"].toString(), document.data["name"].toString(), document.data["color"].toString())
                     tags.add(tag)
                 }
 
                 callback(tags)
             }
+    }
+
+    fun createTask(task: Task, callback: Callback){
+        FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid).collection("tasks")
+            .document(task.uid).set(task)
+            .addOnSuccessListener { callback.onSuccess() }
+            .addOnFailureListener { callback.onFailure("Não foi possível adicionar tag") }
+            .addOnCompleteListener { callback.onComplete() }
     }
 }

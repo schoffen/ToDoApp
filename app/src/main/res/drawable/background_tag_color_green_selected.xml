@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape android:shape="oval" xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/tag_text_green" />
+    <stroke android:color="@color/purple_primary" android:width="@dimen/radio_stroke_width" />
+</shape>
