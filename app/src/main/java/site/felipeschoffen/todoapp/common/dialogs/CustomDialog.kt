@@ -16,11 +16,13 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.*
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.datas.Tag
 import site.felipeschoffen.todoapp.common.datas.Task
+import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.databinding.DialogCreateTagBinding
 import site.felipeschoffen.todoapp.databinding.DialogCreateTaskBinding
 import site.felipeschoffen.todoapp.databinding.DialogFilterBinding
@@ -48,7 +50,7 @@ abstract class CustomDialog {
         }
     }
 
-    class CreateTaskDialog(private val supportFragmentManager: FragmentManager) : DialogFragment() {
+    class CreateTaskDialog(private val supportFragmentManager: FragmentManager, private val callback: Callback) : DialogFragment() {
         private lateinit var binding: DialogCreateTaskBinding
 
         override fun onCreateView(
@@ -118,24 +120,26 @@ abstract class CustomDialog {
             }
 
             binding.createYesButton.setOnClickListener {
-                val taskUid = UUID.randomUUID().toString()
-                val taskName = binding.createTaskEditText.text.toString()
-                val taskTimestamp = getTimestamp(selectedDate, selectedTime)
-                val taskTags = getSelectedTags()
 
-                val task = Task(taskUid, taskName, taskTimestamp, taskTags)
+                val task = Task(
+                    uid = UUID.randomUUID().toString(),
+                    name = binding.createTaskEditText.text.toString(),
+                    timestamp = getTimestamp(selectedDate, selectedTime),
+                    tags = getSelectedTags(),
+                    status = TaskStatus.ON_GOING
+                )
 
                 DataSource.createTask(task, object : Callback {
                     override fun onSuccess() {
-                        Toast.makeText(requireContext(), "Tarefa adicionada", Toast.LENGTH_LONG)
-                            .show()
+                        callback.onSuccess()
                     }
 
                     override fun onFailure(message: String) {
-                        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+                        callback.onFailure(message)
                     }
 
                     override fun onComplete() {
+                        callback.onComplete()
                         dismiss()
                     }
                 })
@@ -205,8 +209,11 @@ abstract class CustomDialog {
                     binding.createTagsRV.adapter = TagsAdapter(it)
                     binding.createTagsRV.layoutManager =
                         LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+                    binding.createTagsProgress.visibility = View.GONE
                     binding.createTagsRV.visibility = View.VISIBLE
-                    binding.createNoTagsTV.visibility = View.GONE
+                } else {
+                    binding.createTagsProgress.visibility = View.GONE
+                    binding.createNoTagsTV.visibility = View.VISIBLE
                 }
             }
         }

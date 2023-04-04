@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.dialogs.CustomDialog
 import site.felipeschoffen.todoapp.databinding.ActivityMainBinding
@@ -66,13 +67,18 @@ class MainActivity : AppCompatActivity(), Main.View {
         finish()
     }
 
+    override fun showSnackBar(message: String) {
+        Snackbar.make(binding.mainRootView, message, Snackbar.LENGTH_SHORT)
+            .setBackgroundTint(resources.getColor(R.color.purple_primary))
+            .show()
+    }
+
     private fun logout() {
         presenter.logout()
     }
 
     private fun openCreateTaskDialog() {
-        CustomDialog.CreateTaskDialog(supportFragmentManager)
-            .show(supportFragmentManager, "")
+        presenter.openCreateTaskDialog(supportFragmentManager, applicationContext)
     }
 
     private fun initFragments() {

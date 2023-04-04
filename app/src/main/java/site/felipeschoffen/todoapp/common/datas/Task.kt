@@ -6,5 +6,6 @@ data class Task (
     val uid: String,
     val name: String,
     val timestamp: Timestamp,
-    val tags: List<Tag>
+    val tags: List<Tag>,
+    val status: TaskStatus
         )

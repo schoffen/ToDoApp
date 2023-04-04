@@ -68,4 +68,7 @@
     <string name="name_hint">nome</string>
     <string name="name_short_error">Nome não pode ser menor que 3 caracteres</string>
     <string name="no_tags_info">Você não possui tags, crie uma</string>
+    
+    <string name="task_create_successfully">Tarefa adicionada</string>
+    <string name="task_create_error">Ocorreu um erro ao adicionar tarefa</string>
 </resources>

@@ -122,23 +122,31 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/createTagsRV"
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="12dp"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="3"
                 tools:listitem="@layout/item_tag" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/createNoTagsTV"
                 style="@style/TextViewBlueNormal"
                 android:layout_gravity="center"
                 android:layout_marginTop="8dp"
                 android:text="@string/no_tags_info"
                 android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/createTagsProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/createTagButton"
@@ -160,11 +168,11 @@
                     android:layout_height="34dp"
                     android:layout_gravity="center"
                     android:layout_marginEnd="8dp"
-                    android:background="@drawable/background_filter_button"
+                    android:background="@drawable/selector_background_cancel_button_white"
                     android:gravity="center"
                     android:text="@string/cancel"
                     android:textAlignment="center"
-                    android:textColor="@color/purple_primary"
+                    android:textColor="@color/selector_text_color_white"
                     android:textSize="14sp" />
 
                 <TextView
@@ -173,7 +181,7 @@
                     android:layout_height="34dp"
                     android:layout_gravity="center"
                     android:background="@drawable/background_filter_button"
-                    android:backgroundTint="@color/purple_primary"
+                    android:backgroundTint="@color/selector_background_button_purple"
                     android:gravity="center"
                     android:text="@string/create"
                     android:textAlignment="center"
