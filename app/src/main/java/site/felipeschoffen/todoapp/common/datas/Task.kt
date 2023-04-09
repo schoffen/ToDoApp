@@ -1,6 +1,7 @@
 package site.felipeschoffen.todoapp.common.datas
 
-import java.sql.Timestamp
+import com.google.firebase.Timestamp
+
 
 data class Task (
     val uid: String,

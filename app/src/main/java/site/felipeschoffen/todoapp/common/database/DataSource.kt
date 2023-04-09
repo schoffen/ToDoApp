@@ -1,14 +1,20 @@
 package site.felipeschoffen.todoapp.common.database
 
+import android.icu.util.Calendar
+import android.text.style.TabStopSpan
 import android.util.Log
 import com.google.firebase.FirebaseException
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.firestore.FirebaseFirestore
 import site.felipeschoffen.todoapp.common.Callback
+import site.felipeschoffen.todoapp.common.CustomDate
 import site.felipeschoffen.todoapp.common.datas.Tag
 import site.felipeschoffen.todoapp.common.datas.Task
+import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.common.datas.UserInfo
+import site.felipeschoffen.todoapp.home.Home
 
 object DataSource {
 
@@ -116,7 +122,8 @@ object DataSource {
     }
 
     fun createTag(tag: Tag, callback: Callback) {
-        FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid).collection("tags")
+        FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid)
+            .collection("tags")
             .document(tag.name).set(tag)
             .addOnSuccessListener { callback.onSuccess() }
             .addOnFailureListener { callback.onFailure("Não foi possível adicionar tag") }
@@ -125,11 +132,16 @@ object DataSource {
     fun getUserTags(callback: (List<Tag>) -> Unit) {
         val tags = mutableListOf<Tag>()
 
-        FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid).collection("tags").get()
+        FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid)
+            .collection("tags").get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     val tag =
-                        Tag(document.data["uid"].toString(), document.data["name"].toString(), document.data["color"].toString())
+                        Tag(
+                            document.data["uid"].toString(),
+                            document.data["name"].toString(),
+                            document.data["color"].toString()
+                        )
                     tags.add(tag)
                 }
 
@@ -137,11 +149,93 @@ object DataSource {
             }
     }
 
-    fun createTask(task: Task, callback: Callback){
-        FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid).collection("tasks")
+    fun createTask(task: Task, callback: Callback) {
+        FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid)
+            .collection("tasks")
             .document(task.uid).set(task)
             .addOnSuccessListener { callback.onSuccess() }
             .addOnFailureListener { callback.onFailure("Não foi possível adicionar tag") }
             .addOnCompleteListener { callback.onComplete() }
+    }
+
+    fun getTodayTasks(callback: Home.Callback) {
+        val tasks = mutableListOf<Task>()
+
+        FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid)
+            .collection("tasks").get()
+            .addOnSuccessListener { documents ->
+                if (documents.isEmpty) {
+                    callback.onFailure()
+                    return@addOnSuccessListener
+                } else {
+                    for (task in documents) {
+                        val date = task.getTimestamp("timestamp")?.toDate()
+
+                        if (date != null) {
+                            val taskCalendar = Calendar.getInstance()
+                            taskCalendar.time = date
+
+                            val isYearEqual =
+                                taskCalendar.get(Calendar.YEAR) == CustomDate.todayYear
+                            val isMonthEqual =
+                                taskCalendar.get(Calendar.MONTH) == CustomDate.todayMonth
+                            val isDayEqual =
+                                taskCalendar.get(Calendar.DAY_OF_MONTH) == CustomDate.todayDay
+
+                            if (isYearEqual && isMonthEqual && isDayEqual) {
+                                FirebaseFirestore.getInstance().collection("/users")
+                                    .document(currentUser!!.uid)
+                                    .collection("tasks").document(task.data["uid"].toString()).get()
+                                    .addOnSuccessListener {
+
+                                        if (it != null) {
+                                            val taskUid = it.data?.get("uid").toString()
+                                            val taskName = it.data?.get("name").toString()
+                                            val taskTimestamp = it.data?.get("timestamp")
+
+                                            val tagsListRef = it.data?.get("tags") as List<*>
+                                            val taskTags = mutableListOf<Tag>()
+
+                                            for (tag in tagsListRef) {
+                                                val tagHash = tag as HashMap<*, *>
+                                                taskTags.add(
+                                                    Tag(
+                                                        tagHash["uid"].toString(),
+                                                        tagHash["name"].toString(),
+                                                        tagHash["color"].toString()
+                                                    )
+                                                )
+                                            }
+
+                                            val taskStatus =
+                                                when (it.data?.get("status").toString()) {
+                                                    TaskStatus.COMPLETED.toString() -> TaskStatus.COMPLETED
+                                                    TaskStatus.CANCELED.toString() -> TaskStatus.CANCELED
+                                                    TaskStatus.ON_GOING.toString() -> TaskStatus.ON_GOING
+                                                    TaskStatus.PENDING.toString() -> TaskStatus.PENDING
+                                                    else -> ""
+                                                }
+
+                                            tasks.add(
+                                                Task(
+                                                    taskUid,
+                                                    taskName,
+                                                    taskTimestamp as Timestamp,
+                                                    taskTags,
+                                                    taskStatus as TaskStatus
+                                                )
+                                            )
+
+                                            callback.onSuccess(tasks)
+                                        }
+                                    }
+                            }
+                        }
+                    }
+                }
+            }
+            .addOnFailureListener {
+                callback.onFailure()
+            }
     }
 }

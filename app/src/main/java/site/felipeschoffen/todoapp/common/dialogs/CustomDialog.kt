@@ -17,6 +17,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Timestamp
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.*
 import site.felipeschoffen.todoapp.common.database.DataSource
@@ -26,7 +27,6 @@ import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.databinding.DialogCreateTagBinding
 import site.felipeschoffen.todoapp.databinding.DialogCreateTaskBinding
 import site.felipeschoffen.todoapp.databinding.DialogFilterBinding
-import java.sql.Timestamp
 import java.util.*
 
 abstract class CustomDialog {
@@ -198,7 +198,7 @@ abstract class CustomDialog {
                 0
             )
 
-            val date = calendar.time.time
+            val date = calendar.time
 
             return Timestamp(date)
         }
