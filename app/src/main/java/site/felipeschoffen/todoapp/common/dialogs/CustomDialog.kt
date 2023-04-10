@@ -6,23 +6,20 @@ import android.app.TimePickerDialog.OnTimeSetListener
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CalendarView.OnDateChangeListener
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.*
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.datas.Tag
-import site.felipeschoffen.todoapp.common.datas.Task
+import site.felipeschoffen.todoapp.common.datas.UserTask
 import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.databinding.DialogCreateTagBinding
 import site.felipeschoffen.todoapp.databinding.DialogCreateTaskBinding
@@ -121,7 +118,7 @@ abstract class CustomDialog {
 
             binding.createYesButton.setOnClickListener {
 
-                val task = Task(
+                val userTask = UserTask(
                     uid = UUID.randomUUID().toString(),
                     name = binding.createTaskEditText.text.toString(),
                     timestamp = getTimestamp(selectedDate, selectedTime),
@@ -129,7 +126,7 @@ abstract class CustomDialog {
                     status = TaskStatus.ON_GOING
                 )
 
-                DataSource.createTask(task, object : Callback {
+                DataSource.createTask(userTask, object : Callback {
                     override fun onSuccess() {
                         callback.onSuccess()
                     }

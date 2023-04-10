@@ -6,15 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
-import site.felipeschoffen.todoapp.common.datas.Task
-import site.felipeschoffen.todoapp.common.dialogs.TagsAdapter
-import site.felipeschoffen.todoapp.databinding.ItemTagBinding
+import site.felipeschoffen.todoapp.common.datas.UserTask
 import site.felipeschoffen.todoapp.databinding.ItemTaskWideBinding
-import java.text.SimpleDateFormat
 import java.util.*
 
 class HomeTasksAdapter() : RecyclerView.Adapter<HomeTasksAdapter.TaskViewHolder>() {
-    lateinit var tasks: List<Task>
+    lateinit var userTasks: List<UserTask>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeTasksAdapter.TaskViewHolder {
         val binding = ItemTaskWideBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -23,20 +20,20 @@ class HomeTasksAdapter() : RecyclerView.Adapter<HomeTasksAdapter.TaskViewHolder>
     }
 
     override fun onBindViewHolder(holder: HomeTasksAdapter.TaskViewHolder, position: Int) {
-        val item = tasks[position]
+        val item = userTasks[position]
         holder.bind(item)
     }
 
-    override fun getItemCount() = tasks.size
+    override fun getItemCount() = userTasks.size
 
     inner class TaskViewHolder(private val binding: ItemTaskWideBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(task: Task) {
-            Log.d("adapter", task.toString())
-            binding.itemTodayTaskName.text = task.name
-            binding.itemTodayTaskTime.text = timestampToString(task.timestamp)
+        fun bind(userTask: UserTask) {
+            Log.d("adapter", userTask.toString())
+            binding.itemTodayTaskName.text = userTask.name
+            binding.itemTodayTaskTime.text = timestampToString(userTask.timestamp)
 
             binding.itemTodayTaskTagsRV.layoutManager = LinearLayoutManager(this.binding.root.context, LinearLayoutManager.HORIZONTAL, false)
-            binding.itemTodayTaskTagsRV.adapter = TagsAdapter(task.tags)
+            binding.itemTodayTaskTagsRV.adapter = TagsWideAdapter(userTask.tags)
         }
 
         private fun timestampToString(timestamp: Timestamp): String {

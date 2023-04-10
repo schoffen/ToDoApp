@@ -1,8 +1,8 @@
 package site.felipeschoffen.todoapp.common.database
 
 import android.icu.util.Calendar
-import android.text.style.TabStopSpan
 import android.util.Log
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.FirebaseException
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -10,8 +10,9 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.firestore.FirebaseFirestore
 import site.felipeschoffen.todoapp.common.Callback
 import site.felipeschoffen.todoapp.common.CustomDate
+import site.felipeschoffen.todoapp.common.SelectedDate
 import site.felipeschoffen.todoapp.common.datas.Tag
-import site.felipeschoffen.todoapp.common.datas.Task
+import site.felipeschoffen.todoapp.common.datas.UserTask
 import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.common.datas.UserInfo
 import site.felipeschoffen.todoapp.home.Home
@@ -149,25 +150,22 @@ object DataSource {
             }
     }
 
-    fun createTask(task: Task, callback: Callback) {
+    fun createTask(userTask: UserTask, callback: Callback) {
         FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid)
             .collection("tasks")
-            .document(task.uid).set(task)
+            .document(userTask.uid).set(userTask)
             .addOnSuccessListener { callback.onSuccess() }
             .addOnFailureListener { callback.onFailure("Não foi possível adicionar tag") }
             .addOnCompleteListener { callback.onComplete() }
     }
 
-    fun getTodayTasks(callback: Home.Callback) {
-        val tasks = mutableListOf<Task>()
+    fun getTasksByDate(selectedDate: SelectedDate, callback: (List<UserTask>) -> Unit) {
+        val userTaskList = mutableListOf<UserTask>()
 
         FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid)
             .collection("tasks").get()
             .addOnSuccessListener { documents ->
-                if (documents.isEmpty) {
-                    callback.onFailure()
-                    return@addOnSuccessListener
-                } else {
+                if (!documents.isEmpty) {
                     for (task in documents) {
                         val date = task.getTimestamp("timestamp")?.toDate()
 
@@ -176,66 +174,61 @@ object DataSource {
                             taskCalendar.time = date
 
                             val isYearEqual =
-                                taskCalendar.get(Calendar.YEAR) == CustomDate.todayYear
+                                taskCalendar.get(Calendar.YEAR) == selectedDate.year
                             val isMonthEqual =
-                                taskCalendar.get(Calendar.MONTH) == CustomDate.todayMonth
+                                taskCalendar.get(Calendar.MONTH) == selectedDate.month
                             val isDayEqual =
-                                taskCalendar.get(Calendar.DAY_OF_MONTH) == CustomDate.todayDay
+                                taskCalendar.get(Calendar.DAY_OF_MONTH) == selectedDate.day
 
                             if (isYearEqual && isMonthEqual && isDayEqual) {
-                                FirebaseFirestore.getInstance().collection("/users")
-                                    .document(currentUser!!.uid)
-                                    .collection("tasks").document(task.data["uid"].toString()).get()
-                                    .addOnSuccessListener {
 
-                                        if (it != null) {
-                                            val taskUid = it.data?.get("uid").toString()
-                                            val taskName = it.data?.get("name").toString()
-                                            val taskTimestamp = it.data?.get("timestamp")
+                                val taskUid = task.data["uid"].toString()
+                                val taskName = task.data["name"].toString()
+                                val taskTimestamp = task.data["timestamp"]
+                                val taskTags = hashTagsToTagList(task.data["tags"] as List<*>)
+                                val taskStatus = stringToTaskStatus(task.data["status"].toString())
 
-                                            val tagsListRef = it.data?.get("tags") as List<*>
-                                            val taskTags = mutableListOf<Tag>()
-
-                                            for (tag in tagsListRef) {
-                                                val tagHash = tag as HashMap<*, *>
-                                                taskTags.add(
-                                                    Tag(
-                                                        tagHash["uid"].toString(),
-                                                        tagHash["name"].toString(),
-                                                        tagHash["color"].toString()
-                                                    )
-                                                )
-                                            }
-
-                                            val taskStatus =
-                                                when (it.data?.get("status").toString()) {
-                                                    TaskStatus.COMPLETED.toString() -> TaskStatus.COMPLETED
-                                                    TaskStatus.CANCELED.toString() -> TaskStatus.CANCELED
-                                                    TaskStatus.ON_GOING.toString() -> TaskStatus.ON_GOING
-                                                    TaskStatus.PENDING.toString() -> TaskStatus.PENDING
-                                                    else -> ""
-                                                }
-
-                                            tasks.add(
-                                                Task(
-                                                    taskUid,
-                                                    taskName,
-                                                    taskTimestamp as Timestamp,
-                                                    taskTags,
-                                                    taskStatus as TaskStatus
-                                                )
-                                            )
-
-                                            callback.onSuccess(tasks)
-                                        }
-                                    }
+                                userTaskList.add(
+                                    UserTask(
+                                        taskUid,
+                                        taskName,
+                                        taskTimestamp as Timestamp,
+                                        taskTags,
+                                        taskStatus as TaskStatus
+                                    )
+                                )
                             }
                         }
                     }
+                    callback(userTaskList)
                 }
             }
-            .addOnFailureListener {
-                callback.onFailure()
-            }
+    }
+
+    private fun hashTagsToTagList(tagsListRef: List<*>): List<Tag> {
+        val taskTags = mutableListOf<Tag>()
+
+        for (tag in tagsListRef) {
+            val tagHash = tag as HashMap<*, *>
+            taskTags.add(
+                Tag(
+                    tagHash["uid"].toString(),
+                    tagHash["name"].toString(),
+                    tagHash["color"].toString()
+                )
+            )
+        }
+
+        return taskTags
+    }
+
+    private fun stringToTaskStatus(data: String): TaskStatus? {
+        return when (data) {
+            TaskStatus.COMPLETED.toString() -> TaskStatus.COMPLETED
+            TaskStatus.CANCELED.toString() -> TaskStatus.CANCELED
+            TaskStatus.ON_GOING.toString() -> TaskStatus.ON_GOING
+            TaskStatus.PENDING.toString() -> TaskStatus.PENDING
+            else -> null
+        }
     }
 }

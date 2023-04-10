@@ -3,7 +3,7 @@ package site.felipeschoffen.todoapp.common.datas
 import com.google.firebase.Timestamp
 
 
-data class Task (
+data class UserTask (
     val uid: String,
     val name: String,
     val timestamp: Timestamp,

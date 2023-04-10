@@ -1,25 +1,15 @@
 package site.felipeschoffen.todoapp.home
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.Timestamp
 import site.felipeschoffen.todoapp.R
-import site.felipeschoffen.todoapp.common.Callback
 import site.felipeschoffen.todoapp.common.database.DataSource
-import site.felipeschoffen.todoapp.common.datas.Tag
-import site.felipeschoffen.todoapp.common.datas.Task
-import site.felipeschoffen.todoapp.common.datas.TaskStatus
+import site.felipeschoffen.todoapp.common.datas.UserTask
 import site.felipeschoffen.todoapp.databinding.FragmentHomeBinding
-import java.time.LocalDate
-import java.time.LocalDateTime
 
 class HomeFragment : Fragment(), Home.View {
     private lateinit var binding: FragmentHomeBinding
@@ -38,7 +28,8 @@ class HomeFragment : Fragment(), Home.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.homeTodayTaskLayout.homeTasksRV.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.homeTodayTaskLayout.homeTasksRV.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.homeTodayTaskLayout.homeTasksRV.adapter = adapter
 
         binding.homeTopLayout.homeWelcomeText.text =
@@ -55,12 +46,12 @@ class HomeFragment : Fragment(), Home.View {
     }
 
 
-    override fun displayTodayTasks(tasks: List<Task>) {
+    override fun displayTodayTasks(userTasks: List<UserTask>) {
         showProgress(false)
         binding.homeTodayTaskLayout.homeNoTaskDisplayText.visibility = View.GONE
         binding.homeTodayTaskLayout.homeTasksRV.visibility = View.VISIBLE
 
-        adapter.tasks = tasks
+        adapter.userTasks = userTasks
         adapter.notifyDataSetChanged()
     }
 
