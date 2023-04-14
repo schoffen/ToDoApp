@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
+import site.felipeschoffen.todoapp.common.CustomDate.formatTime
 import site.felipeschoffen.todoapp.common.ShortTaskAdapter
 import site.felipeschoffen.todoapp.databinding.ItemTaskDayHourBinding
 import java.util.*
@@ -32,7 +33,7 @@ class TasksFragmentAdapter(var tasksByHour: List<TasksByHour>) :
     inner class TaskViewHolder(private val binding: ItemTaskDayHourBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(tasksByHour: TasksByHour) {
-            binding.timeText.text = tasksByHour.hour.toString()
+            binding.timeText.text = formatTime(Timestamp(tasksByHour.hour.toLong() * 3600, 0))
 
             binding.hoursTasksRV.layoutManager =
                 LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
@@ -42,16 +43,6 @@ class TasksFragmentAdapter(var tasksByHour: List<TasksByHour>) :
             binding.hoursTasksRV.adapter = adapter
         }
 
-        private fun timestampToString(timestamp: Timestamp): String {
-            val date = timestamp.toDate()
 
-            val calendar = Calendar.getInstance()
-            calendar.time = date
-
-            val hour = calendar.get(Calendar.HOUR_OF_DAY)
-            val minute = calendar.get(Calendar.MINUTE)
-
-            return "$hour : $minute"
-        }
     }
 }

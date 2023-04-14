@@ -17,6 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.*
+import site.felipeschoffen.todoapp.common.CustomDate.dateToString
+import site.felipeschoffen.todoapp.common.CustomDate.formatTime
+import site.felipeschoffen.todoapp.common.CustomDate.intToTimestamp
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.datas.Tag
 import site.felipeschoffen.todoapp.common.datas.UserTask
@@ -69,19 +72,14 @@ abstract class CustomDialog {
             var selectedTime = SelectedTime(CustomDate.todayHour, CustomDate.todayMinute)
 
             changeSelectedDateText(
-                CustomDate.dateToString(
+                dateToString(
                     selectedDate.day,
                     selectedDate.month,
                     selectedDate.year
                 )
             )
 
-            changeSelectedTimeText(
-                CustomDate.timeToString(
-                    selectedTime.hour,
-                    selectedTime.minute
-                )
-            )
+            changeSelectedTimeText(intToTimestamp(selectedTime.hour, selectedTime.minute))
 
             // This show custom background
             dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -95,10 +93,8 @@ abstract class CustomDialog {
 
             binding.addTimePickerButton.setOnClickListener {
                 timePickerDialog(it) { _, hour, minute ->
-                    // add 0 to hour start
-                    val hourString =
-                        if (hour.toString().length == 1) "0${hour}" else hour.toString()
-                    changeSelectedTimeText("$hourString : $minute")
+
+                    changeSelectedTimeText(intToTimestamp(hour, minute))
 
                     selectedTime = SelectedTime(hour, minute)
                 }
@@ -177,8 +173,8 @@ abstract class CustomDialog {
             binding.addDatePickerText.text = date
         }
 
-        private fun changeSelectedTimeText(time: String) {
-            binding.addTimePickerText.text = time
+        private fun changeSelectedTimeText(timestamp: Timestamp) {
+            binding.addTimePickerText.text = formatTime(timestamp)
         }
 
         private fun getTimestamp(

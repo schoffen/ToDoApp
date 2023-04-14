@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
+import site.felipeschoffen.todoapp.common.CustomDate.formatTime
 import site.felipeschoffen.todoapp.common.datas.UserTask
 import site.felipeschoffen.todoapp.databinding.ItemTaskShortBinding
 import site.felipeschoffen.todoapp.databinding.ItemTaskWideBinding
@@ -30,7 +31,7 @@ class ShortTaskAdapter() : RecyclerView.Adapter<ShortTaskAdapter.TaskViewHolder>
     inner class TaskViewHolder(private val binding: ItemTaskShortBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(userTask: UserTask) {
             binding.itemTodayTaskName.text = userTask.name
-            binding.itemTodayTaskTime.text = timestampToString(userTask.timestamp)
+            binding.itemTodayTaskTime.text = formatTime(userTask.timestamp)
 
             binding.itemTodayTaskTagsRV.layoutManager = LinearLayoutManager(this.binding.root.context, LinearLayoutManager.HORIZONTAL, false)
             binding.itemTodayTaskTagsRV.adapter = TagsWideAdapter(userTask.tags)

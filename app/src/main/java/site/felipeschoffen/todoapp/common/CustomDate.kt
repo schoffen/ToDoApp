@@ -1,6 +1,7 @@
 package site.felipeschoffen.todoapp.common
 
-import java.util.Calendar
+import com.google.firebase.Timestamp
+import java.util.*
 
 object CustomDate {
     val todayDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
@@ -29,5 +30,21 @@ object CustomDate {
         return "$day $monthString $year"
     }
 
-    fun timeToString(hour: Int, minute: Int) = "$hour:$minute"
+    fun intToTimestamp(hour: Int, minute: Int): Timestamp {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, hour)
+        calendar.set(Calendar.MINUTE, minute)
+
+        return Timestamp(Date(calendar.timeInMillis))
+    }
+
+    fun formatTime(timestamp: Timestamp): String {
+        val hour = timestamp.toDate().hours
+        val minute = timestamp.toDate().minutes
+
+        val newHour = if (hour < 10) "0$hour" else hour
+        val newMinute = if (minute < 10) "0$minute" else minute
+
+        return "$newHour:$newMinute"
+    }
 }
