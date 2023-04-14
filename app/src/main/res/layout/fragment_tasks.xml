@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/main_padding"
-    tools:context=".tasks.TasksFragment"
-    tools:showIn="@layout/activity_main">
+    tools:context=".tasks.TasksFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tasksSearchInput"
@@ -63,11 +62,33 @@
         app:layout_constraintTop_toBottomOf="@id/tasksSearchInput" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="16dp"
-        tools:listitem="@layout/item_task_day_hour"
-        app:layout_constraintTop_toBottomOf="@id/taskDatePickerButton"
         android:id="@+id/taskDayTaskRV"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/taskDatePickerButton"
+        tools:listitem="@layout/item_task_day_hour" />
+
+    <ProgressBar
+        android:id="@+id/taskProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/taskDatePickerButton" />
+
+    <TextView
+        android:id="@+id/taskNoTaskDisplayText"
+        style="@style/TextViewBlueNormal"
+        android:layout_marginTop="30dp"
+        android:text="@string/no_tasks_to_show"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/taskDatePickerButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

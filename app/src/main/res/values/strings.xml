@@ -64,7 +64,7 @@
     <string name="password_not_match">Senhas não conferem</string>
     <string name="password_short_length">Senha deve conter 8 caracteres ou mais</string>
     <string name="incorrect_info">Dados incorretos</string>
-    <string name="no_tasks_to_show">Você não possuí tarefas hoje!</string>
+    <string name="no_tasks_to_show">Você não possuí tarefas para este dia!</string>
     <string name="name_hint">nome</string>
     <string name="name_short_error">Nome não pode ser menor que 3 caracteres</string>
     <string name="no_tags_info">Você não possui tags, crie uma</string>

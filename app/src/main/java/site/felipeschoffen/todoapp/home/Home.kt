@@ -10,7 +10,7 @@ interface Home {
     }
 
     interface Presenter {
-        val view: Home.View
+        val view: View
 
         fun getTodayTasks()
     }

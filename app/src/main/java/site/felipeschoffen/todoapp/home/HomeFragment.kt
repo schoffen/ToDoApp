@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import site.felipeschoffen.todoapp.R
+import site.felipeschoffen.todoapp.common.ShortTaskAdapter
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.datas.UserTask
 import site.felipeschoffen.todoapp.databinding.FragmentHomeBinding
@@ -14,7 +15,7 @@ import site.felipeschoffen.todoapp.databinding.FragmentHomeBinding
 class HomeFragment : Fragment(), Home.View {
     private lateinit var binding: FragmentHomeBinding
     private val presenter = HomePresenter(this)
-    private val adapter = HomeTasksAdapter()
+    private val adapter = ShortTaskAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
