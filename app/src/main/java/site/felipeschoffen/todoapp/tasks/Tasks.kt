@@ -8,11 +8,13 @@ interface Tasks {
         fun showProgress(show: Boolean)
         fun displayEmptyTasks()
         fun displayTasks(tasks: List<TasksByHour>)
+        fun getCurrentDate(): SelectedDate
     }
 
     interface Presenter {
         val view: View
 
         fun getSelectedTasks(selectedDate: SelectedDate)
+        fun filterTasksStartWith(prefix: String?)
     }
 }

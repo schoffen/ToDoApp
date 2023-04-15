@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/main_padding"
     tools:context=".tasks.TasksFragment">
 
     <com.google.android.material.textfield.TextInputLayout
@@ -63,11 +62,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/taskDayTaskRV"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/taskDatePickerButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_task_day_hour" />
 
     <ProgressBar

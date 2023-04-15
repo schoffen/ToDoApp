@@ -28,7 +28,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingHorizontal="16dp"
+        android:paddingHorizontal="@dimen/main_padding"
         app:layout_constraintBottom_toTopOf="@id/mainBottonNavigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

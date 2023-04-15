@@ -2,6 +2,8 @@ package site.felipeschoffen.todoapp.tasks
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,6 +20,7 @@ import java.util.*
 
 class TasksFragment : Fragment(), Tasks.View {
 
+    private var currentDate: SelectedDate = SelectedDate(CustomDate.todayDay, CustomDate.todayMonth, CustomDate.todayYear)
     private lateinit var binding: FragmentTasksBinding
     private val presenter = TasksPresenter(this)
 
@@ -34,7 +37,7 @@ class TasksFragment : Fragment(), Tasks.View {
 
         changeSelectedDateText(CustomDate.dateToString(CustomDate.todayDay, CustomDate.todayMonth, CustomDate.todayYear))
 
-        presenter.getSelectedTasks(SelectedDate(CustomDate.todayDay, CustomDate.todayMonth, CustomDate.todayYear))
+        presenter.getSelectedTasks(currentDate)
 
         binding.taskDatePickerButton.setOnClickListener {
 
@@ -43,7 +46,8 @@ class TasksFragment : Fragment(), Tasks.View {
                     view.context,
                     { _, year, month, day ->
                         changeSelectedDateText(CustomDate.dateToString(day, month, year))
-                        presenter.getSelectedTasks(SelectedDate(day, month, year))
+                        currentDate = SelectedDate(day, month, year)
+                        presenter.getSelectedTasks(currentDate)
                     },
                     CustomDate.todayYear,
                     CustomDate.todayMonth,
@@ -51,6 +55,18 @@ class TasksFragment : Fragment(), Tasks.View {
                 )
             datePickerDialog.show()
         }
+
+        binding.tasksSearchText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                presenter.filterTasksStartWith(s.toString())
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        })
     }
 
     override fun showProgress(show: Boolean) {
@@ -74,5 +90,9 @@ class TasksFragment : Fragment(), Tasks.View {
 
     private fun changeSelectedDateText(date: String) {
         binding.taskDatePickerButton.text = date
+    }
+
+    override fun getCurrentDate(): SelectedDate {
+        return currentDate
     }
 }
