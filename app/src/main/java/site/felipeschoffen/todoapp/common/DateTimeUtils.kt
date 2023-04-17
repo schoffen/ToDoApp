@@ -3,7 +3,7 @@ package site.felipeschoffen.todoapp.common
 import com.google.firebase.Timestamp
 import java.util.*
 
-object CustomDate {
+object DateTimeUtils {
     val todayDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
     val todayMonth = Calendar.getInstance().get(Calendar.MONTH)
     val todayYear = Calendar.getInstance().get(Calendar.YEAR)

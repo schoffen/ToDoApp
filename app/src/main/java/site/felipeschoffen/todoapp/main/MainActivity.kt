@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import site.felipeschoffen.todoapp.R
-import site.felipeschoffen.todoapp.common.dialogs.CustomDialog
 import site.felipeschoffen.todoapp.databinding.ActivityMainBinding
 import site.felipeschoffen.todoapp.home.HomeFragment
 import site.felipeschoffen.todoapp.profile.ProfileFragment
@@ -18,6 +17,8 @@ class MainActivity : AppCompatActivity(), Main.View {
 
     private val presenter = MainPresenter(this)
     private lateinit var binding: ActivityMainBinding
+
+    private var currentFragmentId = 0
 
     private lateinit var homeFragment: HomeFragment
     private lateinit var tasksFragment: TasksFragment
@@ -73,6 +74,20 @@ class MainActivity : AppCompatActivity(), Main.View {
             .show()
     }
 
+    override fun notifyFragmentToReloadTasks() {
+        when (currentFragmentId) {
+            homeFragment.id -> {
+                val currentFragment = supportFragmentManager.findFragmentById(binding.mainFragmentContainer.id) as HomeFragment
+                currentFragment.reloadTasks()
+            }
+
+            tasksFragment.id -> {
+                val currentFragment = supportFragmentManager.findFragmentById(binding.mainFragmentContainer.id) as TasksFragment
+                currentFragment.reloadTasks()
+            }
+        }
+    }
+
     private fun logout() {
         presenter.logout()
     }
@@ -85,6 +100,8 @@ class MainActivity : AppCompatActivity(), Main.View {
         homeFragment = HomeFragment()
         tasksFragment = TasksFragment()
         profileFragment = ProfileFragment()
+
+        currentFragmentId = homeFragment.id
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -92,5 +109,7 @@ class MainActivity : AppCompatActivity(), Main.View {
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(binding.mainFragmentContainer.id, fragment)
         fragmentTransaction.commit()
+
+        currentFragmentId = fragment.id
     }
 }

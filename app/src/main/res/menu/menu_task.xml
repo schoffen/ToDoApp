@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menuTaskStart" android:title="@string/start" android:visible="false" />
+    <item android:id="@+id/menuTaskComplete" android:title="@string/complete" android:visible="false" />
+    <item android:id="@+id/menuTaskRestore" android:title="@string/restore" android:visible="false" />
+    <item android:id="@+id/menuTaskEdit" android:title="@string/edit" android:visible="false"/>
+    <item android:id="@+id/menuTaskCancel" android:title="@string/cancel"/>
+    <item android:id="@+id/menuTaskDelete" android:title="@string/delete" />
+</menu>

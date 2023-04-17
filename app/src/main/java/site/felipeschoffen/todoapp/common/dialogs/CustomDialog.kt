@@ -17,9 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.*
-import site.felipeschoffen.todoapp.common.CustomDate.dateToString
-import site.felipeschoffen.todoapp.common.CustomDate.formatTime
-import site.felipeschoffen.todoapp.common.CustomDate.intToTimestamp
+import site.felipeschoffen.todoapp.common.DateTimeUtils.dateToString
+import site.felipeschoffen.todoapp.common.DateTimeUtils.formatTime
+import site.felipeschoffen.todoapp.common.DateTimeUtils.intToTimestamp
+import site.felipeschoffen.todoapp.common.adapters.TagsAdapter
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.datas.Tag
 import site.felipeschoffen.todoapp.common.datas.UserTask
@@ -68,8 +69,8 @@ abstract class CustomDialog {
             loadTags()
 
             var selectedDate =
-                SelectedDate(CustomDate.todayDay, CustomDate.todayMonth, CustomDate.todayYear)
-            var selectedTime = SelectedTime(CustomDate.todayHour, CustomDate.todayMinute)
+                SelectedDate(DateTimeUtils.todayDay, DateTimeUtils.todayMonth, DateTimeUtils.todayYear)
+            var selectedTime = SelectedTime(DateTimeUtils.todayHour, DateTimeUtils.todayMinute)
 
             changeSelectedDateText(
                 dateToString(
@@ -86,7 +87,7 @@ abstract class CustomDialog {
 
             binding.addDatePickerButton.setOnClickListener {
                 datePickerDialog(it) { _, year, month, day ->
-                    changeSelectedDateText(CustomDate.dateToString(day, month, year))
+                    changeSelectedDateText(DateTimeUtils.dateToString(day, month, year))
                     selectedDate = SelectedDate(day, month, year)
                 }
             }
@@ -119,7 +120,7 @@ abstract class CustomDialog {
                     name = binding.createTaskEditText.text.toString(),
                     timestamp = getTimestamp(selectedDate, selectedTime),
                     tags = getSelectedTags(),
-                    status = TaskStatus.ON_GOING
+                    status = TaskStatus.PENDING
                 )
 
                 DataSource.createTask(userTask, object : Callback {
@@ -148,9 +149,9 @@ abstract class CustomDialog {
                 DatePickerDialog(
                     view.context,
                     onDateSetListener,
-                    CustomDate.todayYear,
-                    CustomDate.todayMonth,
-                    CustomDate.todayDay
+                    DateTimeUtils.todayYear,
+                    DateTimeUtils.todayMonth,
+                    DateTimeUtils.todayDay
                 )
             datePickerDialog.show()
         }
@@ -160,8 +161,8 @@ abstract class CustomDialog {
                 TimePickerDialog(
                     view.context,
                     onTimeSetListener,
-                    CustomDate.todayHour,
-                    CustomDate.todayMinute,
+                    DateTimeUtils.todayHour,
+                    DateTimeUtils.todayMinute,
                     true
                 )
 

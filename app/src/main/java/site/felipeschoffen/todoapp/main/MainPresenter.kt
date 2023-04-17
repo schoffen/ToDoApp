@@ -28,6 +28,7 @@ class MainPresenter(override val view: Main.View) : Main.Presenter {
         CustomDialog.CreateTaskDialog(supportFragmentManager, object : Callback {
             override fun onSuccess() {
                 view.showSnackBar(context.getString(R.string.task_create_successfully))
+                view.notifyFragmentToReloadTasks()
             }
 
             override fun onFailure(message: String) {

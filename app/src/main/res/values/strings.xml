@@ -71,4 +71,9 @@
     
     <string name="task_create_successfully">Tarefa adicionada</string>
     <string name="task_create_error">Ocorreu um erro ao adicionar tarefa</string>
+    <string name="restore">Restaurar</string>
+    <string name="delete">Deletar</string>
+    <string name="edit">Editar</string>
+    <string name="start">Começar</string>
+    <string name="complete">Completar</string>
 </resources>

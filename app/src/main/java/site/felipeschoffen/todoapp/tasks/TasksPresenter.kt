@@ -1,11 +1,15 @@
 package site.felipeschoffen.todoapp.tasks
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import site.felipeschoffen.todoapp.common.Callback
 import site.felipeschoffen.todoapp.common.SelectedDate
 import site.felipeschoffen.todoapp.common.database.DataSource
+import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.common.datas.UserTask
-import java.util.*
 
-class TasksPresenter(override val view: Tasks.View) : Tasks.Presenter {
+class TasksPresenter(override val view: Tasks.View, private val coroutineScope: CoroutineScope) :
+    Tasks.Presenter {
 
     var currentUserTasks: List<UserTask> = emptyList()
 
@@ -25,6 +29,19 @@ class TasksPresenter(override val view: Tasks.View) : Tasks.Presenter {
         }
     }
 
+    override fun deleteTask(taskUID: String) {
+        coroutineScope.launch {
+            val deleted = DataSource.deleteTask(taskUID)
+            if (deleted) {
+                view.showSnackbar("Tarefa deletada")
+                view.reloadTasks()
+            }
+            else {
+                view.showSnackbar("Falha ao deletar")
+            }
+        }
+    }
+
     override fun filterTasksStartWith(prefix: String?) {
         if (prefix != null) {
             val filteredTasks = filterTasksWithPrefix(prefix, currentUserTasks)
@@ -32,6 +49,22 @@ class TasksPresenter(override val view: Tasks.View) : Tasks.Presenter {
             view.displayTasks(sortedFilteredTasks)
         } else {
             view.displayEmptyTasks()
+        }
+    }
+
+    override fun updateTaskStatus(taskUID: String, taskStatus: TaskStatus) {
+        coroutineScope.launch {
+            val updated = DataSource.updateTaskStatus(taskUID, taskStatus)
+            if (updated)
+                view.reloadTasks()
+        }
+    }
+
+    override fun cancelTask(taskUID: String) {
+        coroutineScope.launch {
+            val canceled = DataSource.cancelTask(taskUID)
+            if (canceled)
+                view.reloadTasks()
         }
     }
 

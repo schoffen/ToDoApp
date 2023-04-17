@@ -7,6 +7,7 @@ interface Main {
     interface View {
         fun goToSplashScreen()
         fun showSnackBar(message: String)
+        fun notifyFragmentToReloadTasks()
     }
 
     interface Presenter {

@@ -2,40 +2,45 @@ package site.felipeschoffen.todoapp.tasks
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.tasks.Task
-import site.felipeschoffen.todoapp.common.CustomDate
+import com.google.android.material.snackbar.Snackbar
+import site.felipeschoffen.todoapp.common.CustomTextWatcher
+import site.felipeschoffen.todoapp.common.DateTimeUtils
+import site.felipeschoffen.todoapp.common.DateTimeUtils.dateToString
 import site.felipeschoffen.todoapp.common.SelectedDate
-import site.felipeschoffen.todoapp.common.database.DataSource
-import site.felipeschoffen.todoapp.common.datas.UserTask
+import site.felipeschoffen.todoapp.common.adapters.TaskAdapterListener
+import site.felipeschoffen.todoapp.common.adapters.TasksFragmentAdapter
+import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.databinding.FragmentTasksBinding
-import java.util.*
 
-class TasksFragment : Fragment(), Tasks.View {
+class TasksFragment : Fragment(), Tasks.View, TaskAdapterListener {
 
-    private var currentDate: SelectedDate = SelectedDate(CustomDate.todayDay, CustomDate.todayMonth, CustomDate.todayYear)
+    private var currentDate: SelectedDate = SelectedDate(DateTimeUtils.todayDay, DateTimeUtils.todayMonth, DateTimeUtils.todayYear)
     private lateinit var binding: FragmentTasksBinding
-    private val presenter = TasksPresenter(this)
+    private lateinit var presenter: Tasks.Presenter
+    private lateinit var adapter: TasksFragmentAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTasksBinding.inflate(inflater, container, false)
+
+        presenter = TasksPresenter(this, viewLifecycleOwner.lifecycleScope)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        changeSelectedDateText(CustomDate.dateToString(CustomDate.todayDay, CustomDate.todayMonth, CustomDate.todayYear))
+        changeSelectedDateText(dateToString(currentDate.day, currentDate.month, currentDate.year))
 
         presenter.getSelectedTasks(currentDate)
 
@@ -45,27 +50,19 @@ class TasksFragment : Fragment(), Tasks.View {
                 DatePickerDialog(
                     view.context,
                     { _, year, month, day ->
-                        changeSelectedDateText(CustomDate.dateToString(day, month, year))
+                        changeSelectedDateText(dateToString(day, month, year))
                         currentDate = SelectedDate(day, month, year)
                         presenter.getSelectedTasks(currentDate)
                     },
-                    CustomDate.todayYear,
-                    CustomDate.todayMonth,
-                    CustomDate.todayDay
+                    DateTimeUtils.todayYear,
+                    DateTimeUtils.todayMonth,
+                    DateTimeUtils.todayDay
                 )
             datePickerDialog.show()
         }
 
-        binding.tasksSearchText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                presenter.filterTasksStartWith(s.toString())
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-            }
+        binding.tasksSearchText.addTextChangedListener(CustomTextWatcher { charSequence ->
+            presenter.filterTasksStartWith(charSequence.toString())
         })
     }
 
@@ -74,6 +71,10 @@ class TasksFragment : Fragment(), Tasks.View {
             true -> binding.taskProgressBar.visibility = View.VISIBLE
             false -> binding.taskProgressBar.visibility = View.GONE
         }
+    }
+
+    override fun showSnackbar(message: String) {
+        Snackbar.make(this.requireView(), message, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun displayEmptyTasks() {
@@ -85,7 +86,9 @@ class TasksFragment : Fragment(), Tasks.View {
         binding.taskNoTaskDisplayText.visibility = View.GONE
         binding.taskDayTaskRV.visibility = View.VISIBLE
         binding.taskDayTaskRV.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.taskDayTaskRV.adapter = TasksFragmentAdapter(tasks)
+        adapter = TasksFragmentAdapter(tasks, this)
+        binding.taskDayTaskRV.adapter = adapter
+        Log.d("Teste", tasks.toString())
     }
 
     private fun changeSelectedDateText(date: String) {
@@ -95,4 +98,23 @@ class TasksFragment : Fragment(), Tasks.View {
     override fun getCurrentDate(): SelectedDate {
         return currentDate
     }
+
+    override fun reloadTasks() {
+        adapter.notifyDataSetChanged()
+        presenter.getSelectedTasks(currentDate)
+    }
+
+    override fun onDeleteTask(taskUID: String) {
+        presenter.deleteTask(taskUID)
+    }
+
+    override fun onCancelTask(taskUID: String) {
+        presenter.cancelTask(taskUID)
+    }
+
+    override fun onUpdateTaskStatus(taskUID: String, taskStatus: TaskStatus) {
+        presenter.updateTaskStatus(taskUID, taskStatus)
+    }
+
+
 }

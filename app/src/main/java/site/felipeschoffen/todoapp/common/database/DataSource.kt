@@ -2,20 +2,21 @@ package site.felipeschoffen.todoapp.common.database
 
 import android.icu.util.Calendar
 import android.util.Log
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.FirebaseException
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import site.felipeschoffen.todoapp.common.Callback
-import site.felipeschoffen.todoapp.common.CustomDate
 import site.felipeschoffen.todoapp.common.SelectedDate
 import site.felipeschoffen.todoapp.common.datas.Tag
 import site.felipeschoffen.todoapp.common.datas.UserTask
 import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.common.datas.UserInfo
-import site.felipeschoffen.todoapp.home.Home
+import kotlin.coroutines.coroutineContext
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 object DataSource {
 
@@ -151,8 +152,7 @@ object DataSource {
     }
 
     fun createTask(userTask: UserTask, callback: Callback) {
-        FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid)
-            .collection("tasks")
+        currentUserTasksRef()
             .document(userTask.uid).set(userTask)
             .addOnSuccessListener { callback.onSuccess() }
             .addOnFailureListener { callback.onFailure("Não foi possível adicionar tag") }
@@ -162,8 +162,7 @@ object DataSource {
     fun getTasksByDate(selectedDate: SelectedDate, callback: (List<UserTask>) -> Unit) {
         val userTaskList = mutableListOf<UserTask>()
 
-        FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid)
-            .collection("tasks").get()
+        currentUserTasksRef().get()
             .addOnSuccessListener { documents ->
                 if (!documents.isEmpty) {
                     for (task in documents) {
@@ -205,6 +204,35 @@ object DataSource {
             }
     }
 
+    suspend fun deleteTask(taskUID: String): Boolean = suspendCoroutine { continuation ->
+        currentUserTasksRef().document(taskUID).delete()
+            .addOnSuccessListener { continuation.resume(true) }
+            .addOnFailureListener { continuation.resume(false) }
+    }
+
+    suspend fun cancelTask(taskUID: String): Boolean = suspendCoroutine { continuation ->
+        currentUserTasksRef().document(taskUID).update(
+            hashMapOf<String, Any>("status" to TaskStatus.CANCELED)
+        ).addOnSuccessListener {
+            continuation.resume(true)
+        }
+            .addOnFailureListener {
+                continuation.resume(false)
+            }
+
+    }
+
+    suspend fun updateTaskStatus(taskUID: String, taskStatus: TaskStatus): Boolean = suspendCoroutine { continuation ->
+        currentUserTasksRef().document(taskUID).update(
+            hashMapOf<String, Any>("status" to taskStatus)
+        ).addOnSuccessListener {
+            continuation.resume(true)
+        }
+            .addOnFailureListener {
+                continuation.resume(false)
+            }
+    }
+
     private fun hashTagsToTagList(tagsListRef: List<*>): List<Tag> {
         val taskTags = mutableListOf<Tag>()
 
@@ -230,5 +258,10 @@ object DataSource {
             TaskStatus.PENDING.toString() -> TaskStatus.PENDING
             else -> null
         }
+    }
+
+    private fun currentUserTasksRef(): CollectionReference {
+        return FirebaseFirestore.getInstance().collection("/users")
+            .document(currentUser!!.uid).collection("tasks")
     }
 }
