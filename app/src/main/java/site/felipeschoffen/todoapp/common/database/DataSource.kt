@@ -7,14 +7,18 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import site.felipeschoffen.todoapp.common.Callback
 import site.felipeschoffen.todoapp.common.SelectedDate
 import site.felipeschoffen.todoapp.common.datas.Tag
 import site.felipeschoffen.todoapp.common.datas.UserTask
 import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.common.datas.UserInfo
-import kotlin.coroutines.coroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -23,51 +27,47 @@ object DataSource {
     var currentUser = FirebaseAuth.getInstance().currentUser
     var userInfo = UserInfo("", "", "")
 
-    fun login(email: String, password: String, callback: DatabaseCallback) {
+    suspend fun login(
+        email: String,
+        password: String,
+        coroutineScope: CoroutineScope
+    ): LoginResult = suspendCoroutine { continuation ->
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
             .addOnSuccessListener {
                 currentUser = FirebaseAuth.getInstance().currentUser
-                setUserInfo(object : Callback {
-                    override fun onSuccess() {
-                        callback.onSuccess()
-                    }
 
-                    override fun onFailure(message: String) {
-                    }
-
-                    override fun onComplete() {
-                    }
-                })
+                coroutineScope.launch {
+                    if (setUserInfo())
+                        continuation.resume(LoginResult(true, null))
+                    else
+                        continuation.resume(
+                            LoginResult(
+                                false,
+                                DatabaseError.FAILED_TO_SET_USER_INFO
+                            )
+                        )
+                }
             }
             .addOnFailureListener {
                 try {
                     throw it
                 } catch (e: FirebaseAuthInvalidCredentialsException) {
-                    callback.onFailure(DatabaseError.INVALID_CREDENTIALS)
+                    continuation.resume(LoginResult(false, DatabaseError.INVALID_CREDENTIALS))
                 } catch (e: FirebaseException) {
                     Log.d("FirebaseException", e.message.toString())
                 }
             }
-            .addOnCompleteListener {
-
-                callback.onComplete()
-            }
     }
 
-    fun register(name: String, email: String, password: String, callback: Callback) {
+    suspend fun register(
+        name: String,
+        email: String,
+        password: String,
+        coroutineScope: CoroutineScope
+    ): RegisterResult = suspendCoroutine { continuation ->
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener {
                 currentUser = FirebaseAuth.getInstance().currentUser
-                setUserInfo(object : Callback {
-                    override fun onSuccess() {
-                    }
-
-                    override fun onFailure(message: String) {
-                    }
-
-                    override fun onComplete() {
-                    }
-                })
 
                 val user = hashMapOf(
                     "name" to name,
@@ -77,33 +77,37 @@ object DataSource {
                 FirebaseFirestore.getInstance().collection("/users")
                     .document(currentUser?.uid.toString())
                     .set(user)
-
-                callback.onSuccess()
+                    .addOnSuccessListener {
+                        coroutineScope.launch {
+                            val isUserInfoSet = setUserInfo()
+                            if (isUserInfoSet)
+                                continuation.resume(RegisterResult(true, null))
+                            else
+                                continuation.resume(RegisterResult(false, null))
+                        }
+                    }
             }
-            .addOnFailureListener { exception -> callback.onFailure(exception.message.toString()) }
-            .addOnCompleteListener {
-
-                callback.onComplete()
+            .addOnFailureListener {
+                continuation.resume(RegisterResult(false, null))
+                // tratar essa exception
             }
     }
-
-    fun logout(callback: Callback) {
+    fun logout() {
         FirebaseAuth.getInstance().signOut()
         currentUser = null
-        callback.onSuccess()
-        callback.onComplete()
     }
 
-    fun getSession(): Boolean {
-        return if (FirebaseAuth.getInstance().currentUser != null) {
+    suspend fun getSession(): Boolean = coroutineScope {
+        if (FirebaseAuth.getInstance().currentUser != null) {
             currentUser = FirebaseAuth.getInstance().currentUser
-            true
+
+            return@coroutineScope setUserInfo()
         } else {
-            false
+            return@coroutineScope false
         }
     }
 
-    fun setUserInfo(callback: Callback?) {
+    private suspend fun setUserInfo(): Boolean = suspendCoroutine { continuation ->
         val uid = currentUser?.uid.toString()
         val email = currentUser?.email.toString()
         var name = ""
@@ -115,20 +119,18 @@ object DataSource {
                     userInfo.uid = uid
                     userInfo.email = email
                     userInfo.name = name
-                    Log.d("name", name)
-                    callback?.onSuccess()
-                    callback?.onComplete()
+                    continuation.resume(true)
                 } else
-                    callback?.onFailure("Falhou ao alocar nome")
+                    continuation.resume(false)
             }
     }
 
-    fun createTag(tag: Tag, callback: Callback) {
+    suspend fun createTag(tag: Tag): Boolean = suspendCoroutine { continuation ->
         FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid)
             .collection("tags")
             .document(tag.name).set(tag)
-            .addOnSuccessListener { callback.onSuccess() }
-            .addOnFailureListener { callback.onFailure("Não foi possível adicionar tag") }
+            .addOnSuccessListener { continuation.resume(true) }
+            .addOnFailureListener { continuation.resume(false) }
     }
 
     fun getUserTags(callback: (List<Tag>) -> Unit) {
@@ -159,50 +161,25 @@ object DataSource {
             .addOnCompleteListener { callback.onComplete() }
     }
 
-    fun getTasksByDate(selectedDate: SelectedDate, callback: (List<UserTask>) -> Unit) {
-        val userTaskList = mutableListOf<UserTask>()
+    suspend fun getTasksByDate(selectedDate: SelectedDate): List<UserTask> =
+        suspendCoroutine { continuation ->
+            val userTaskList = mutableListOf<UserTask>()
 
-        currentUserTasksRef().get()
-            .addOnSuccessListener { documents ->
-                if (!documents.isEmpty) {
-                    for (task in documents) {
-                        val date = task.getTimestamp("timestamp")?.toDate()
-
-                        if (date != null) {
-                            val taskCalendar = Calendar.getInstance()
-                            taskCalendar.time = date
-
-                            val isYearEqual =
-                                taskCalendar.get(Calendar.YEAR) == selectedDate.year
-                            val isMonthEqual =
-                                taskCalendar.get(Calendar.MONTH) == selectedDate.month
-                            val isDayEqual =
-                                taskCalendar.get(Calendar.DAY_OF_MONTH) == selectedDate.day
-
-                            if (isYearEqual && isMonthEqual && isDayEqual) {
-
-                                val taskUid = task.data["uid"].toString()
-                                val taskName = task.data["name"].toString()
-                                val taskTimestamp = task.data["timestamp"]
-                                val taskTags = hashTagsToTagList(task.data["tags"] as List<*>)
-                                val taskStatus = stringToTaskStatus(task.data["status"].toString())
-
-                                userTaskList.add(
-                                    UserTask(
-                                        taskUid,
-                                        taskName,
-                                        taskTimestamp as Timestamp,
-                                        taskTags,
-                                        taskStatus as TaskStatus
-                                    )
-                                )
+            currentUserTasksRef().get()
+                .addOnSuccessListener { documents ->
+                    if (!documents.isEmpty) {
+                        documents.forEach { document ->
+                            document.getTimestamp("timestamp")?.run {
+                                if (checkFirebaseTimestampEqualsDate(this, selectedDate)) {
+                                    userTaskList.add(queryDocumentSnapShotToUserTask(document))
+                                }
                             }
                         }
                     }
-                    callback(userTaskList)
+                    continuation.resume(userTaskList)
                 }
-            }
-    }
+                .addOnFailureListener { continuation.resume(userTaskList) }
+        }
 
     suspend fun deleteTask(taskUID: String): Boolean = suspendCoroutine { continuation ->
         currentUserTasksRef().document(taskUID).delete()
@@ -210,27 +187,52 @@ object DataSource {
             .addOnFailureListener { continuation.resume(false) }
     }
 
-    suspend fun cancelTask(taskUID: String): Boolean = suspendCoroutine { continuation ->
-        currentUserTasksRef().document(taskUID).update(
-            hashMapOf<String, Any>("status" to TaskStatus.CANCELED)
-        ).addOnSuccessListener {
-            continuation.resume(true)
-        }
-            .addOnFailureListener {
-                continuation.resume(false)
+    suspend fun updateTaskStatus(taskUID: String, taskStatus: TaskStatus): Boolean =
+        suspendCoroutine { continuation ->
+            currentUserTasksRef().document(taskUID).update(
+                hashMapOf<String, Any>("status" to taskStatus)
+            ).addOnSuccessListener {
+                continuation.resume(true)
             }
+                .addOnFailureListener {
+                    continuation.resume(false)
+                }
+        }
 
+    private fun queryDocumentSnapShotToUserTask(document: QueryDocumentSnapshot): UserTask {
+        val taskUid = document.data["uid"].toString()
+        val taskName = document.data["name"].toString()
+        val taskTimestamp = document.data["timestamp"]
+        val taskTags = hashTagsToTagList(document.data["tags"] as List<*>)
+        val taskStatus =
+            stringToTaskStatus(document.data["status"].toString())
+
+        return UserTask(
+            taskUid,
+            taskName,
+            taskTimestamp as Timestamp,
+            taskTags,
+            taskStatus as TaskStatus
+        )
     }
 
-    suspend fun updateTaskStatus(taskUID: String, taskStatus: TaskStatus): Boolean = suspendCoroutine { continuation ->
-        currentUserTasksRef().document(taskUID).update(
-            hashMapOf<String, Any>("status" to taskStatus)
-        ).addOnSuccessListener {
-            continuation.resume(true)
-        }
-            .addOnFailureListener {
-                continuation.resume(false)
-            }
+    private fun checkFirebaseTimestampEqualsDate(
+        timestamp: Timestamp,
+        selectedDate: SelectedDate
+    ): Boolean {
+        val date = timestamp.toDate()
+
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+
+        val isYearEqual =
+            calendar.get(Calendar.YEAR) == selectedDate.year
+        val isMonthEqual =
+            calendar.get(Calendar.MONTH) == selectedDate.month
+        val isDayEqual =
+            calendar.get(Calendar.DAY_OF_MONTH) == selectedDate.day
+
+        return isDayEqual && isMonthEqual && isYearEqual
     }
 
     private fun hashTagsToTagList(tagsListRef: List<*>): List<Tag> {

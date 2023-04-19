@@ -19,7 +19,6 @@ interface Tasks {
         fun getSelectedTasks(selectedDate: SelectedDate)
         fun filterTasksStartWith(prefix: String?)
         fun deleteTask(taskUID: String)
-        fun cancelTask(taskUID: String)
         fun updateTaskStatus(taskUID: String, taskStatus: TaskStatus)
     }
 }

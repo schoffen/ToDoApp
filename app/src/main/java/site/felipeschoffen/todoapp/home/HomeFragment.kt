@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.CoroutineScope
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.adapters.ShortTaskAdapter
 import site.felipeschoffen.todoapp.common.adapters.TaskAdapterListener
@@ -95,9 +94,5 @@ class HomeFragment : Fragment(), Home.View, TaskAdapterListener {
 
     override fun onUpdateTaskStatus(taskUID: String, taskStatus: TaskStatus) {
         presenter.updateTaskStatus(taskUID, taskStatus)
-    }
-
-    override fun onCancelTask(taskUID: String) {
-        presenter.cancelTask(taskUID)
     }
 }

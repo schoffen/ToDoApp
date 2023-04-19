@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.lifecycleScope
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.CustomTextWatcher
 import site.felipeschoffen.todoapp.common.InputErrors
@@ -15,12 +16,14 @@ import site.felipeschoffen.todoapp.register.RegisterActivity
 
 class LoginActivity : AppCompatActivity(), Login.View {
 
-    override val presenter: Login.Presenter = LoginPresenter(this)
+    override lateinit var presenter: Login.Presenter
     private lateinit var binding: ActivityLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        presenter = LoginPresenter(this, lifecycleScope)
 
         binding.loginEmailET.addTextChangedListener (CustomTextWatcher {
             displayEmailError(null)

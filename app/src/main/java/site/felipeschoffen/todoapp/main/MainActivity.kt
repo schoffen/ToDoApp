@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.databinding.ActivityMainBinding
@@ -15,7 +16,7 @@ import site.felipeschoffen.todoapp.tasks.TasksFragment
 
 class MainActivity : AppCompatActivity(), Main.View {
 
-    private val presenter = MainPresenter(this)
+    private lateinit var presenter: MainPresenter
     private lateinit var binding: ActivityMainBinding
 
     private var currentFragmentId = 0
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity(), Main.View {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        presenter = MainPresenter(this, lifecycleScope)
 
         initFragments()
 

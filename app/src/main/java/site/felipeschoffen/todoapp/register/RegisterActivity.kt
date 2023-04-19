@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.CustomTextWatcher
 import site.felipeschoffen.todoapp.common.InputErrors
@@ -12,12 +13,13 @@ import site.felipeschoffen.todoapp.login.LoginActivity
 import site.felipeschoffen.todoapp.main.MainActivity
 
 class RegisterActivity : AppCompatActivity(), Register.View {
-    override val presenter: RegisterPresenter = RegisterPresenter(this)
+    override lateinit var presenter: RegisterPresenter
 
     private lateinit var binding: ActivityRegisterBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
+        presenter = RegisterPresenter(this, lifecycleScope)
         setContentView(binding.root)
 
         with(binding) {

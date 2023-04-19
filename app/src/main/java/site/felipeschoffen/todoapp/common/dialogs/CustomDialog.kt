@@ -15,6 +15,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.*
 import site.felipeschoffen.todoapp.common.DateTimeUtils.dateToString
@@ -51,7 +53,7 @@ abstract class CustomDialog {
         }
     }
 
-    class CreateTaskDialog(private val supportFragmentManager: FragmentManager, private val callback: Callback) : DialogFragment() {
+    class CreateTaskDialog(private val supportFragmentManager: FragmentManager, private val callback: Callback, private val coroutineScope: CoroutineScope) : DialogFragment() {
         private lateinit var binding: DialogCreateTaskBinding
 
         override fun onCreateView(
@@ -110,7 +112,7 @@ abstract class CustomDialog {
                     override fun newTagCreated() {
                         loadTags()
                     }
-                }).show(supportFragmentManager, null)
+                }, coroutineScope).show(supportFragmentManager, null)
             }
 
             binding.createYesButton.setOnClickListener {
@@ -205,6 +207,7 @@ abstract class CustomDialog {
                         LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
                     binding.createTagsProgress.visibility = View.GONE
                     binding.createTagsRV.visibility = View.VISIBLE
+                    binding.createNoTagsTV.visibility = View.INVISIBLE
                 } else {
                     binding.createTagsProgress.visibility = View.GONE
                     binding.createNoTagsTV.visibility = View.VISIBLE
@@ -235,7 +238,7 @@ abstract class CustomDialog {
         }
     }
 
-    class CreateTagDialog(private val callback: CreateTagCallback) : DialogFragment() {
+    class CreateTagDialog(private val callback: CreateTagCallback, private val coroutineScope: CoroutineScope) : DialogFragment() {
         private lateinit var binding: DialogCreateTagBinding
 
         override fun onCreateView(
@@ -268,17 +271,12 @@ abstract class CustomDialog {
 
 
                 if (tagName.isNotEmpty() && tagColor != null) {
-                    DataSource.createTag(Tag(uid, tagName, tagColor), object : Callback {
-                        override fun onSuccess() {
+                    coroutineScope.launch {
+                        val tagCreated = DataSource.createTag(Tag(uid, tagName, tagColor))
+                        if (tagCreated)
                             callback.newTagCreated()
-                        }
+                    }
 
-                        override fun onFailure(message: String) {
-                        }
-
-                        override fun onComplete() {
-                        }
-                    })
                     dismiss()
                 } else {
                     Toast.makeText(

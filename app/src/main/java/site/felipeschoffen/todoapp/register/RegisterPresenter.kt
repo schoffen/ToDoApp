@@ -1,32 +1,30 @@
 package site.felipeschoffen.todoapp.register
 
 import android.util.Patterns
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import site.felipeschoffen.todoapp.common.Callback
 import site.felipeschoffen.todoapp.common.Constants
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.InputErrors
 
-class RegisterPresenter(override val view: Register.View) : Register.Presenter {
+class RegisterPresenter(override val view: Register.View, private val coroutineScope: CoroutineScope) : Register.Presenter {
 
     override fun register(name: String, email: String, password: String, confirmPassword: String) {
         view.displayRegisterButtonProgress(true)
 
         if (validateData(name, email, password, confirmPassword)) {
-            DataSource.register(name, email, password, object : Callback{
-                override fun onSuccess() {
+            coroutineScope.launch {
+                val registerResult = DataSource.register(name, email, password, coroutineScope)
+                if (registerResult.success) {
                     view.goToMainScreen()
-                }
-
-                override fun onFailure(message: String) {
-                    if (message == "The email address is already in use by another account.") {
-                        view.displayEmailError(InputErrors.EMAIL_ALREADY_IN_USE)
-                    }
-                }
-
-                override fun onComplete() {
                     view.displayRegisterButtonProgress(false)
                 }
-            })
+                else {
+                    // view.displayEmailError()
+                    // TRATAR ESSA EXCESSAO
+                }
+            }
         } else {
             view.displayRegisterButtonProgress(false)
         }

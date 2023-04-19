@@ -39,12 +39,24 @@ class ShortTaskAdapter(private val listener: TaskAdapterListener) : RecyclerView
             binding.itemTodayTaskName.text = userTask.name
             binding.itemTodayTaskTime.text = formatTime(userTask.timestamp)
 
+            val colors = selectColorByStatus(userTask.status)
+
             ViewCompat.setBackgroundTintList(
                 binding.itemTodayTaskLine,
                 ColorStateList.valueOf(
                     ContextCompat.getColor(
                         this.binding.root.context,
-                        selectColorByStatus(userTask.status)
+                        colors.first
+                    )
+                )
+            )
+
+            ViewCompat.setBackgroundTintList(
+                binding.itemCL,
+                ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        this.binding.root.context,
+                        colors.second
                     )
                 )
             )
@@ -85,6 +97,21 @@ class ShortTaskAdapter(private val listener: TaskAdapterListener) : RecyclerView
                             true
                         }
 
+                        R.id.menuTaskStart -> {
+                            listener.onUpdateTaskStatus(userTask.uid, TaskStatus.ON_GOING)
+                            true
+                        }
+
+                        R.id.menuTaskComplete -> {
+                            listener.onUpdateTaskStatus(userTask.uid, TaskStatus.COMPLETED)
+                            true
+                        }
+
+                        R.id.menuTaskRestore -> {
+                            listener.onUpdateTaskStatus(userTask.uid, TaskStatus.PENDING)
+                            true
+                        }
+
                         else -> false
                     }
                 }
@@ -93,13 +120,18 @@ class ShortTaskAdapter(private val listener: TaskAdapterListener) : RecyclerView
             }
         }
 
+        /**
+         *
+         * Return Pair<Strong color, light color>
+         *     common used for <Vertical Line, Background>
+         */
         @ColorRes
-        private fun selectColorByStatus(status: TaskStatus): Int {
+        private fun selectColorByStatus(status: TaskStatus): Pair<Int, Int> {
             return when (status) {
-                TaskStatus.COMPLETED -> R.color.blue_full
-                TaskStatus.CANCELED -> R.color.red_full
-                TaskStatus.PENDING -> R.color.purple_full
-                TaskStatus.ON_GOING -> R.color.green_full
+                TaskStatus.COMPLETED -> Pair(R.color.blue_full, R.color.blue_alpha)
+                TaskStatus.CANCELED -> Pair(R.color.red_full, R.color.red_alpha)
+                TaskStatus.PENDING -> Pair(R.color.purple_full, R.color.purple_alpha)
+                TaskStatus.ON_GOING -> Pair(R.color.green_full, R.color.green_alpha)
             }
         }
     }

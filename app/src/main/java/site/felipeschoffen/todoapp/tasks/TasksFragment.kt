@@ -100,16 +100,11 @@ class TasksFragment : Fragment(), Tasks.View, TaskAdapterListener {
     }
 
     override fun reloadTasks() {
-        adapter.notifyDataSetChanged()
         presenter.getSelectedTasks(currentDate)
     }
 
     override fun onDeleteTask(taskUID: String) {
         presenter.deleteTask(taskUID)
-    }
-
-    override fun onCancelTask(taskUID: String) {
-        presenter.cancelTask(taskUID)
     }
 
     override fun onUpdateTaskStatus(taskUID: String, taskStatus: TaskStatus) {

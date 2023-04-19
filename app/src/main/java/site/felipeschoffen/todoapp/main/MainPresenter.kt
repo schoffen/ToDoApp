@@ -2,26 +2,16 @@ package site.felipeschoffen.todoapp.main
 
 import android.content.Context
 import androidx.fragment.app.FragmentManager
+import kotlinx.coroutines.CoroutineScope
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.Callback
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.dialogs.CustomDialog
 
-class MainPresenter(override val view: Main.View) : Main.Presenter {
+class MainPresenter(override val view: Main.View, private val coroutineScope: CoroutineScope) : Main.Presenter {
     override fun logout() {
-        DataSource.logout(object : Callback {
-            override fun onSuccess() {
-
-            }
-
-            override fun onFailure(message: String) {
-
-            }
-
-            override fun onComplete() {
-                view.goToSplashScreen()
-            }
-        })
+        DataSource.logout()
+        view.goToSplashScreen()
     }
 
     override fun openCreateTaskDialog(supportFragmentManager: FragmentManager, context: Context) {
@@ -38,7 +28,7 @@ class MainPresenter(override val view: Main.View) : Main.Presenter {
             override fun onComplete() {
 
             }
-        })
+        }, coroutineScope)
             .show(supportFragmentManager, "")
     }
 }

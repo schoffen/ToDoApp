@@ -16,8 +16,7 @@ interface Home {
         val view: View
 
         fun getTodayTasks()
-        fun deleteTask(taskUID: String)
-        fun cancelTask(taskUID: String)
         fun updateTaskStatus(taskUID: String, taskStatus: TaskStatus)
+        fun deleteTask(taskUID: String)
     }
 }

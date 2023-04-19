@@ -5,25 +5,38 @@ import kotlinx.coroutines.launch
 import site.felipeschoffen.todoapp.common.Callback
 import site.felipeschoffen.todoapp.common.DateTimeUtils
 import site.felipeschoffen.todoapp.common.SelectedDate
+import site.felipeschoffen.todoapp.common.adapters.TaskAdapterListener
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.datas.TaskStatus
 
 class HomePresenter(override val view: Home.View, private val coroutineScope: CoroutineScope) : Home.Presenter {
     override fun getTodayTasks() {
-        DataSource.getTasksByDate(
-            SelectedDate(
-                DateTimeUtils.todayDay,
-                DateTimeUtils.todayMonth,
-                DateTimeUtils.todayYear
+        view.showProgress(true)
+
+        coroutineScope.launch {
+            val userTasksList = DataSource.getTasksByDate(
+                SelectedDate(
+                    DateTimeUtils.todayDay,
+                    DateTimeUtils.todayMonth,
+                    DateTimeUtils.todayYear
+                )
             )
-        ) { taskList ->
-            if (taskList.isNotEmpty()) {
-                view.displayTodayTasks(taskList)
+
+            if (userTasksList.isNotEmpty()) {
+                view.displayTodayTasks(userTasksList)
                 view.showProgress(false)
             } else {
                 view.displayEmptyTasks()
                 view.showProgress(false)
             }
+        }
+    }
+
+    override fun updateTaskStatus(taskUID: String, taskStatus: TaskStatus) {
+        coroutineScope.launch {
+            val updated = DataSource.updateTaskStatus(taskUID, taskStatus)
+            if (updated)
+                view.reloadTasks()
         }
     }
 
@@ -40,19 +53,4 @@ class HomePresenter(override val view: Home.View, private val coroutineScope: Co
         }
     }
 
-    override fun updateTaskStatus(taskUID: String, taskStatus: TaskStatus) {
-        coroutineScope.launch {
-            val updated = DataSource.updateTaskStatus(taskUID, taskStatus)
-            if (updated)
-                view.reloadTasks()
-        }
-    }
-
-    override fun cancelTask(taskUID: String) {
-        coroutineScope.launch {
-            val canceled = DataSource.cancelTask(taskUID)
-            if (canceled)
-                view.reloadTasks()
-        }
-    }
 }

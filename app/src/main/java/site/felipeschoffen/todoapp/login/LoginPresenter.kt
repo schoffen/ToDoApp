@@ -1,41 +1,43 @@
 package site.felipeschoffen.todoapp.login
 
 import android.util.Patterns
-import site.felipeschoffen.todoapp.common.Callback
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.InputErrors
 import site.felipeschoffen.todoapp.common.database.DatabaseCallback
 import site.felipeschoffen.todoapp.common.database.DatabaseError
 
-class LoginPresenter(override val view: Login.View) : Login.Presenter {
+class LoginPresenter(override val view: Login.View, private val coroutineScope: CoroutineScope) : Login.Presenter {
 
     override fun login(email: String, password: String) {
         val isEmailValid = validateEmail(email)
         val isPasswordValid = validatePassword(password)
 
         if (isEmailValid && isPasswordValid) {
-            DataSource.login(email, password, object : DatabaseCallback {
-                override fun onSuccess() {
+            coroutineScope.launch {
+                val loginResult = DataSource.login(email, password, coroutineScope)
+
+                if (loginResult.success)
                     view.goToMainScreen()
-                }
-
-                override fun onFailure(error: DatabaseError) {
-                    checkDatabaseError(error)
-                }
-
-                override fun onComplete() {
-
-                }
-            })
+                else
+                    displayDatabaseError(loginResult.error)
+            }
         }
     }
 
-    private fun checkDatabaseError(error: DatabaseError) {
+    private fun displayDatabaseError(error: DatabaseError?) {
         when (error) {
             DatabaseError.INVALID_CREDENTIALS -> {
                 view.displayEmailError(InputErrors.INCORRECT_INFO)
                 view.displayPasswordError(InputErrors.INCORRECT_INFO)
             }
+
+            DatabaseError.FAILED_TO_SET_USER_INFO -> {
+
+            }
+
+            else -> { }
         }
     }
 

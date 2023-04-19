@@ -1,5 +1,6 @@
 package site.felipeschoffen.todoapp.tasks
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import site.felipeschoffen.todoapp.common.Callback
@@ -16,15 +17,19 @@ class TasksPresenter(override val view: Tasks.View, private val coroutineScope: 
     override fun getSelectedTasks(selectedDate: SelectedDate) {
         view.showProgress(true)
 
-        DataSource.getTasksByDate(selectedDate) { userTaskList ->
-            if (userTaskList.isEmpty()) {
+        coroutineScope.launch {
+            val userTasksList = DataSource.getTasksByDate(selectedDate)
+
+            if (userTasksList.isNotEmpty()) {
+                Log.d("scope", "lista cheia")
+                currentUserTasks = userTasksList
+                view.showProgress(false)
+                view.displayTasks(sortTaskByHour(userTasksList))
+            } else {
+                Log.d("scope", "lista vazia")
                 currentUserTasks = emptyList()
                 view.showProgress(false)
                 view.displayEmptyTasks()
-            } else {
-                currentUserTasks = userTaskList
-                view.showProgress(false)
-                view.displayTasks(sortTaskByHour(userTaskList))
             }
         }
     }
@@ -56,14 +61,6 @@ class TasksPresenter(override val view: Tasks.View, private val coroutineScope: 
         coroutineScope.launch {
             val updated = DataSource.updateTaskStatus(taskUID, taskStatus)
             if (updated)
-                view.reloadTasks()
-        }
-    }
-
-    override fun cancelTask(taskUID: String) {
-        coroutineScope.launch {
-            val canceled = DataSource.cancelTask(taskUID)
-            if (canceled)
                 view.reloadTasks()
         }
     }

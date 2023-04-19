@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.Callback
 import site.felipeschoffen.todoapp.common.database.DataSource
@@ -23,23 +25,15 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (DataSource.getSession()) {
+        lifecycleScope.launch {
             showProgress(true)
-
-            DataSource.setUserInfo(object : Callback {
-                override fun onSuccess() {
-                }
-
-                override fun onFailure(message: String) {
-                }
-
-                override fun onComplete() {
-                    Timer().schedule(timerTask {
-                        goToMainScreen()
-                        finish()
-                    }, 2000)
-                }
-            })
+            val session = DataSource.getSession()
+            if (session) {
+                goToMainScreen()
+                finish()
+            } else {
+                showProgress(false)
+            }
         }
 
         binding.splashLoginBtn.setOnClickListener { goToLoginScreen() }
