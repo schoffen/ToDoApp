@@ -6,7 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.Callback
 import site.felipeschoffen.todoapp.common.database.DataSource
-import site.felipeschoffen.todoapp.common.dialogs.CustomDialog
+import site.felipeschoffen.todoapp.common.dialogs.CreateTaskDialog
 
 class MainPresenter(override val view: Main.View, private val coroutineScope: CoroutineScope) : Main.Presenter {
     override fun logout() {
@@ -15,7 +15,7 @@ class MainPresenter(override val view: Main.View, private val coroutineScope: Co
     }
 
     override fun openCreateTaskDialog(supportFragmentManager: FragmentManager, context: Context) {
-        CustomDialog.CreateTaskDialog(supportFragmentManager, object : Callback {
+        CreateTaskDialog(supportFragmentManager, object : Callback {
             override fun onSuccess() {
                 view.showSnackBar(context.getString(R.string.task_create_successfully))
                 view.notifyFragmentToReloadTasks()

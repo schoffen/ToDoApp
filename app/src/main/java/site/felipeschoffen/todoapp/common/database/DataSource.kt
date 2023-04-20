@@ -10,6 +10,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.google.firebase.firestore.auth.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -92,6 +93,7 @@ object DataSource {
                 // tratar essa exception
             }
     }
+
     fun logout() {
         FirebaseAuth.getInstance().signOut()
         currentUser = null
@@ -133,32 +135,27 @@ object DataSource {
             .addOnFailureListener { continuation.resume(false) }
     }
 
-    fun getUserTags(callback: (List<Tag>) -> Unit) {
+    suspend fun getUserTags(): List<Tag> = suspendCoroutine { continuation ->
         val tags = mutableListOf<Tag>()
 
         FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid)
             .collection("tags").get()
             .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    val tag =
-                        Tag(
-                            document.data["uid"].toString(),
-                            document.data["name"].toString(),
-                            document.data["color"].toString()
-                        )
+
+                documents.forEach { document ->
+                    val tag = document.toObject(Tag::class.java)
                     tags.add(tag)
                 }
 
-                callback(tags)
+                continuation.resume(tags)
             }
     }
 
-    fun createTask(userTask: UserTask, callback: Callback) {
+    suspend fun createTask(userTask: UserTask): Boolean = suspendCoroutine { continuation ->
         currentUserTasksRef()
             .document(userTask.uid).set(userTask)
-            .addOnSuccessListener { callback.onSuccess() }
-            .addOnFailureListener { callback.onFailure("Não foi possível adicionar tag") }
-            .addOnCompleteListener { callback.onComplete() }
+            .addOnSuccessListener { continuation.resume(true) }
+            .addOnFailureListener { continuation.resume(false) }
     }
 
     suspend fun getTasksByDate(selectedDate: SelectedDate): List<UserTask> =
@@ -198,22 +195,15 @@ object DataSource {
                     continuation.resume(false)
                 }
         }
-
+    
+    suspend fun editTask(userTask: UserTask): Boolean = suspendCoroutine { continuation ->  
+        currentUserTasksRef().document(userTask.uid).set(userTask)
+            .addOnSuccessListener { continuation.resume(true) }
+            .addOnFailureListener { continuation.resume(false) }
+    }
+    
     private fun queryDocumentSnapShotToUserTask(document: QueryDocumentSnapshot): UserTask {
-        val taskUid = document.data["uid"].toString()
-        val taskName = document.data["name"].toString()
-        val taskTimestamp = document.data["timestamp"]
-        val taskTags = hashTagsToTagList(document.data["tags"] as List<*>)
-        val taskStatus =
-            stringToTaskStatus(document.data["status"].toString())
-
-        return UserTask(
-            taskUid,
-            taskName,
-            taskTimestamp as Timestamp,
-            taskTags,
-            taskStatus as TaskStatus
-        )
+        return document.toObject(UserTask::class.java)
     }
 
     private fun checkFirebaseTimestampEqualsDate(
@@ -233,33 +223,6 @@ object DataSource {
             calendar.get(Calendar.DAY_OF_MONTH) == selectedDate.day
 
         return isDayEqual && isMonthEqual && isYearEqual
-    }
-
-    private fun hashTagsToTagList(tagsListRef: List<*>): List<Tag> {
-        val taskTags = mutableListOf<Tag>()
-
-        for (tag in tagsListRef) {
-            val tagHash = tag as HashMap<*, *>
-            taskTags.add(
-                Tag(
-                    tagHash["uid"].toString(),
-                    tagHash["name"].toString(),
-                    tagHash["color"].toString()
-                )
-            )
-        }
-
-        return taskTags
-    }
-
-    private fun stringToTaskStatus(data: String): TaskStatus? {
-        return when (data) {
-            TaskStatus.COMPLETED.toString() -> TaskStatus.COMPLETED
-            TaskStatus.CANCELED.toString() -> TaskStatus.CANCELED
-            TaskStatus.ON_GOING.toString() -> TaskStatus.ON_GOING
-            TaskStatus.PENDING.toString() -> TaskStatus.PENDING
-            else -> null
-        }
     }
 
     private fun currentUserTasksRef(): CollectionReference {

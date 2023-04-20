@@ -86,7 +86,7 @@ class TasksFragment : Fragment(), Tasks.View, TaskAdapterListener {
         binding.taskNoTaskDisplayText.visibility = View.GONE
         binding.taskDayTaskRV.visibility = View.VISIBLE
         binding.taskDayTaskRV.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        adapter = TasksFragmentAdapter(tasks, this)
+        adapter = TasksFragmentAdapter(tasks, this, parentFragmentManager, viewLifecycleOwner.lifecycleScope)
         binding.taskDayTaskRV.adapter = adapter
         Log.d("Teste", tasks.toString())
     }
@@ -111,5 +111,7 @@ class TasksFragment : Fragment(), Tasks.View, TaskAdapterListener {
         presenter.updateTaskStatus(taskUID, taskStatus)
     }
 
-
+    override fun onEditTask() {
+        reloadTasks()
+    }
 }

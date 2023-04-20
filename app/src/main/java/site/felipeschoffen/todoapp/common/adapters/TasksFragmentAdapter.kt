@@ -2,14 +2,21 @@ package site.felipeschoffen.todoapp.common.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
 import site.felipeschoffen.todoapp.common.DateTimeUtils.formatTime
 import site.felipeschoffen.todoapp.common.DateTimeUtils.intToTimestamp
 import site.felipeschoffen.todoapp.databinding.ItemTaskDayHourBinding
 import site.felipeschoffen.todoapp.tasks.TasksByHour
 
-class TasksFragmentAdapter(var tasksByHour: List<TasksByHour>, val listener: TaskAdapterListener) :
+class TasksFragmentAdapter(
+    var tasksByHour: List<TasksByHour>,
+    val listener: TaskAdapterListener,
+    private val supportFragmentManager: FragmentManager,
+    private val coroutineScope: CoroutineScope
+) :
     RecyclerView.Adapter<TasksFragmentAdapter.TaskViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -37,7 +44,7 @@ class TasksFragmentAdapter(var tasksByHour: List<TasksByHour>, val listener: Tas
             binding.hoursTasksRV.layoutManager =
                 LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
 
-            val adapter = ShortTaskAdapter(listener)
+            val adapter = ShortTaskAdapter(listener, supportFragmentManager, coroutineScope)
             adapter.userTasks = tasksByHour.userTasksList.sortedBy { it.timestamp.toDate().minutes }
             binding.hoursTasksRV.adapter = adapter
         }

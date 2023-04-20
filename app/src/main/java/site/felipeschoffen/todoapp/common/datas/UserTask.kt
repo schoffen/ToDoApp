@@ -4,9 +4,9 @@ import com.google.firebase.Timestamp
 
 
 data class UserTask (
-    val uid: String,
-    val name: String,
-    val timestamp: Timestamp,
-    val tags: List<Tag>,
-    val status: TaskStatus
+    var uid: String = "",
+    var name: String = "",
+    var timestamp: Timestamp = Timestamp.now(),
+    var tags: List<Tag> = emptyList(),
+    var status: TaskStatus = TaskStatus.PENDING
         )

@@ -1,5 +1,6 @@
 package site.felipeschoffen.todoapp.common.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -25,6 +26,7 @@ class TagsAdapter(val tags: List<Tag>) : RecyclerView.Adapter<TagsAdapter.TagVie
     inner class TagViewHolder(private val binding: ItemTagBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(tag: Tag) {
             binding.itemTagName.text = tag.name
+            binding.itemTagName.isChecked = tag.isSelected
 
             when(tag.color) {
                 Constants.tagColorGreen -> {

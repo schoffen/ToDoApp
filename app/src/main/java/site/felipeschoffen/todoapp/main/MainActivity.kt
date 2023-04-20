@@ -80,12 +80,14 @@ class MainActivity : AppCompatActivity(), Main.View {
     override fun notifyFragmentToReloadTasks() {
         when (currentFragmentId) {
             homeFragment.id -> {
-                val currentFragment = supportFragmentManager.findFragmentById(binding.mainFragmentContainer.id) as HomeFragment
+                val currentFragment =
+                    supportFragmentManager.findFragmentById(binding.mainFragmentContainer.id) as HomeFragment
                 currentFragment.reloadTasks()
             }
 
             tasksFragment.id -> {
-                val currentFragment = supportFragmentManager.findFragmentById(binding.mainFragmentContainer.id) as TasksFragment
+                val currentFragment =
+                    supportFragmentManager.findFragmentById(binding.mainFragmentContainer.id) as TasksFragment
                 currentFragment.reloadTasks()
             }
         }

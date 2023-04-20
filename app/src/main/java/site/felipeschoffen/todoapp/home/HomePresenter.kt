@@ -52,5 +52,4 @@ class HomePresenter(override val view: Home.View, private val coroutineScope: Co
             }
         }
     }
-
 }

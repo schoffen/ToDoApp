@@ -7,16 +7,24 @@ import android.widget.PopupMenu
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
 import site.felipeschoffen.todoapp.R
+import site.felipeschoffen.todoapp.common.Callback
 import site.felipeschoffen.todoapp.common.DateTimeUtils.formatTime
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.common.datas.UserTask
+import site.felipeschoffen.todoapp.common.dialogs.EditTaskDialog
 import site.felipeschoffen.todoapp.databinding.ItemTaskShortBinding
 
-class ShortTaskAdapter(private val listener: TaskAdapterListener) : RecyclerView.Adapter<ShortTaskAdapter.TaskViewHolder>() {
+class ShortTaskAdapter(
+    private val listener: TaskAdapterListener,
+    private val supportFragmentManager: FragmentManager,
+    private val coroutineScope: CoroutineScope
+) : RecyclerView.Adapter<ShortTaskAdapter.TaskViewHolder>() {
     lateinit var userTasks: List<UserTask>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -73,7 +81,8 @@ class ShortTaskAdapter(private val listener: TaskAdapterListener) : RecyclerView
                 popUp.inflate(R.menu.menu_task)
 
                 when (userTask.status) {
-                    TaskStatus.COMPLETED -> popUp.menu.findItem(R.id.menuTaskRestore).isVisible = true
+                    TaskStatus.COMPLETED -> popUp.menu.findItem(R.id.menuTaskRestore).isVisible =
+                        true
                     TaskStatus.CANCELED -> {
                         popUp.menu.findItem(R.id.menuTaskRestore).isVisible = true
                         popUp.menu.findItem(R.id.menuTaskCancel).isVisible = false
@@ -82,7 +91,8 @@ class ShortTaskAdapter(private val listener: TaskAdapterListener) : RecyclerView
                         popUp.menu.findItem(R.id.menuTaskStart).isVisible = true
                         popUp.menu.findItem(R.id.menuTaskEdit).isVisible = true
                     }
-                    TaskStatus.ON_GOING -> popUp.menu.findItem(R.id.menuTaskComplete).isVisible = true
+                    TaskStatus.ON_GOING -> popUp.menu.findItem(R.id.menuTaskComplete).isVisible =
+                        true
                 }
 
                 popUp.setOnMenuItemClickListener { menuItem ->
@@ -112,6 +122,11 @@ class ShortTaskAdapter(private val listener: TaskAdapterListener) : RecyclerView
                             true
                         }
 
+                        R.id.menuTaskEdit -> {
+                            openEditTaskDialog(userTask)
+                            true
+                        }
+
                         else -> false
                     }
                 }
@@ -133,6 +148,20 @@ class ShortTaskAdapter(private val listener: TaskAdapterListener) : RecyclerView
                 TaskStatus.PENDING -> Pair(R.color.purple_full, R.color.purple_alpha)
                 TaskStatus.ON_GOING -> Pair(R.color.green_full, R.color.green_alpha)
             }
+        }
+
+        private fun openEditTaskDialog(userTask: UserTask) {
+            EditTaskDialog(supportFragmentManager, object : Callback {
+                override fun onSuccess() {
+                    listener.onEditTask()
+                }
+
+                override fun onFailure(message: String) {
+                }
+
+                override fun onComplete() {
+                }
+            }, coroutineScope, userTask).show(supportFragmentManager, null)
         }
     }
 }

@@ -20,14 +20,14 @@ import java.util.Calendar
 class HomeFragment : Fragment(), Home.View, TaskAdapterListener {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var presenter: Home.Presenter
-    private val adapter = ShortTaskAdapter(this)
+    private lateinit var adapter: ShortTaskAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
-
+        adapter = ShortTaskAdapter(this, childFragmentManager, viewLifecycleOwner.lifecycleScope)
         presenter = HomePresenter(this, viewLifecycleOwner.lifecycleScope)
 
         return binding.root
@@ -94,5 +94,9 @@ class HomeFragment : Fragment(), Home.View, TaskAdapterListener {
 
     override fun onUpdateTaskStatus(taskUID: String, taskStatus: TaskStatus) {
         presenter.updateTaskStatus(taskUID, taskStatus)
+    }
+
+    override fun onEditTask() {
+        reloadTasks()
     }
 }

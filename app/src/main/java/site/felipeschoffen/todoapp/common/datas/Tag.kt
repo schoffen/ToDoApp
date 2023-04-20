@@ -1,7 +1,8 @@
 package site.felipeschoffen.todoapp.common.datas
 
 data class Tag(
-    val uid: String,
-    val name: String,
-    val color: String
+    var uid: String = "",
+    var name: String = "",
+    var color: String = "",
+    var isSelected: Boolean = false
 )
