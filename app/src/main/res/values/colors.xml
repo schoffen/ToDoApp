@@ -32,6 +32,15 @@
     <color name="orange_light">#FFEFEB</color>
     <color name="orange_dark">#F0A58E</color>
 
+    <color name="purple_light">#ECEAFF</color>
+    <color name="purple_dark">#8F81FE</color>
+
+    <color name="red_light">#FFE9ED</color>
+    <color name="red_dark">#F57C96</color>
+
+    <color name="green_light">#D1FEFF</color>
+    <color name="green_dark">#1EC1C3</color>
+
     <color name="today_task_background">#F9FAFD</color>
 
     <color name="tag_background_purple">#ECEAFF</color>

@@ -12,22 +12,22 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import site.felipeschoffen.todoapp.common.Constants
 import site.felipeschoffen.todoapp.common.database.DataSource
-import site.felipeschoffen.todoapp.common.datas.Tag
-import site.felipeschoffen.todoapp.databinding.DialogCreateTagBinding
+import site.felipeschoffen.todoapp.common.datas.Folder
+import site.felipeschoffen.todoapp.databinding.DialogCreateFolderBinding
 import java.util.*
 
-class CreateTagDialog(
-    private val callback: CreateTagCallback,
+class CreateFolderDialog(
+    private val callback: CreateFolderCallback,
     private val coroutineScope: CoroutineScope
 ) : DialogFragment() {
-    private lateinit var binding: DialogCreateTagBinding
+    private lateinit var binding: DialogCreateFolderBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DialogCreateTagBinding.inflate(layoutInflater, container, false)
+        binding = DialogCreateFolderBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -37,32 +37,31 @@ class CreateTagDialog(
         // This show custom background
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        binding.newTagCancelButton.setOnClickListener { dismiss() }
-        binding.newTagYesButton.setOnClickListener {
+        binding.newFolderCancelButton.setOnClickListener { dismiss() }
+        binding.newFolderYesButton.setOnClickListener {
 
             val uid = UUID.randomUUID().toString()
-            val tagName = binding.newTagEditText.text.toString()
-            val tagColor: String? = when (binding.newTagRadioGroup.checkedRadioButtonId) {
-                binding.newTagGreenRadio.id -> Constants.colorGreen
-                binding.newTagOrangeRadio.id -> Constants.colorOrange
-                binding.newTagRedRadio.id -> Constants.colorRed
-                binding.newTagPurpleRadio.id -> Constants.colorPurple
-                else -> null
+            val folderName = binding.newFolderEditText.text.toString()
+            val folderColor: String = when (binding.newFolderRadioGroup.checkedRadioButtonId) {
+                binding.newFolderGreenRadio.id -> Constants.colorGreen
+                binding.newFolderOrangeRadio.id -> Constants.colorOrange
+                binding.newFolderRedRadio.id -> Constants.colorRed
+                binding.newFolderPurpleRadio.id -> Constants.colorPurple
+                else -> Constants.colorOrange
             }
 
-
-            if (tagName.isNotEmpty() && tagColor != null) {
+            if (folderName.isNotEmpty()) {
                 coroutineScope.launch {
-                    val tagCreated = DataSource.createTag(Tag(uid, tagName, tagColor))
-                    if (tagCreated)
-                        callback.newTagCreated()
+                    val folderAdded = DataSource.addFolder(Folder(uid, folderName, folderColor))
+                    if (folderAdded)
+                        callback.newFolderCreated()
                 }
 
                 dismiss()
             } else {
                 Toast.makeText(
                     view.context,
-                    "Tag deve conter um nome e uma cor",
+                    "Pasta deve conter um nome e uma cor",
                     Toast.LENGTH_LONG
                 ).show()
             }

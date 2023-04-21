@@ -16,10 +16,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import site.felipeschoffen.todoapp.common.Callback
 import site.felipeschoffen.todoapp.common.SelectedDate
-import site.felipeschoffen.todoapp.common.datas.Tag
-import site.felipeschoffen.todoapp.common.datas.UserTask
-import site.felipeschoffen.todoapp.common.datas.TaskStatus
-import site.felipeschoffen.todoapp.common.datas.UserInfo
+import site.felipeschoffen.todoapp.common.datas.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -228,5 +225,30 @@ object DataSource {
     private fun currentUserTasksRef(): CollectionReference {
         return FirebaseFirestore.getInstance().collection("/users")
             .document(currentUser!!.uid).collection("tasks")
+    }
+
+    private fun currentUserFoldersRef(): CollectionReference {
+        return FirebaseFirestore.getInstance().collection("/users")
+            .document(currentUser!!.uid).collection("folders")
+    }
+
+    suspend fun addFolder(folder: Folder): Boolean = suspendCoroutine { continuation ->
+        currentUserFoldersRef().document(folder.uid).set(folder)
+            .addOnSuccessListener { continuation.resume(true) }
+            .addOnFailureListener { continuation.resume(false) }
+    }
+
+    suspend fun getFolders(): List<Folder> = suspendCoroutine { continuation ->
+        val folders = mutableListOf<Folder>()
+
+        currentUserFoldersRef().get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    documents.forEach { document ->
+                        folders.add(document.toObject(Folder::class.java))
+                    }
+                }
+                continuation.resume(folders)
+            }
     }
 }

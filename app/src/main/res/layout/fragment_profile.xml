@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/layout_padding_horizontal"
-    tools:context=".profile.ProfileFragment"
-    tools:showIn="@layout/activity_main">
+    tools:context=".profile.ProfileFragment">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profilePicture"

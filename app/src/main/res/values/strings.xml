@@ -76,4 +76,6 @@
     <string name="edit">Editar</string>
     <string name="start">Começar</string>
     <string name="complete">Completar</string>
+    <string name="new_folder">Nova pasta</string>
+    <string name="folder_name">casa, trabalho, privado...</string>
 </resources>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_dialog"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            style="@style/TextViewBlueTitle"
+            android:layout_marginBottom="24dp"
+            android:text="@string/new_folder" />
+
+        <EditText
+            android:id="@+id/newFolderEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="24dp"
+            android:autofillHints="name"
+            android:background="@drawable/background_low_round_corners"
+            android:backgroundTint="@color/gray_light_light"
+            android:fontFamily="@font/hind_siliguri_light"
+            android:hint="@string/folder_name"
+            android:inputType="text"
+            android:padding="12dp" />
+
+        <RadioGroup
+            android:id="@+id/newFolderRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="24dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/newFolderGreenRadio"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/selector_tag_color_green"
+                android:button="@null" />
+
+            <RadioButton
+                android:id="@+id/newFolderOrangeRadio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/selector_tag_color_orange"
+                android:button="@null" />
+
+            <RadioButton
+                android:id="@+id/newFolderRedRadio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/selector_tag_color_red"
+                android:button="@null" />
+
+            <RadioButton
+                android:id="@+id/newFolderPurpleRadio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_tag_color_purple"
+                android:button="@null" />
+
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp">
+
+            <TextView
+                android:id="@+id/newFolderCancelButton"
+                android:layout_width="91dp"
+                android:layout_height="34dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/selector_background_cancel_button_white"
+                android:gravity="center"
+                android:text="@string/cancel"
+                android:textAlignment="center"
+                android:textColor="@color/selector_text_color_white"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/newFolderYesButton"
+                android:layout_width="91dp"
+                android:layout_height="34dp"
+                android:layout_gravity="center"
+                android:background="@drawable/background_filter_button"
+                android:backgroundTint="@color/selector_background_button_purple"
+                android:gravity="center"
+                android:text="@string/create"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

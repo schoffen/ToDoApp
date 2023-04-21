@@ -27,22 +27,22 @@ class TagsWideAdapter(val tags: List<Tag>) : RecyclerView.Adapter<TagsWideAdapte
             binding.itemTagName.text = tag.name
 
             when(tag.color) {
-                Constants.tagColorGreen -> {
+                Constants.colorGreen -> {
                     binding.itemTagRoot.background = ContextCompat.getDrawable(binding.root.context, R.drawable.selector_background_tag_green)
                     binding.itemTagName.setTextColor(ContextCompat.getColor(binding.root.context, R.color.tag_text_green))
                 }
 
-                Constants.tagColorOrange -> {
+                Constants.colorOrange -> {
                     binding.itemTagRoot.background = ContextCompat.getDrawable(binding.root.context, R.drawable.selector_background_tag_orange)
                     binding.itemTagName.setTextColor(ContextCompat.getColor(binding.root.context, R.color.tag_text_orange))
                 }
 
-                Constants.tagColorRed -> {
+                Constants.colorRed -> {
                     binding.itemTagRoot.background = ContextCompat.getDrawable(binding.root.context, R.drawable.selector_background_tag_red)
                     binding.itemTagName.setTextColor(ContextCompat.getColor(binding.root.context, R.color.tag_text_red))
                 }
 
-                Constants.tagColorPurple -> {
+                Constants.colorPurple -> {
                     binding.itemTagRoot.background = ContextCompat.getDrawable(binding.root.context, R.drawable.selector_background_tag_purple)
                     binding.itemTagName.setTextColor(ContextCompat.getColor(binding.root.context, R.color.tag_text_purple))
                 }

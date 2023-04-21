@@ -1,6 +1,5 @@
 package site.felipeschoffen.todoapp.common.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -29,22 +28,22 @@ class TagsAdapter(val tags: List<Tag>) : RecyclerView.Adapter<TagsAdapter.TagVie
             binding.itemTagName.isChecked = tag.isSelected
 
             when(tag.color) {
-                Constants.tagColorGreen -> {
+                Constants.colorGreen -> {
                     binding.itemTagName.background = ContextCompat.getDrawable(binding.root.context, R.drawable.selector_background_tag_green)
                     binding.itemTagName.setTextColor(ContextCompat.getColor(binding.root.context, R.color.tag_text_green))
                 }
 
-                Constants.tagColorOrange -> {
+                Constants.colorOrange -> {
                     binding.itemTagName.background = ContextCompat.getDrawable(binding.root.context, R.drawable.selector_background_tag_orange)
                     binding.itemTagName.setTextColor(ContextCompat.getColor(binding.root.context, R.color.tag_text_orange))
                 }
 
-                Constants.tagColorRed -> {
+                Constants.colorRed -> {
                     binding.itemTagName.background = ContextCompat.getDrawable(binding.root.context, R.drawable.selector_background_tag_red)
                     binding.itemTagName.setTextColor(ContextCompat.getColor(binding.root.context, R.color.tag_text_red))
                 }
 
-                Constants.tagColorPurple -> {
+                Constants.colorPurple -> {
                     binding.itemTagName.background = ContextCompat.getDrawable(binding.root.context, R.drawable.selector_background_tag_purple)
                     binding.itemTagName.setTextColor(ContextCompat.getColor(binding.root.context, R.color.tag_text_purple))
                 }

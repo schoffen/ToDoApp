@@ -1,6 +1,7 @@
 package site.felipeschoffen.todoapp.common.adapters
 
 import android.content.res.ColorStateList
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
