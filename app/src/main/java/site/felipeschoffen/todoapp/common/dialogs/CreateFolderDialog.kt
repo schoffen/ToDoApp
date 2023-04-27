@@ -52,9 +52,10 @@ class CreateFolderDialog(
 
             if (folderName.isNotEmpty()) {
                 coroutineScope.launch {
-                    val folderAdded = DataSource.addFolder(Folder(uid, folderName, folderColor))
+                    val folderToAdd = Folder(uid, folderName, folderColor)
+                    val folderAdded = DataSource.addFolder(folderToAdd)
                     if (folderAdded)
-                        callback.newFolderCreated()
+                        callback.newFolderCreated(folderToAdd)
                 }
 
                 dismiss()

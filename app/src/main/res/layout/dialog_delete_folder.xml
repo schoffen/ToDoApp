@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_dialog"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/deleteFolderNameTV"
+            style="@style/TextViewBlueTitle"
+            android:layout_marginBottom="24dp"
+            android:text="@string/delete_folder" />
+
+        <TextView
+            android:id="@+id/deleteFolderWarningTV"
+            style="@style/TextViewBlueNormal"
+            android:layout_marginBottom="24dp"
+            android:text="@string/delete_folder_warning" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:id="@+id/deleteFolderCancelButton"
+                android:layout_width="91dp"
+                android:layout_height="34dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/selector_background_cancel_button_white"
+                android:gravity="center"
+                android:text="@string/keep_folder"
+                android:textAlignment="center"
+                android:textColor="@color/selector_text_color_white"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/deleteFolderYesButton"
+                android:layout_width="91dp"
+                android:layout_height="34dp"
+                android:layout_gravity="center"
+                android:background="@drawable/background_filter_button"
+                android:backgroundTint="@color/selector_background_button_purple"
+                android:gravity="center"
+                android:text="@string/yes_delete_folder"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

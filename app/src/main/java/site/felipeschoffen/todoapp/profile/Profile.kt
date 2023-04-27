@@ -4,9 +4,10 @@ import site.felipeschoffen.todoapp.common.datas.Folder
 
 interface Profile {
     interface View {
-        fun displayFolders(folders: List<Folder>)
+        fun setAdapterFolders(folders: List<Folder>)
         fun displayUserInfo(name: String, email: String)
-        fun getFolders()
+        fun notifyAdapterItemInserted(position: Int)
+        fun notifyAdapterItemRemoved(position: Int)
     }
 
     interface Presenter {

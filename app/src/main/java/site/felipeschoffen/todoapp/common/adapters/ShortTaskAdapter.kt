@@ -3,6 +3,7 @@ package site.felipeschoffen.todoapp.common.adapters
 import android.content.res.ColorStateList
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.annotation.ColorRes
@@ -14,8 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.Callback
+import site.felipeschoffen.todoapp.common.Constants
 import site.felipeschoffen.todoapp.common.DateTimeUtils.formatTime
-import site.felipeschoffen.todoapp.common.database.DataSource
+import site.felipeschoffen.todoapp.common.datas.Folder
 import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.common.datas.UserTask
 import site.felipeschoffen.todoapp.common.dialogs.EditTaskDialog
@@ -48,27 +50,50 @@ class ShortTaskAdapter(
             binding.itemTodayTaskName.text = userTask.name
             binding.itemTodayTaskTime.text = formatTime(userTask.timestamp)
 
-            val colors = selectColorByStatus(userTask.status)
+            val statusColors = selectColorByStatus(userTask.status)
 
             ViewCompat.setBackgroundTintList(
                 binding.itemTodayTaskLine,
                 ColorStateList.valueOf(
                     ContextCompat.getColor(
                         this.binding.root.context,
-                        colors.first
+                        statusColors.first
                     )
                 )
             )
 
-            ViewCompat.setBackgroundTintList(
-                binding.itemCL,
-                ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        this.binding.root.context,
-                        colors.second
+//            ViewCompat.setBackgroundTintList(
+//                binding.itemCL,
+//                ColorStateList.valueOf(
+//                    ContextCompat.getColor(
+//                        this.binding.root.context,
+//                        statusColors.second
+//                    )
+//                )
+//            )
+
+            if (userTask.folder != null && userTask.folder!!.uid != "null") {
+                
+                binding.itemFolderName.visibility = View.VISIBLE
+
+                binding.itemFolderName.text = userTask.folder!!.name
+
+                val folderColors = selectColorByFolder(userTask.folder!!)
+
+                binding.itemFolderName.setTextColor(folderColors.first)
+
+                ViewCompat.setBackgroundTintList(
+                    binding.itemFolderName,
+                    ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            this.binding.root.context,
+                            folderColors.second
+                        )
                     )
                 )
-            )
+            } else {
+                binding.itemFolderName.visibility = View.GONE
+            }
 
             binding.itemTodayTaskTagsRV.layoutManager = LinearLayoutManager(
                 this.binding.root.context,
@@ -77,8 +102,8 @@ class ShortTaskAdapter(
             )
             binding.itemTodayTaskTagsRV.adapter = TagsWideAdapter(userTask.tags)
 
-            binding.itemTodayTaskItemSpinner.setOnClickListener {
-                val popUp = PopupMenu(binding.root.context, binding.itemTodayTaskItemSpinner)
+            binding.itemCL.setOnLongClickListener {
+                val popUp = PopupMenu(binding.root.context, binding.itemCL)
                 popUp.inflate(R.menu.menu_task)
 
                 when (userTask.status) {
@@ -133,6 +158,8 @@ class ShortTaskAdapter(
                 }
 
                 popUp.show()
+
+                true
             }
         }
 
@@ -148,6 +175,17 @@ class ShortTaskAdapter(
                 TaskStatus.CANCELED -> Pair(R.color.red_full, R.color.red_alpha)
                 TaskStatus.PENDING -> Pair(R.color.purple_full, R.color.purple_alpha)
                 TaskStatus.ON_GOING -> Pair(R.color.green_full, R.color.green_alpha)
+            }
+        }
+
+        @ColorRes
+        private fun selectColorByFolder(folder: Folder): Pair<Int, Int> {
+            return when (folder.color) {
+                Constants.colorOrange -> Pair(R.color.orange_dark, R.color.orange_light)
+                Constants.colorGreen -> Pair(R.color.green_dark, R.color.green_light)
+                Constants.colorRed -> Pair(R.color.red_dark, R.color.red_light)
+                Constants.colorPurple -> Pair(R.color.purple_dark, R.color.purple_light)
+                else -> Pair(R.color.orange_dark, R.color.orange_light)
             }
         }
 

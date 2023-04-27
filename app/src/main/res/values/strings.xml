@@ -78,4 +78,11 @@
     <string name="complete">Completar</string>
     <string name="new_folder">Nova pasta</string>
     <string name="folder_name">casa, trabalho, privado...</string>
+    <string name="folder">Pasta</string>
+
+    <string name="delete_folder">Deletar pasta %1$s</string>
+    <string name="keep_folder">Manter pasta</string>
+    <string name="yes_delete_folder">Deletar pasta</string>
+
+    <string name="delete_folder_warning">Deseja realmente deletar esta pasta? Todas as tarefas associadas serão deletadas.</string>
 </resources>

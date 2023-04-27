@@ -117,6 +117,27 @@
             <TextView
                 style="@style/TextViewBlueNormal"
                 android:layout_marginTop="10dp"
+                android:text="@string/folder"
+                android:textColor="@color/gray_dark" />
+
+            <Spinner
+                android:id="@+id/createFoldersSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:contentDescription="@null"
+                android:minHeight="48dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/vertical_line"
+                android:backgroundTint="@color/gray_light" />
+
+            <TextView
+                style="@style/TextViewBlueNormal"
+                android:layout_marginTop="10dp"
                 android:text="@string/tag"
                 android:textColor="@color/gray_dark" />
 
@@ -133,13 +154,13 @@
                 tools:listitem="@layout/item_tag" />
 
             <TextView
-                android:visibility="gone"
                 android:id="@+id/createNoTagsTV"
                 style="@style/TextViewBlueNormal"
                 android:layout_gravity="center"
                 android:layout_marginTop="8dp"
                 android:text="@string/no_tags_info"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone" />
 
             <ProgressBar
                 android:id="@+id/createTagsProgress"

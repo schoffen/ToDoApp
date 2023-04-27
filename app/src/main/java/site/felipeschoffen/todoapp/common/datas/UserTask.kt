@@ -8,5 +8,6 @@ data class UserTask (
     var name: String = "",
     var timestamp: Timestamp = Timestamp.now(),
     var tags: List<Tag> = emptyList(),
-    var status: TaskStatus = TaskStatus.PENDING
+    var status: TaskStatus = TaskStatus.PENDING,
+    var folder: Folder? = null
         )

@@ -16,11 +16,13 @@ import site.felipeschoffen.todoapp.common.datas.Folder
 import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.common.dialogs.CreateFolderCallback
 import site.felipeschoffen.todoapp.common.dialogs.CreateFolderDialog
+import site.felipeschoffen.todoapp.common.dialogs.DeleteFolderCallback
+import site.felipeschoffen.todoapp.common.dialogs.DeleteFolderDialog
 import site.felipeschoffen.todoapp.databinding.ItemFolderBinding
 import site.felipeschoffen.todoapp.profile.Profile
 
 class FoldersAdapter(
-    var folders: List<Folder>,
+    val folders: MutableList<Folder>,
     private val coroutineScope: CoroutineScope,
     private val view: Profile.View,
     private val supportFragmentManager: FragmentManager
@@ -35,31 +37,28 @@ class FoldersAdapter(
     }
 
     override fun onBindViewHolder(holder: FoldersViewHolder, position: Int) {
-
-        val item: Folder = if (position == folders.size) {
-            Folder("add", "add")
-        } else {
-            folders[position]
-        }
+        val item = folders[position]
 
         holder.bind(item)
     }
 
     override fun getItemCount(): Int {
-        return folders.size + 1
+        return folders.size
     }
 
     inner class FoldersViewHolder(private val binding: ItemFolderBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(folder: Folder) {
-            if (folder.uid == "add") {
+            if (folder.uid == Constants.createNewFolderReference.uid) {
                 binding.folderIconIV.setImageResource(R.drawable.ic_plus)
                 binding.folderNameText.text =
                     this.itemView.context.getString(R.string.create_folder)
 
                 binding.folderCL.setOnClickListener {
-                    openCreateFolderDialog()
+                    if (folder.uid == Constants.createNewFolderReference.uid) {
+                        openCreateFolderDialog()
+                    }
                 }
             } else {
                 binding.folderIconIV.setImageResource(R.drawable.ic_folder)
@@ -86,15 +85,35 @@ class FoldersAdapter(
                         )
                     )
                 )
+
+                binding.folderCL.setOnClickListener {
+                    // Ir para a pasta
+                }
+
+                binding.folderCL.setOnLongClickListener {
+                    openDeleteFolderDialog(folder, adapterPosition)
+                    true
+                }
             }
         }
 
         private fun openCreateFolderDialog() {
             CreateFolderDialog(object : CreateFolderCallback {
-                override fun newFolderCreated() {
-                    view.getFolders()
+                override fun newFolderCreated(folder: Folder) {
+                    val index = folders.size - 1
+                    folders.add(index, folder)
+                    view.notifyAdapterItemInserted(index)
                 }
             }, coroutineScope).show(supportFragmentManager, null)
+        }
+
+        private fun openDeleteFolderDialog(folder: Folder, position: Int) {
+            DeleteFolderDialog(object : DeleteFolderCallback {
+                override fun folderDeleted() {
+                    folders.removeAt(position)
+                    view.notifyAdapterItemRemoved(position)
+                }
+            }, coroutineScope, folder).show(supportFragmentManager, null)
         }
 
         @ColorRes

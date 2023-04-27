@@ -3,7 +3,9 @@ package site.felipeschoffen.todoapp.main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.widget.Toast
+import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
@@ -47,6 +49,8 @@ class MainActivity : AppCompatActivity(), Main.View {
         }
 
         binding.mainBottonNavigation.setOnItemSelectedListener {
+            enableBottomNavigationItems(false)
+
             when (it.itemId) {
                 R.id.menuHome -> {
                     replaceFragment(homeFragment)
@@ -57,6 +61,11 @@ class MainActivity : AppCompatActivity(), Main.View {
                     replaceFragment(tasksFragment)
                     true
                 }
+                R.id.menuGraphs -> {
+                    enableBottomNavigationItems(true)
+                    true
+                }
+
                 R.id.menuTaskFolder -> {
                     replaceFragment(profileFragment)
                     true
@@ -116,5 +125,11 @@ class MainActivity : AppCompatActivity(), Main.View {
         fragmentTransaction.commit()
 
         currentFragmentId = fragment.id
+
+        Handler().postDelayed({ enableBottomNavigationItems(true) }, 500)
+    }
+
+    private fun enableBottomNavigationItems(enable: Boolean) {
+        binding.mainBottonNavigation.menu.forEach { it.isEnabled = enable }
     }
 }

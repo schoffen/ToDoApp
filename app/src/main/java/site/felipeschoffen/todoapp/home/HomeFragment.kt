@@ -1,5 +1,6 @@
 package site.felipeschoffen.todoapp.home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,6 +16,8 @@ import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.common.datas.UserTask
 import site.felipeschoffen.todoapp.databinding.FragmentHomeBinding
+import site.felipeschoffen.todoapp.folder.FolderActivity
+import site.felipeschoffen.todoapp.main.MainActivity
 import java.util.Calendar
 
 class HomeFragment : Fragment(), Home.View, TaskAdapterListener {
@@ -45,7 +48,9 @@ class HomeFragment : Fragment(), Home.View, TaskAdapterListener {
 
         presenter.getTodayTasks()
 
-
+        binding.homeMyTasksLayout.homeCompleteContainer.completedContainerTaskBackground.setOnClickListener {
+            startActivity(Intent(requireContext(), FolderActivity::class.java))
+        }
     }
 
     override fun showSnackbar(message: String) {

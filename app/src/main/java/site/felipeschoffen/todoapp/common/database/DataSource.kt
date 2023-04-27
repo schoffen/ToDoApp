@@ -11,6 +11,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.auth.User
+import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -250,5 +251,23 @@ object DataSource {
                 }
                 continuation.resume(folders)
             }
+    }
+
+    suspend fun deleteFolder(folder: Folder): Boolean = suspendCoroutine { continuation ->
+        currentUserFoldersRef().document(folder.uid).delete()
+            .addOnSuccessListener {
+                currentUserTasksRef().get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            val task = document.toObject<UserTask>()
+                            if (task.folder!!.uid == folder.uid) {
+                                document.reference.delete()
+                            }
+                        }
+
+                        continuation.resume(true)
+                    }
+            }
+            .addOnFailureListener { continuation.resume(false) }
     }
 }

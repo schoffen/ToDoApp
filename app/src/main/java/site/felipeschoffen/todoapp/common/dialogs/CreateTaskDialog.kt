@@ -5,9 +5,11 @@ import android.app.TimePickerDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
@@ -22,6 +24,7 @@ import site.felipeschoffen.todoapp.common.SelectedDate
 import site.felipeschoffen.todoapp.common.SelectedTime
 import site.felipeschoffen.todoapp.common.adapters.TagsAdapter
 import site.felipeschoffen.todoapp.common.database.DataSource
+import site.felipeschoffen.todoapp.common.datas.Folder
 import site.felipeschoffen.todoapp.common.datas.Tag
 import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.common.datas.UserTask
@@ -34,6 +37,7 @@ class CreateTaskDialog(
     private val coroutineScope: CoroutineScope
 ) : DialogFragment() {
     private lateinit var binding: DialogCreateTaskBinding
+    private val folders = mutableListOf<Folder>(Folder("null", "Nenhum (padrão)"))
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +51,7 @@ class CreateTaskDialog(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        loadFoldersSpinner()
         loadTags()
 
         var selectedDate =
@@ -105,7 +110,8 @@ class CreateTaskDialog(
                 name = binding.createTaskEditText.text.toString(),
                 timestamp = getTimestamp(selectedDate, selectedTime),
                 tags = getSelectedTags(),
-                status = TaskStatus.PENDING
+                status = TaskStatus.PENDING,
+                folder = folders[binding.createFoldersSpinner.selectedItemPosition]
             )
 
             coroutineScope.launch {
@@ -175,6 +181,18 @@ class CreateTaskDialog(
         val date = calendar.time
 
         return Timestamp(date)
+    }
+
+    private fun loadFoldersSpinner() {
+        coroutineScope.launch {
+            folders.addAll(DataSource.getFolders())
+
+            val foldersNameList = folders.map { it.name }
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, foldersNameList)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+            binding.createFoldersSpinner.adapter = adapter
+        }
     }
 
     private fun loadTags() {
