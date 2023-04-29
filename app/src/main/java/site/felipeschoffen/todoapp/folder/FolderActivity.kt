@@ -1,11 +1,9 @@
 package site.felipeschoffen.todoapp.folder
 
 import android.app.DatePickerDialog
-import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import site.felipeschoffen.todoapp.common.DateTimeUtils
+import site.felipeschoffen.todoapp.common.util.DateTimeUtils
 import site.felipeschoffen.todoapp.common.dialogs.FilterDialog
 import site.felipeschoffen.todoapp.databinding.ActivityFolderBinding
 

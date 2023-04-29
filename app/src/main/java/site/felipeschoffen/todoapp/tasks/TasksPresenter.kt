@@ -12,7 +12,7 @@ import site.felipeschoffen.todoapp.common.datas.UserTask
 class TasksPresenter(override val view: Tasks.View, private val coroutineScope: CoroutineScope) :
     Tasks.Presenter {
 
-    var currentUserTasks: List<UserTask> = emptyList()
+    private var currentUserTasks: List<UserTask> = emptyList()
 
     override fun getSelectedTasks(selectedDate: SelectedDate) {
         view.showProgress(true)

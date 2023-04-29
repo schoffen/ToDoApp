@@ -32,9 +32,9 @@
     <TextView
         android:id="@+id/itemFolderName"
         style="@style/TextViewBlueNormal"
+        android:layout_marginStart="8dp"
         android:background="@drawable/background_folder_square"
         android:backgroundTint="@color/orange_light"
-        android:layout_marginStart="8dp"
         android:paddingHorizontal="6dp"
         android:text="@string/folder"
         android:textColor="@color/orange_dark"
@@ -48,16 +48,13 @@
         app:layout_constraintStart_toStartOf="@id/itemTodayTaskName"
         app:layout_constraintTop_toBottomOf="@id/itemTodayTaskName" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/itemTodayTaskTagsRV"
-        android:layout_marginTop="6dp"
+    <include
+        android:id="@+id/itemTodayTaskTag"
+        layout="@layout/item_tag_wide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_marginTop="6dp"
         app:layout_constraintStart_toStartOf="@+id/itemTodayTaskTime"
-        app:layout_constraintTop_toBottomOf="@+id/itemTodayTaskTime"
-        tools:itemCount="1"
-        tools:listitem="@layout/item_tag" />
+        app:layout_constraintTop_toBottomOf="@+id/itemTodayTaskTime" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

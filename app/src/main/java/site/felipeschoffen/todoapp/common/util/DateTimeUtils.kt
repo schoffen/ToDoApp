@@ -1,4 +1,4 @@
-package site.felipeschoffen.todoapp.common
+package site.felipeschoffen.todoapp.common.util
 
 import com.google.firebase.Timestamp
 import java.util.*

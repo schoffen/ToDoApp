@@ -5,27 +5,22 @@ import android.app.TimePickerDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.CheckBox
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.Callback
-import site.felipeschoffen.todoapp.common.DateTimeUtils
+import site.felipeschoffen.todoapp.common.util.DateTimeUtils
 import site.felipeschoffen.todoapp.common.SelectedDate
 import site.felipeschoffen.todoapp.common.SelectedTime
-import site.felipeschoffen.todoapp.common.adapters.TagsAdapter
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.datas.Folder
-import site.felipeschoffen.todoapp.common.datas.Tag
+import site.felipeschoffen.todoapp.common.util.PriorityTag
 import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.common.datas.UserTask
 import site.felipeschoffen.todoapp.databinding.DialogCreateTaskBinding
@@ -52,7 +47,6 @@ class CreateTaskDialog(
         super.onViewCreated(view, savedInstanceState)
 
         loadFoldersSpinner()
-        loadTags()
 
         var selectedDate =
             SelectedDate(
@@ -95,21 +89,13 @@ class CreateTaskDialog(
             dismiss()
         }
 
-        binding.createTagButton.setOnClickListener {
-            CreateTagDialog(object : CreateTagCallback {
-                override fun newTagCreated() {
-                    loadTags()
-                }
-            }, coroutineScope).show(supportFragmentManager, null)
-        }
-
         binding.createYesButton.setOnClickListener {
 
             val userTask = UserTask(
                 uid = UUID.randomUUID().toString(),
                 name = binding.createTaskEditText.text.toString(),
                 timestamp = getTimestamp(selectedDate, selectedTime),
-                tags = getSelectedTags(),
+                priorityTag = getSelectedTag(),
                 status = TaskStatus.PENDING,
                 folder = folders[binding.createFoldersSpinner.selectedItemPosition]
             )
@@ -195,49 +181,13 @@ class CreateTaskDialog(
         }
     }
 
-    private fun loadTags() {
-        coroutineScope.launch {
-            val userTags = DataSource.getUserTags()
-
-            if (userTags.isNotEmpty()) {
-                binding.createTagsRV.adapter = TagsAdapter(userTags)
-                binding.createTagsRV.layoutManager =
-                    LinearLayoutManager(
-                        this@CreateTaskDialog.context,
-                        LinearLayoutManager.HORIZONTAL,
-                        false
-                    )
-                binding.createTagsProgress.visibility = View.GONE
-                binding.createTagsRV.visibility = View.VISIBLE
-                binding.createNoTagsTV.visibility = View.INVISIBLE
-            } else {
-                binding.createTagsProgress.visibility = View.GONE
-                binding.createNoTagsTV.visibility = View.VISIBLE
-            }
+    private fun getSelectedTag(): PriorityTag {
+        return when (binding.createTagRadioGroup.checkedRadioButtonId) {
+            binding.createTagLowPriority.id -> PriorityTag.LOW_PRIORITY
+            binding.createTagMediumPriority.id -> PriorityTag.MEDIUM_PRIORITY
+            binding.createTagHighPriority.id -> PriorityTag.HIGH_PRIORITY
+            binding.createTagUrgent.id -> PriorityTag.URGENT
+            else -> PriorityTag.LOW_PRIORITY
         }
-    }
-
-    private fun getSelectedTags(): List<Tag> {
-        val tags = mutableListOf<Tag>()
-
-        if (binding.createTagsRV.adapter != null) {
-            for (i in 0 until binding.createTagsRV.adapter!!.itemCount) {
-                val item =
-                    binding.createTagsRV.findViewHolderForAdapterPosition(i) as? TagsAdapter.TagViewHolder
-                val isChecked =
-                    item?.itemView?.findViewById<CheckBox>(R.id.itemTagName)?.isChecked
-
-                if (isChecked == true) {
-                    val adapter = binding.createTagsRV.adapter as TagsAdapter
-
-                    val tag = adapter.tags[i]
-                    tag.isSelected = true
-
-                    tags.add(tag)
-                }
-            }
-        }
-
-        return tags
     }
 }

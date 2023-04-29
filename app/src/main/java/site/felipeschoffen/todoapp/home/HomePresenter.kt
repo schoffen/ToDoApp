@@ -2,10 +2,8 @@ package site.felipeschoffen.todoapp.home
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import site.felipeschoffen.todoapp.common.Callback
-import site.felipeschoffen.todoapp.common.DateTimeUtils
+import site.felipeschoffen.todoapp.common.util.DateTimeUtils
 import site.felipeschoffen.todoapp.common.SelectedDate
-import site.felipeschoffen.todoapp.common.adapters.TaskAdapterListener
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.datas.TaskStatus
 

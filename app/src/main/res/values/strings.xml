@@ -85,4 +85,9 @@
     <string name="yes_delete_folder">Deletar pasta</string>
 
     <string name="delete_folder_warning">Deseja realmente deletar esta pasta? Todas as tarefas associadas serão deletadas.</string>
+
+    <string name="urgent_portuguese">Urgente</string>
+    <string name="high_priority_portuguese">Alta Prioridade</string>
+    <string name="medium_priority_portuguese">Média Prioridade</string>
+    <string name="low_priority_portuguese">Baixa Prioridade</string>
 </resources>

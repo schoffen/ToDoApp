@@ -5,28 +5,19 @@ import android.app.TimePickerDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.Callback
-import site.felipeschoffen.todoapp.common.DateTimeUtils
-import site.felipeschoffen.todoapp.common.SelectedDate
-import site.felipeschoffen.todoapp.common.SelectedTime
-import site.felipeschoffen.todoapp.common.adapters.TagsAdapter
+import site.felipeschoffen.todoapp.common.util.DateTimeUtils
 import site.felipeschoffen.todoapp.common.database.DataSource
-import site.felipeschoffen.todoapp.common.datas.Tag
-import site.felipeschoffen.todoapp.common.datas.TaskStatus
+import site.felipeschoffen.todoapp.common.util.PriorityTag
 import site.felipeschoffen.todoapp.common.datas.UserTask
-import site.felipeschoffen.todoapp.databinding.DialogCreateTaskBinding
 import site.felipeschoffen.todoapp.databinding.DialogEditTaskBinding
 import java.util.*
 
@@ -50,11 +41,7 @@ class EditTaskDialog(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadTags()
-
-        binding.editTaskEditText.append(userTask.name)
-        changeSelectedDateText(userTask.timestamp)
-        changeSelectedTimeText(userTask.timestamp)
+        setupFieldsWithUserTask()
 
         // This show custom background
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -87,27 +74,21 @@ class EditTaskDialog(
             dismiss()
         }
 
-        binding.editTagButton.setOnClickListener {
-            CreateTagDialog(object : CreateTagCallback {
-                override fun newTagCreated() {
-                    loadTags()
-                }
-            }, coroutineScope).show(supportFragmentManager, null)
-        }
-
         binding.editYesButton.setOnClickListener {
-            setUserTags()
-            setUserTaskName()
+            editTask()
+        }
+    }
 
-            coroutineScope.launch {
-                val edited = DataSource.editTask(userTask)
-                if (edited)
-                    callback.onSuccess()
-                else
-                    callback.onFailure("Falha ao criar tarefa")
+    private fun setupFieldsWithUserTask() {
+        binding.editTaskEditText.append(userTask.name)
+        changeSelectedDateText(userTask.timestamp)
+        changeSelectedTimeText(userTask.timestamp)
 
-                dismiss()
-            }
+        when (userTask.priorityTag) {
+            PriorityTag.LOW_PRIORITY -> binding.editTagLowPriority.isChecked = true
+            PriorityTag.MEDIUM_PRIORITY -> binding.editTagMediumPriority.isChecked = true
+            PriorityTag.HIGH_PRIORITY -> binding.editTagHighPriority.isChecked = true
+            PriorityTag.URGENT -> binding.editTagUrgent.isChecked = true
         }
     }
 
@@ -140,7 +121,6 @@ class EditTaskDialog(
         timePickerDialog.show()
     }
 
-
     private fun changeSelectedDateText(timestamp: Timestamp) {
         binding.editDatePickerText.text = DateTimeUtils.formatDate(timestamp)
     }
@@ -149,58 +129,33 @@ class EditTaskDialog(
         binding.editTimePickerText.text = DateTimeUtils.formatTime(timestamp)
     }
 
-    private fun loadTags() {
-        coroutineScope.launch {
-            val userTags = DataSource.getUserTags()
-
-            userTags.forEach { databaseTag ->
-                userTask.tags.forEach { taskTag ->
-                    if (databaseTag.uid == taskTag.uid)
-                        databaseTag.isSelected = true
-                }
-            }
-
-            if (userTags.isNotEmpty()) {
-                binding.editTagsRV.adapter = TagsAdapter(userTags)
-                binding.editTagsRV.layoutManager =
-                    LinearLayoutManager(
-                        this@EditTaskDialog.context,
-                        LinearLayoutManager.HORIZONTAL,
-                        false
-                    )
-                binding.editTagsProgress.visibility = View.GONE
-                binding.editTagsRV.visibility = View.VISIBLE
-                binding.editNoTagsTV.visibility = View.INVISIBLE
-            } else {
-                binding.editTagsProgress.visibility = View.GONE
-                binding.editNoTagsTV.visibility = View.VISIBLE
-            }
-        }
-    }
-
     private fun setUserTaskName() {
         userTask.name = binding.editTaskEditText.text.toString()
     }
 
-    private fun setUserTags() {
-        val tags = mutableListOf<Tag>()
-
-        if (binding.editTagsRV.adapter != null) {
-            for (i in 0 until binding.editTagsRV.adapter!!.itemCount) {
-                val item =
-                    binding.editTagsRV.findViewHolderForAdapterPosition(i) as? TagsAdapter.TagViewHolder
-                val isChecked =
-                    item?.itemView?.findViewById<CheckBox>(R.id.itemTagName)?.isChecked
-
-                if (isChecked == true) {
-                    val adapter = binding.editTagsRV.adapter as TagsAdapter
-
-                    val tag = adapter.tags[i]
-                    tags.add(tag)
-                }
-            }
-
-            userTask.tags = tags
+    private fun setSelectedTag() {
+        userTask.priorityTag = when (binding.editTagRadioGroup.checkedRadioButtonId) {
+            binding.editTagLowPriority.id -> PriorityTag.LOW_PRIORITY
+            binding.editTagMediumPriority.id -> PriorityTag.MEDIUM_PRIORITY
+            binding.editTagHighPriority.id -> PriorityTag.HIGH_PRIORITY
+            binding.editTagUrgent.id -> PriorityTag.URGENT
+            else -> PriorityTag.LOW_PRIORITY
         }
     }
+
+    private fun editTask() {
+        setSelectedTag()
+        setUserTaskName()
+
+        coroutineScope.launch {
+            val edited = DataSource.editTask(userTask)
+            if (edited)
+                callback.onSuccess()
+            else
+                callback.onFailure("Falha ao criar tarefa")
+
+            dismiss()
+        }
+    }
+
 }

@@ -34,17 +34,14 @@
         app:layout_constraintStart_toStartOf="@id/itemTodayTaskName"
         app:layout_constraintTop_toBottomOf="@id/itemTodayTaskName" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/itemTodayTaskTagsRV"
+    <include
+        layout="@layout/item_tag_wide"
+        android:id="@+id/itemTodayTaskTag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="@id/itemTodayTaskName"
-        app:layout_constraintTop_toBottomOf="@id/itemTodayTaskTime"
-        tools:itemCount="2"
-        tools:listitem="@layout/item_tag" />
+        app:layout_constraintTop_toBottomOf="@id/itemTodayTaskTime" />
 
     <ImageView
         android:id="@+id/itemTodayTaskItemSpinner"

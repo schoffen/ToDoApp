@@ -6,8 +6,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
-import site.felipeschoffen.todoapp.common.DateTimeUtils.formatTime
-import site.felipeschoffen.todoapp.common.DateTimeUtils.intToTimestamp
+import site.felipeschoffen.todoapp.common.util.DateTimeUtils.formatTime
+import site.felipeschoffen.todoapp.common.util.DateTimeUtils.intToTimestamp
 import site.felipeschoffen.todoapp.databinding.ItemTaskDayHourBinding
 import site.felipeschoffen.todoapp.tasks.TasksByHour
 

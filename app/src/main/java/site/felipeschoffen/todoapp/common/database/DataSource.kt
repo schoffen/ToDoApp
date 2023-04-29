@@ -7,17 +7,15 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import site.felipeschoffen.todoapp.common.Callback
 import site.felipeschoffen.todoapp.common.SelectedDate
 import site.felipeschoffen.todoapp.common.datas.*
+import site.felipeschoffen.todoapp.common.util.PriorityTag
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -125,27 +123,27 @@ object DataSource {
             }
     }
 
-    suspend fun createTag(tag: Tag): Boolean = suspendCoroutine { continuation ->
+    suspend fun createTag(priorityTag: PriorityTag): Boolean = suspendCoroutine { continuation ->
         FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid)
             .collection("tags")
-            .document(tag.name).set(tag)
+            .document(priorityTag.name).set(priorityTag)
             .addOnSuccessListener { continuation.resume(true) }
             .addOnFailureListener { continuation.resume(false) }
     }
 
-    suspend fun getUserTags(): List<Tag> = suspendCoroutine { continuation ->
-        val tags = mutableListOf<Tag>()
+    suspend fun getUserTags(): List<PriorityTag> = suspendCoroutine { continuation ->
+        val priorityTags = mutableListOf<PriorityTag>()
 
         FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid)
             .collection("tags").get()
             .addOnSuccessListener { documents ->
 
                 documents.forEach { document ->
-                    val tag = document.toObject(Tag::class.java)
-                    tags.add(tag)
+                    val priorityTag = document.toObject(PriorityTag::class.java)
+                    priorityTags.add(priorityTag)
                 }
 
-                continuation.resume(tags)
+                continuation.resume(priorityTags)
             }
     }
 

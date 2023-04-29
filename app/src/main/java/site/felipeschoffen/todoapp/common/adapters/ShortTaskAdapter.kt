@@ -1,7 +1,6 @@
 package site.felipeschoffen.todoapp.common.adapters
 
 import android.content.res.ColorStateList
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +9,12 @@ import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.Callback
 import site.felipeschoffen.todoapp.common.Constants
-import site.felipeschoffen.todoapp.common.DateTimeUtils.formatTime
+import site.felipeschoffen.todoapp.common.util.DateTimeUtils.formatTime
 import site.felipeschoffen.todoapp.common.datas.Folder
 import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.common.datas.UserTask
@@ -62,15 +60,28 @@ class ShortTaskAdapter(
                 )
             )
 
-//            ViewCompat.setBackgroundTintList(
-//                binding.itemCL,
-//                ColorStateList.valueOf(
-//                    ContextCompat.getColor(
-//                        this.binding.root.context,
-//                        statusColors.second
-//                    )
-//                )
-//            )
+            ViewCompat.setBackgroundTintList(
+                binding.itemCL,
+                ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        this.binding.root.context,
+                        statusColors.second
+                    )
+                )
+            )
+
+            binding.itemTodayTaskTag.itemTagName.text = userTask.priorityTag.getTagNameInPortuguese(binding.root.context)
+            binding.itemTodayTaskTag.itemTagName.setTextColor(binding.root.context.getColor(userTask.priorityTag.getPriorityColor().textColor))
+
+            ViewCompat.setBackgroundTintList(
+                binding.itemTodayTaskTag.itemTagRoot,
+                ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        userTask.priorityTag.getPriorityColor().backgroundColor
+                    )
+                )
+            )
 
             if (userTask.folder != null && userTask.folder!!.uid != "null") {
                 
@@ -94,13 +105,6 @@ class ShortTaskAdapter(
             } else {
                 binding.itemFolderName.visibility = View.GONE
             }
-
-            binding.itemTodayTaskTagsRV.layoutManager = LinearLayoutManager(
-                this.binding.root.context,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
-            binding.itemTodayTaskTagsRV.adapter = TagsWideAdapter(userTask.tags)
 
             binding.itemCL.setOnLongClickListener {
                 val popUp = PopupMenu(binding.root.context, binding.itemCL)

@@ -2,7 +2,6 @@ package site.felipeschoffen.todoapp.tasks
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import site.felipeschoffen.todoapp.common.CustomTextWatcher
-import site.felipeschoffen.todoapp.common.DateTimeUtils
-import site.felipeschoffen.todoapp.common.DateTimeUtils.dateToString
+import site.felipeschoffen.todoapp.common.util.DateTimeUtils
+import site.felipeschoffen.todoapp.common.util.DateTimeUtils.dateToString
 import site.felipeschoffen.todoapp.common.SelectedDate
 import site.felipeschoffen.todoapp.common.adapters.TaskAdapterListener
 import site.felipeschoffen.todoapp.common.adapters.TasksFragmentAdapter
@@ -88,7 +87,6 @@ class TasksFragment : Fragment(), Tasks.View, TaskAdapterListener {
         binding.taskDayTaskRV.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         adapter = TasksFragmentAdapter(tasks, this, parentFragmentManager, viewLifecycleOwner.lifecycleScope)
         binding.taskDayTaskRV.adapter = adapter
-        Log.d("Teste", tasks.toString())
     }
 
     private fun changeSelectedDateText(date: String) {

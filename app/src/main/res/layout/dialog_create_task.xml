@@ -141,41 +141,52 @@
                 android:text="@string/tag"
                 android:textColor="@color/gray_dark" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/createTagsRV"
+            <RadioGroup
+                android:id="@+id/createTagRadioGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="3"
-                tools:listitem="@layout/item_tag" />
-
-            <TextView
-                android:id="@+id/createNoTagsTV"
-                style="@style/TextViewBlueNormal"
-                android:layout_gravity="center"
                 android:layout_marginTop="8dp"
-                android:text="@string/no_tags_info"
-                android:textSize="14sp"
-                android:visibility="gone" />
+                android:orientation="horizontal">
 
-            <ProgressBar
-                android:id="@+id/createTagsProgress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="visible" />
+                <RadioButton
+                    android:id="@+id/createTagUrgent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:background="@drawable/background_tag_circle_selected"
+                    android:backgroundTint="@color/selector_background_tag_urgent"
+                    android:button="@null" />
 
-            <TextView
-                android:id="@+id/createTagButton"
-                style="@style/TextViewBlueNormal"
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
-                android:text="@string/add_tag"
-                android:textSize="12sp" />
+                <RadioButton
+                    android:id="@+id/createTagHighPriority"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:background="@drawable/background_tag_circle_selected"
+                    android:backgroundTint="@color/selector_background_tag_high_priority"
+                    android:button="@null" />
+
+                <RadioButton
+                    android:id="@+id/createTagMediumPriority"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:background="@drawable/background_tag_circle_selected"
+                    android:backgroundTint="@color/selector_background_tag_medium_priority"
+                    android:button="@null" />
+
+                <RadioButton
+                    android:id="@+id/createTagLowPriority"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:background="@drawable/background_tag_circle_selected"
+                    android:backgroundTint="@color/selector_background_tag_low_priority"
+                    android:button="@null"
+                    android:checked="true" />
+
+            </RadioGroup>
 
             <LinearLayout
                 android:layout_width="wrap_content"
