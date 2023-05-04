@@ -3,21 +3,16 @@ package site.felipeschoffen.todoapp.common.dialogs
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import site.felipeschoffen.todoapp.R
-import site.felipeschoffen.todoapp.common.Constants
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.datas.Folder
-import site.felipeschoffen.todoapp.databinding.DialogCreateFolderBinding
 import site.felipeschoffen.todoapp.databinding.DialogDeleteFolderBinding
-import java.util.*
 
 class DeleteFolderDialog(
     private val callback: DeleteFolderCallback,
@@ -46,7 +41,7 @@ class DeleteFolderDialog(
         binding.deleteFolderCancelButton.setOnClickListener { dismiss() }
         binding.deleteFolderYesButton.setOnClickListener {
             coroutineScope.launch {
-                DataSource.deleteFolder(folder)
+                DataSource.deleteFolderAndTasksInFolder(folder)
             }
             callback.folderDeleted()
             dismiss()

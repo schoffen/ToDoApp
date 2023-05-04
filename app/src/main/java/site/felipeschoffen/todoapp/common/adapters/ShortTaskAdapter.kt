@@ -60,51 +60,13 @@ class ShortTaskAdapter(
                 )
             )
 
-            ViewCompat.setBackgroundTintList(
-                binding.itemCL,
-                ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        this.binding.root.context,
-                        statusColors.second
-                    )
-                )
-            )
+            binding.itemTodayTaskTag.imageTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    this.binding.root.context,
+                    userTask.priorityTag.getPriorityColor().textColor
+                ))
 
-            binding.itemTodayTaskTag.itemTagName.text = userTask.priorityTag.getTagNameInPortuguese(binding.root.context)
-            binding.itemTodayTaskTag.itemTagName.setTextColor(binding.root.context.getColor(userTask.priorityTag.getPriorityColor().textColor))
-
-            ViewCompat.setBackgroundTintList(
-                binding.itemTodayTaskTag.itemTagRoot,
-                ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        binding.root.context,
-                        userTask.priorityTag.getPriorityColor().backgroundColor
-                    )
-                )
-            )
-
-            if (userTask.folder != null && userTask.folder!!.uid != "null") {
-                
-                binding.itemFolderName.visibility = View.VISIBLE
-
-                binding.itemFolderName.text = userTask.folder!!.name
-
-                val folderColors = selectColorByFolder(userTask.folder!!)
-
-                binding.itemFolderName.setTextColor(folderColors.first)
-
-                ViewCompat.setBackgroundTintList(
-                    binding.itemFolderName,
-                    ColorStateList.valueOf(
-                        ContextCompat.getColor(
-                            this.binding.root.context,
-                            folderColors.second
-                        )
-                    )
-                )
-            } else {
-                binding.itemFolderName.visibility = View.GONE
-            }
+            binding.itemFolderName.text = userTask.folder?.name
 
             binding.itemCL.setOnLongClickListener {
                 val popUp = PopupMenu(binding.root.context, binding.itemCL)
@@ -185,10 +147,10 @@ class ShortTaskAdapter(
         @ColorRes
         private fun selectColorByFolder(folder: Folder): Pair<Int, Int> {
             return when (folder.color) {
-                Constants.colorOrange -> Pair(R.color.orange_dark, R.color.orange_light)
-                Constants.colorGreen -> Pair(R.color.green_dark, R.color.green_light)
-                Constants.colorRed -> Pair(R.color.red_dark, R.color.red_light)
-                Constants.colorPurple -> Pair(R.color.purple_dark, R.color.purple_light)
+                Constants.COLOR_ORANGE -> Pair(R.color.orange_dark, R.color.orange_light)
+                Constants.COLOR_GREEN -> Pair(R.color.green_dark, R.color.green_light)
+                Constants.COLOR_RED -> Pair(R.color.red_dark, R.color.red_light)
+                Constants.COLOR_PURPLE -> Pair(R.color.purple_dark, R.color.purple_light)
                 else -> Pair(R.color.orange_dark, R.color.orange_light)
             }
         }

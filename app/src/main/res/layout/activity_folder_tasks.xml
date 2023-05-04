@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".folder.FolderActivity">
+    tools:context=".folderTasks.FolderTasksActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/folderAppBarLayout"
@@ -38,7 +38,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
         android:paddingBottom="10dp"
-        app:boxBackgroundColor="@color/search_bar_background"
+        app:boxBackgroundColor="@color/gray_background"
         app:boxBackgroundMode="outline"
         app:boxCornerRadiusBottomEnd="15dp"
         app:boxCornerRadiusBottomStart="15dp"

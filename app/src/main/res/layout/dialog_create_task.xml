@@ -20,7 +20,8 @@
             android:paddingHorizontal="16dp"
             android:paddingVertical="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UselessParent">
 
             <TextView
                 style="@style/TextViewBlueNormal"
@@ -138,7 +139,7 @@
             <TextView
                 style="@style/TextViewBlueNormal"
                 android:layout_marginTop="10dp"
-                android:text="@string/tag"
+                android:text="@string/priority"
                 android:textColor="@color/gray_dark" />
 
             <RadioGroup

@@ -12,7 +12,7 @@
         android:theme="@style/Theme.ToDoApp"
         tools:targetApi="31">
         <activity
-            android:name=".folder.FolderActivity"
+            android:name=".folderTasks.FolderTasksActivity"
             android:exported="true">
 
         </activity>

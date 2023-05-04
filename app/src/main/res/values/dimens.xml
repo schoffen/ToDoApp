@@ -5,4 +5,6 @@
     <dimen name="main_padding">16dp</dimen>
 
     <dimen name="radio_stroke_width">2dp</dimen>
+
+    <dimen name="background_round_corners_dp">6dp</dimen>
 </resources>

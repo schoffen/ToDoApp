@@ -15,7 +15,7 @@
         android:layout_width="2dp"
         android:layout_height="0dp"
         android:background="@drawable/background_line"
-        app:layout_constraintBottom_toBottomOf="@id/itemTodayTaskTime"
+        app:layout_constraintBottom_toBottomOf="@id/itemFolderName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/itemTodayTaskName" />
 
@@ -30,31 +30,36 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/itemFolderName"
-        style="@style/TextViewBlueNormal"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/background_folder_square"
-        android:backgroundTint="@color/orange_light"
-        android:paddingHorizontal="6dp"
-        android:text="@string/folder"
-        android:textColor="@color/orange_dark"
-        app:layout_constraintStart_toEndOf="@+id/itemTodayTaskTime"
-        app:layout_constraintTop_toTopOf="@+id/itemTodayTaskTime" />
-
-    <TextView
         android:id="@+id/itemTodayTaskTime"
         style="@style/TextViewBlueNormal"
         android:text="@string/task_time_placeholder"
+        android:textColor="@color/gray_dark"
         app:layout_constraintStart_toStartOf="@id/itemTodayTaskName"
         app:layout_constraintTop_toBottomOf="@id/itemTodayTaskName" />
 
-    <include
+    <TextView
+        android:id="@+id/itemFolderName"
+        style="@style/TextViewBlueNormal"
+        android:drawablePadding="2dp"
+        android:gravity="center"
+        android:text="@string/folder"
+        android:textColor="@color/gray_dark"
+        app:drawableStartCompat="@drawable/ic_folder_small"
+        app:drawableTint="@color/gray_dark"
+        app:layout_constraintEnd_toStartOf="@+id/itemTodayTaskTag"
+        app:layout_constraintStart_toStartOf="@id/itemTodayTaskTime"
+        app:layout_constraintTop_toBottomOf="@id/itemTodayTaskTime" />
+
+    <ImageView
         android:id="@+id/itemTodayTaskTag"
-        layout="@layout/item_tag_wide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        app:layout_constraintStart_toStartOf="@+id/itemTodayTaskTime"
-        app:layout_constraintTop_toBottomOf="@+id/itemTodayTaskTime" />
+        android:layout_marginStart="32dp"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_priority"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/itemFolderName"
+        app:layout_constraintTop_toBottomOf="@id/itemTodayTaskTime" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

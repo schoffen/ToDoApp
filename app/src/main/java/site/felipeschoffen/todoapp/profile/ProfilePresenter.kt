@@ -5,6 +5,7 @@ import kotlinx.coroutines.launch
 import site.felipeschoffen.todoapp.common.Constants
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.datas.Folder
+import site.felipeschoffen.todoapp.common.user.UserInformation
 
 class ProfilePresenter(private val view: Profile.View, private val coroutineScope: CoroutineScope) : Profile.Presenter {
     override fun getUserFolders() {
@@ -14,7 +15,7 @@ class ProfilePresenter(private val view: Profile.View, private val coroutineScop
             val foldersWithCreateFolderReference = mutableListOf<Folder>()
             foldersWithCreateFolderReference.addAll(folders)
 
-            foldersWithCreateFolderReference.add(Constants.createNewFolderReference)
+            foldersWithCreateFolderReference.add(Constants.CREATE_NEW_FOLDER_REFERENCE)
 
             view.setAdapterFolders(foldersWithCreateFolderReference)
         }
@@ -22,8 +23,8 @@ class ProfilePresenter(private val view: Profile.View, private val coroutineScop
 
     override fun getUserInfo() {
         view.displayUserInfo(
-            DataSource.userInfo.name,
-            DataSource.userInfo.email
+            UserInformation.getUserInfo().name,
+            UserInformation.getUserInfo().email
         )
     }
 }

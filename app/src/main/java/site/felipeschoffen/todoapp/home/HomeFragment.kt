@@ -10,14 +10,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import site.felipeschoffen.todoapp.R
+import site.felipeschoffen.todoapp.common.Constants
 import site.felipeschoffen.todoapp.common.adapters.ShortTaskAdapter
 import site.felipeschoffen.todoapp.common.adapters.TaskAdapterListener
 import site.felipeschoffen.todoapp.common.database.DataSource
+import site.felipeschoffen.todoapp.common.datas.Folder
 import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.common.datas.UserTask
+import site.felipeschoffen.todoapp.common.user.UserInformation
 import site.felipeschoffen.todoapp.databinding.FragmentHomeBinding
-import site.felipeschoffen.todoapp.folder.FolderActivity
-import site.felipeschoffen.todoapp.main.MainActivity
+import site.felipeschoffen.todoapp.folderTasks.FolderTasksActivity
 import java.util.Calendar
 
 class HomeFragment : Fragment(), Home.View, TaskAdapterListener {
@@ -44,12 +46,12 @@ class HomeFragment : Fragment(), Home.View, TaskAdapterListener {
         binding.homeTodayTaskLayout.homeTasksRV.adapter = adapter
 
         binding.homeTopLayout.homeWelcomeText.text =
-            getString(R.string.hello_message, DataSource.userInfo.name)
+            getString(R.string.hello_message, UserInformation.getUserInfo().name)
 
         presenter.getTodayTasks()
 
         binding.homeMyTasksLayout.homeCompleteContainer.completedContainerTaskBackground.setOnClickListener {
-            startActivity(Intent(requireContext(), FolderActivity::class.java))
+            openFolderActivity(Constants.COMPLETED_FOLDER)
         }
     }
 
@@ -103,5 +105,11 @@ class HomeFragment : Fragment(), Home.View, TaskAdapterListener {
 
     override fun onEditTask() {
         reloadTasks()
+    }
+
+    private fun openFolderActivity(folder: Folder) {
+        startActivity(Intent(requireContext(), FolderTasksActivity::class.java).apply {
+            putExtra(Constants.EXTRA_FOLDER_ID, folder.uid)
+        })
     }
 }

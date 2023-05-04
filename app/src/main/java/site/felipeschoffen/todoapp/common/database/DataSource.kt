@@ -1,93 +1,75 @@
 package site.felipeschoffen.todoapp.common.database
 
 import android.icu.util.Calendar
-import android.util.Log
-import com.google.firebase.FirebaseException
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.ktx.toObject
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import site.felipeschoffen.todoapp.common.Constants
 import site.felipeschoffen.todoapp.common.SelectedDate
 import site.felipeschoffen.todoapp.common.datas.*
-import site.felipeschoffen.todoapp.common.util.PriorityTag
+import site.felipeschoffen.todoapp.common.user.UserInfo
+import site.felipeschoffen.todoapp.common.user.UserInformation
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 object DataSource {
 
-    var currentUser = FirebaseAuth.getInstance().currentUser
-    var userInfo = UserInfo("", "", "")
+    private var currentUser = FirebaseAuth.getInstance().currentUser
+    var userInfo = UserInfo()
 
     suspend fun login(
         email: String,
         password: String,
-        coroutineScope: CoroutineScope
-    ): LoginResult = suspendCoroutine { continuation ->
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-            .addOnSuccessListener {
-                currentUser = FirebaseAuth.getInstance().currentUser
+    ): LoginResult {
+        return try {
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).await()
 
-                coroutineScope.launch {
-                    if (setUserInfo())
-                        continuation.resume(LoginResult(true, null))
-                    else
-                        continuation.resume(
-                            LoginResult(
-                                false,
-                                DatabaseError.FAILED_TO_SET_USER_INFO
-                            )
-                        )
-                }
+            if (setUserInfo())
+                LoginResult(true, null)
+
+            LoginResult(true, null)
+        } catch (e: Exception) {
+            val error = when (e) {
+                is FirebaseAuthInvalidCredentialsException -> DatabaseError.INVALID_CREDENTIALS
+                else -> null
             }
-            .addOnFailureListener {
-                try {
-                    throw it
-                } catch (e: FirebaseAuthInvalidCredentialsException) {
-                    continuation.resume(LoginResult(false, DatabaseError.INVALID_CREDENTIALS))
-                } catch (e: FirebaseException) {
-                    Log.d("FirebaseException", e.message.toString())
-                }
-            }
+
+            LoginResult(false, error)
+        }
     }
 
     suspend fun register(
         name: String,
         email: String,
-        password: String,
-        coroutineScope: CoroutineScope
-    ): RegisterResult = suspendCoroutine { continuation ->
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-            .addOnSuccessListener {
-                currentUser = FirebaseAuth.getInstance().currentUser
+        password: String
+    ): RegisterResult {
+        return try {
+            val userCreated =
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).await()
+            currentUser = userCreated.user
 
-                val user = hashMapOf(
-                    "name" to name,
-                    "uid" to currentUser?.uid
-                )
+            val user = UserInfo(
+                currentUser!!.uid,
+                name,
+                email
+            )
 
-                FirebaseFirestore.getInstance().collection("/users")
-                    .document(currentUser?.uid.toString())
-                    .set(user)
-                    .addOnSuccessListener {
-                        coroutineScope.launch {
-                            val isUserInfoSet = setUserInfo()
-                            if (isUserInfoSet)
-                                continuation.resume(RegisterResult(true, null))
-                            else
-                                continuation.resume(RegisterResult(false, null))
-                        }
-                    }
-            }
-            .addOnFailureListener {
-                continuation.resume(RegisterResult(false, null))
-                // tratar essa exception
-            }
+            FirebaseFirestore.getInstance().collection("/users")
+                .document(user.uid)
+                .set(user).await()
+
+            if (setUserInfo())
+                RegisterResult(true, null)
+            else
+                RegisterResult(false, null)
+        } catch (e: Exception) {
+            RegisterResult(false, null)
+        }
     }
 
     fun logout() {
@@ -95,111 +77,119 @@ object DataSource {
         currentUser = null
     }
 
-    suspend fun getSession(): Boolean = coroutineScope {
-        if (FirebaseAuth.getInstance().currentUser != null) {
+    suspend fun getSession(): Boolean {
+        return if (FirebaseAuth.getInstance().currentUser != null) {
             currentUser = FirebaseAuth.getInstance().currentUser
 
-            return@coroutineScope setUserInfo()
+            setUserInfo()
+            true
         } else {
-            return@coroutineScope false
+            false
         }
     }
 
-    private suspend fun setUserInfo(): Boolean = suspendCoroutine { continuation ->
-        val uid = currentUser?.uid.toString()
-        val email = currentUser?.email.toString()
-        var name = ""
+    private suspend fun getUserInfo(): UserInfo {
+        val userInfo = UserInfo()
 
-        FirebaseFirestore.getInstance().collection("/users").document(uid).get()
-            .addOnSuccessListener {
-                if (it != null) {
-                    name = it.data?.get("name").toString()
-                    userInfo.uid = uid
-                    userInfo.email = email
-                    userInfo.name = name
-                    continuation.resume(true)
-                } else
-                    continuation.resume(false)
-            }
+        FirebaseFirestore.getInstance().collection("/users")
+            .document(currentUser!!.uid).get().addOnSuccessListener {
+                userInfo.uid = it.data?.get("uid").toString()
+                userInfo.name = it.data?.get("name").toString()
+                userInfo.email = currentUser!!.email.toString()
+            }.await()
+
+        userInfo.foldersList.addAll(getFirebaseCurrentUserFolders())
+        userInfo.userTasksList.addAll(getFirebaseCurrentUserTasks())
+
+        return userInfo
     }
 
-    suspend fun createTag(priorityTag: PriorityTag): Boolean = suspendCoroutine { continuation ->
-        FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid)
-            .collection("tags")
-            .document(priorityTag.name).set(priorityTag)
-            .addOnSuccessListener { continuation.resume(true) }
-            .addOnFailureListener { continuation.resume(false) }
-    }
+    private suspend fun getFirebaseCurrentUserTasks(): List<UserTask> {
+        val userTasksList = mutableListOf<UserTask>()
 
-    suspend fun getUserTags(): List<PriorityTag> = suspendCoroutine { continuation ->
-        val priorityTags = mutableListOf<PriorityTag>()
-
-        FirebaseFirestore.getInstance().collection("/users").document(currentUser!!.uid)
-            .collection("tags").get()
+        FirebaseFirestore.getInstance().collection("/users")
+            .document(currentUser!!.uid).collection("tasks").get()
             .addOnSuccessListener { documents ->
-
-                documents.forEach { document ->
-                    val priorityTag = document.toObject(PriorityTag::class.java)
-                    priorityTags.add(priorityTag)
+                if (!documents.isEmpty) {
+                    documents.forEach { document ->
+                        userTasksList.add(document.toObject(UserTask::class.java))
+                    }
                 }
+            }.await()
 
-                continuation.resume(priorityTags)
-            }
+        return userTasksList
+    }
+
+    private suspend fun getFirebaseCurrentUserFolders(): List<Folder> {
+        val foldersList = mutableListOf<Folder>()
+
+        FirebaseFirestore.getInstance().collection("/users")
+            .document(currentUser!!.uid).collection("folders").get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    documents.forEach { document ->
+                        foldersList.add(document.toObject(Folder::class.java))
+                    }
+                }
+            }.await()
+
+        return foldersList
+    }
+
+    private suspend fun setUserInfo(): Boolean {
+        val userInfo = getUserInfo()
+
+        return run {
+            UserInformation.setUserInfo(userInfo)
+            true
+        }
     }
 
     suspend fun createTask(userTask: UserTask): Boolean = suspendCoroutine { continuation ->
         currentUserTasksRef()
             .document(userTask.uid).set(userTask)
-            .addOnSuccessListener { continuation.resume(true) }
-            .addOnFailureListener { continuation.resume(false) }
-    }
-
-    suspend fun getTasksByDate(selectedDate: SelectedDate): List<UserTask> =
-        suspendCoroutine { continuation ->
-            val userTaskList = mutableListOf<UserTask>()
-
-            currentUserTasksRef().get()
-                .addOnSuccessListener { documents ->
-                    if (!documents.isEmpty) {
-                        documents.forEach { document ->
-                            document.getTimestamp("timestamp")?.run {
-                                if (checkFirebaseTimestampEqualsDate(this, selectedDate)) {
-                                    userTaskList.add(queryDocumentSnapShotToUserTask(document))
-                                }
-                            }
-                        }
-                    }
-                    continuation.resume(userTaskList)
-                }
-                .addOnFailureListener { continuation.resume(userTaskList) }
-        }
-
-    suspend fun deleteTask(taskUID: String): Boolean = suspendCoroutine { continuation ->
-        currentUserTasksRef().document(taskUID).delete()
-            .addOnSuccessListener { continuation.resume(true) }
-            .addOnFailureListener { continuation.resume(false) }
-    }
-
-    suspend fun updateTaskStatus(taskUID: String, taskStatus: TaskStatus): Boolean =
-        suspendCoroutine { continuation ->
-            currentUserTasksRef().document(taskUID).update(
-                hashMapOf<String, Any>("status" to taskStatus)
-            ).addOnSuccessListener {
+            .addOnSuccessListener {
+                UserInformation.addNewUserTask(userTask)
                 continuation.resume(true)
             }
+            .addOnFailureListener { continuation.resume(false) }
+    }
+
+    fun getTasksByDate(selectedDate: SelectedDate): List<UserTask> {
+        return UserInformation.getUserInfo().userTasksList.filter { userTask ->
+            checkFirebaseTimestampEqualsDate(userTask.timestamp, selectedDate)
+        }
+    }
+
+    suspend fun deleteTask(userTaskID: String): Boolean = suspendCoroutine { continuation ->
+        currentUserTasksRef().document(userTaskID).delete()
+            .addOnSuccessListener {
+                UserInformation.deleteUserTaskByID(userTaskID)
+                continuation.resume(true)
+            }
+            .addOnFailureListener { continuation.resume(false) }
+    }
+
+    suspend fun updateTaskStatus(taskUID: String, newTaskStatus: TaskStatus): Boolean =
+        suspendCoroutine { continuation ->
+            currentUserTasksRef().document(taskUID)
+                .update(hashMapOf<String, Any>("status" to newTaskStatus))
+                .addOnSuccessListener {
+                    UserInformation.updateUserTaskStatusByID(taskUID, newTaskStatus)
+                    continuation.resume(true)
+                }
                 .addOnFailureListener {
                     continuation.resume(false)
                 }
         }
-    
-    suspend fun editTask(userTask: UserTask): Boolean = suspendCoroutine { continuation ->  
+
+    suspend fun editTask(userTask: UserTask): Boolean = suspendCoroutine { continuation ->
         currentUserTasksRef().document(userTask.uid).set(userTask)
-            .addOnSuccessListener { continuation.resume(true) }
+            .addOnSuccessListener {
+                UserInformation.editTask(userTask)
+                continuation.resume(true)
+            }
             .addOnFailureListener { continuation.resume(false) }
-    }
-    
-    private fun queryDocumentSnapShotToUserTask(document: QueryDocumentSnapshot): UserTask {
-        return document.toObject(UserTask::class.java)
     }
 
     private fun checkFirebaseTimestampEqualsDate(
@@ -233,25 +223,18 @@ object DataSource {
 
     suspend fun addFolder(folder: Folder): Boolean = suspendCoroutine { continuation ->
         currentUserFoldersRef().document(folder.uid).set(folder)
-            .addOnSuccessListener { continuation.resume(true) }
+            .addOnSuccessListener {
+                UserInformation.addFolderToFoldersList(folder)
+                continuation.resume(true)
+            }
             .addOnFailureListener { continuation.resume(false) }
     }
 
-    suspend fun getFolders(): List<Folder> = suspendCoroutine { continuation ->
-        val folders = mutableListOf<Folder>()
-
-        currentUserFoldersRef().get()
-            .addOnSuccessListener { documents ->
-                if (!documents.isEmpty) {
-                    documents.forEach { document ->
-                        folders.add(document.toObject(Folder::class.java))
-                    }
-                }
-                continuation.resume(folders)
-            }
+    fun getFolders(): List<Folder> {
+        return UserInformation.getFoldersList()
     }
 
-    suspend fun deleteFolder(folder: Folder): Boolean = suspendCoroutine { continuation ->
+    suspend fun deleteFolderAndTasksInFolder(folder: Folder): Boolean = suspendCoroutine { continuation ->
         currentUserFoldersRef().document(folder.uid).delete()
             .addOnSuccessListener {
                 currentUserTasksRef().get()
@@ -262,6 +245,8 @@ object DataSource {
                                 document.reference.delete()
                             }
                         }
+
+                        UserInformation.deleteFolderAndTasksInFolderByID(folder.uid)
 
                         continuation.resume(true)
                     }

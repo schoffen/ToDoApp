@@ -16,22 +16,18 @@ class TasksPresenter(override val view: Tasks.View, private val coroutineScope: 
 
     override fun getSelectedTasks(selectedDate: SelectedDate) {
         view.showProgress(true)
+        val userTasksList = DataSource.getTasksByDate(selectedDate)
 
-        coroutineScope.launch {
-            val userTasksList = DataSource.getTasksByDate(selectedDate)
-
-            if (userTasksList.isNotEmpty()) {
-                Log.d("scope", "lista cheia")
-                currentUserTasks = userTasksList
-                view.showProgress(false)
-                view.displayTasks(sortTaskByHour(userTasksList))
-            } else {
-                Log.d("scope", "lista vazia")
-                currentUserTasks = emptyList()
-                view.showProgress(false)
-                view.displayEmptyTasks()
-            }
+        if (userTasksList.isNotEmpty()) {
+            currentUserTasks = userTasksList
+            view.showProgress(false)
+            view.displayTasks(sortTaskByHour(userTasksList))
+        } else {
+            currentUserTasks = emptyList()
+            view.showProgress(false)
+            view.displayEmptyTasks()
         }
+
     }
 
     override fun deleteTask(taskUID: String) {
@@ -40,8 +36,7 @@ class TasksPresenter(override val view: Tasks.View, private val coroutineScope: 
             if (deleted) {
                 view.showSnackbar("Tarefa deletada")
                 view.reloadTasks()
-            }
-            else {
+            } else {
                 view.showSnackbar("Falha ao deletar")
             }
         }

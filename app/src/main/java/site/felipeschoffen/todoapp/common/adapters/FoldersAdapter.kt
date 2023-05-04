@@ -1,7 +1,6 @@
 package site.felipeschoffen.todoapp.common.adapters
 
 import android.content.res.ColorStateList
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.ColorRes
@@ -13,7 +12,6 @@ import kotlinx.coroutines.CoroutineScope
 import site.felipeschoffen.todoapp.R
 import site.felipeschoffen.todoapp.common.Constants
 import site.felipeschoffen.todoapp.common.datas.Folder
-import site.felipeschoffen.todoapp.common.datas.TaskStatus
 import site.felipeschoffen.todoapp.common.dialogs.CreateFolderCallback
 import site.felipeschoffen.todoapp.common.dialogs.CreateFolderDialog
 import site.felipeschoffen.todoapp.common.dialogs.DeleteFolderCallback
@@ -50,13 +48,13 @@ class FoldersAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(folder: Folder) {
-            if (folder.uid == Constants.createNewFolderReference.uid) {
+            if (folder.uid == Constants.CREATE_NEW_FOLDER_REFERENCE.uid) {
                 binding.folderIconIV.setImageResource(R.drawable.ic_plus)
                 binding.folderNameText.text =
                     this.itemView.context.getString(R.string.create_folder)
 
                 binding.folderCL.setOnClickListener {
-                    if (folder.uid == Constants.createNewFolderReference.uid) {
+                    if (folder.uid == Constants.CREATE_NEW_FOLDER_REFERENCE.uid) {
                         openCreateFolderDialog()
                     }
                 }
@@ -119,10 +117,10 @@ class FoldersAdapter(
         @ColorRes
         private fun selectColorByString(folderColor: String): Pair<Int, Int> {
             return when (folderColor) {
-                Constants.colorOrange -> Pair(R.color.orange_dark, R.color.orange_light)
-                Constants.colorRed -> Pair(R.color.red_dark, R.color.red_light)
-                Constants.colorPurple -> Pair(R.color.purple_dark, R.color.purple_light)
-                Constants.colorGreen -> Pair(R.color.green_dark, R.color.green_light)
+                Constants.COLOR_ORANGE -> Pair(R.color.orange_dark, R.color.orange_light)
+                Constants.COLOR_RED -> Pair(R.color.red_dark, R.color.red_light)
+                Constants.COLOR_PURPLE -> Pair(R.color.purple_dark, R.color.purple_light)
+                Constants.COLOR_GREEN -> Pair(R.color.green_dark, R.color.green_light)
                 else -> Pair(R.color.orange_dark, R.color.orange_light)
             }
         }

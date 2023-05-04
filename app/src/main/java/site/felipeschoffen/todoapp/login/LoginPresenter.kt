@@ -16,7 +16,7 @@ class LoginPresenter(override val view: Login.View, private val coroutineScope: 
 
         if (isEmailValid && isPasswordValid) {
             coroutineScope.launch {
-                val loginResult = DataSource.login(email, password, coroutineScope)
+                val loginResult = DataSource.login(email, password)
 
                 if (loginResult.success)
                     view.goToMainScreen()

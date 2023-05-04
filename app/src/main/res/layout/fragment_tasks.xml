@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
-        app:boxBackgroundColor="@color/search_bar_background"
+        app:boxBackgroundColor="@color/gray_background"
         app:boxBackgroundMode="outline"
         app:boxCornerRadiusBottomEnd="15dp"
         app:boxCornerRadiusBottomStart="15dp"

@@ -22,4 +22,19 @@
         <item>Restaurar</item>
         <item>Deletar</item>
     </string-array>
+
+    <array name="months">
+        <item>JAN</item>
+        <item>FEV</item>
+        <item>MAR</item>
+        <item>ABR</item>
+        <item>MAI</item>
+        <item>JUN</item>
+        <item>JUL</item>
+        <item>AGO</item>
+        <item>SET</item>
+        <item>OUT</item>
+        <item>NOV</item>
+        <item>DEZ</item>
+    </array>
 </resources>

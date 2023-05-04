@@ -9,12 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import site.felipeschoffen.todoapp.common.Callback
+import site.felipeschoffen.todoapp.common.Constants
 import site.felipeschoffen.todoapp.common.util.DateTimeUtils
 import site.felipeschoffen.todoapp.common.SelectedDate
 import site.felipeschoffen.todoapp.common.SelectedTime
@@ -32,7 +34,7 @@ class CreateTaskDialog(
     private val coroutineScope: CoroutineScope
 ) : DialogFragment() {
     private lateinit var binding: DialogCreateTaskBinding
-    private val folders = mutableListOf<Folder>(Folder("null", "Nenhum (padrão)"))
+    private val folders = mutableListOf<Folder>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +42,7 @@ class CreateTaskDialog(
         savedInstanceState: Bundle?
     ): View {
         binding = DialogCreateTaskBinding.inflate(layoutInflater, container, false)
+
         return binding.root
     }
 
@@ -170,15 +173,14 @@ class CreateTaskDialog(
     }
 
     private fun loadFoldersSpinner() {
-        coroutineScope.launch {
-            folders.addAll(DataSource.getFolders())
+        folders.clear()
+        folders.addAll(DataSource.getFolders())
+        folders.add(0, Constants.NONE_FOLDER_SELECTED_REFERENCE)
 
-            val foldersNameList = folders.map { it.name }
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, foldersNameList)
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, folders.map { it.name })
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-            binding.createFoldersSpinner.adapter = adapter
-        }
+        binding.createFoldersSpinner.adapter = adapter
     }
 
     private fun getSelectedTag(): PriorityTag {

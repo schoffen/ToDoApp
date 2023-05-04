@@ -15,7 +15,7 @@ class RegisterPresenter(override val view: Register.View, private val coroutineS
 
         if (validateData(name, email, password, confirmPassword)) {
             coroutineScope.launch {
-                val registerResult = DataSource.register(name, email, password, coroutineScope)
+                val registerResult = DataSource.register(name, email, password)
                 if (registerResult.success) {
                     view.goToMainScreen()
                     view.displayRegisterButtonProgress(false)

@@ -43,11 +43,11 @@ class CreateFolderDialog(
             val uid = UUID.randomUUID().toString()
             val folderName = binding.newFolderEditText.text.toString()
             val folderColor: String = when (binding.newFolderRadioGroup.checkedRadioButtonId) {
-                binding.newFolderGreenRadio.id -> Constants.colorGreen
-                binding.newFolderOrangeRadio.id -> Constants.colorOrange
-                binding.newFolderRedRadio.id -> Constants.colorRed
-                binding.newFolderPurpleRadio.id -> Constants.colorPurple
-                else -> Constants.colorOrange
+                binding.newFolderGreenRadio.id -> Constants.COLOR_GREEN
+                binding.newFolderOrangeRadio.id -> Constants.COLOR_ORANGE
+                binding.newFolderRedRadio.id -> Constants.COLOR_RED
+                binding.newFolderPurpleRadio.id -> Constants.COLOR_PURPLE
+                else -> Constants.COLOR_ORANGE
             }
 
             if (folderName.isNotEmpty()) {

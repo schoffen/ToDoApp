@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/canceledContainerTaskBackground"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="155dp"
+        android:layout_height="152dp"
         android:background="@drawable/selector_background_ongoing_tasks"
         android:clickable="true"
         android:contentDescription="@null"

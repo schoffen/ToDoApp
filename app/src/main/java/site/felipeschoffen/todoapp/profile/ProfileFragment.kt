@@ -45,11 +45,10 @@ class ProfileFragment : Fragment(), Profile.View {
         presenter.getUserFolders()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun setAdapterFolders(folders: List<Folder>) {
         adapter.folders.clear()
         adapter.folders.addAll(folders)
-        adapter.notifyDataSetChanged()
+        adapter.notifyItemRangeInserted(0, folders.size)
     }
 
     override fun displayUserInfo(name: String, email: String) {
