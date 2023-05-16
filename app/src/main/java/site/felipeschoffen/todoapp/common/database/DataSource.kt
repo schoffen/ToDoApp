@@ -253,4 +253,12 @@ object DataSource {
             }
             .addOnFailureListener { continuation.resume(false) }
     }
+
+    fun getFolderInfo(folderID: String): Folder {
+        return UserInformation.getFoldersList().first { it.uid == folderID }
+    }
+
+    fun getTasksByFolder(folder: Folder): List<UserTask> {
+        return UserInformation.getUserTasks().filter { it.folder?.uid == folder.uid }
+    }
 }

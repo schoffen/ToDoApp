@@ -7,10 +7,10 @@
     android:layout_margin="8dp">
 
     <TextView
-        android:textColor="@color/gray_dark"
         android:id="@+id/folderDateText"
         style="@style/TextViewBlueNormal"
         android:text="@string/folder_date"
+        android:textColor="@color/gray_dark"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

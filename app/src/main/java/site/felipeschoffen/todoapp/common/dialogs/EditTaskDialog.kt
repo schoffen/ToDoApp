@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentManager
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import site.felipeschoffen.todoapp.common.Callback
+import site.felipeschoffen.todoapp.common.util.Callback
 import site.felipeschoffen.todoapp.common.util.DateTimeUtils
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.util.PriorityTag

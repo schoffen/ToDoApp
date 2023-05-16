@@ -2,7 +2,6 @@ package site.felipeschoffen.todoapp.common.adapters
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.annotation.ColorRes
@@ -12,7 +11,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import site.felipeschoffen.todoapp.R
-import site.felipeschoffen.todoapp.common.Callback
+import site.felipeschoffen.todoapp.common.util.Callback
 import site.felipeschoffen.todoapp.common.Constants
 import site.felipeschoffen.todoapp.common.util.DateTimeUtils.formatTime
 import site.felipeschoffen.todoapp.common.datas.Folder

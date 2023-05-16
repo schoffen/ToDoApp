@@ -94,6 +94,7 @@
             android:src="@drawable/ic_calendar" />
 
         <TextView
+            android:id="@+id/folderSelectedMonthAndYearText"
             style="@style/TextViewBlueSubTitle"
             android:layout_marginStart="8dp"
             android:text="@string/folder_date_placeholder" />
@@ -104,12 +105,11 @@
         android:id="@+id/folderSV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/folderCalendarButton"
         app:layout_constraintTop_toBottomOf="@id/folderCalendarButton">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:scrollbars="none"
             android:id="@+id/folderMainRV"
             android:layout_width="wrap_content"
             android:layout_height="0dp"

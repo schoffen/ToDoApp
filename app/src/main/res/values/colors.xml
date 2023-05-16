@@ -12,7 +12,7 @@
 
     <color name="blue_text">#12175E</color>
 
-    <color name="blue_full">#46C7FE</color>
+    <color name="blue_full">#45C1F4</color>
     <color name="blue_alpha">#EBF9FF</color>
 
     <color name="purple_full">#8F99EB</color>
@@ -21,7 +21,7 @@
     <color name="red_full">#E88B8C</color>
     <color name="red_alpha">#FFF2F2</color>
 
-    <color name="green_full">#67EF8D</color>
+    <color name="green_full">#65EA8A</color>
     <color name="green_alpha">#ECFDF1</color>
 
     <color name="ic_gray">#A4A4A6</color>

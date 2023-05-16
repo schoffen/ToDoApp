@@ -15,21 +15,7 @@ object DateTimeUtils {
     fun dateToString(day: Int, month: Int, year: Int): String {
         val dayString = if (day < 10) "0$day" else day
 
-        val monthString = when (month) {
-            0 -> "JAN"
-            1 -> "FEV"
-            2 -> "MAR"
-            3 -> "ABR"
-            4 -> "MAI"
-            5 -> "JUN"
-            6 -> "JUL"
-            7 -> "AGO"
-            8 -> "SET"
-            9 -> "OUT"
-            10 -> "NOV"
-            11 -> "DEZ"
-            else -> ""
-        }
+        val monthString = monthIntToString(month)
 
         return "$dayString $monthString $year"
     }
@@ -62,7 +48,19 @@ object DateTimeUtils {
             else
                 calendar.get(Calendar.DAY_OF_MONTH)
 
-        val month = when (calendar.get(Calendar.MONTH)) {
+        val month = monthIntToString(calendar.get(Calendar.MONTH))
+
+        val year = calendar.get(Calendar.YEAR)
+
+        return "$day $month $year"
+    }
+
+    fun formatMonthAndYearIntToString(month: Int, year: Int): String {
+        return "${monthIntToString(month)} $year"
+    }
+
+    private fun monthIntToString(month: Int): String {
+        return when (month) {
             0 -> "JAN"
             1 -> "FEV"
             2 -> "MAR"
@@ -77,9 +75,5 @@ object DateTimeUtils {
             11 -> "DEZ"
             else -> ""
         }
-
-        val year = calendar.get(Calendar.YEAR)
-
-        return "$day $month $year"
     }
 }

@@ -3,7 +3,6 @@ package site.felipeschoffen.todoapp.register
 import android.util.Patterns
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import site.felipeschoffen.todoapp.common.Callback
 import site.felipeschoffen.todoapp.common.Constants
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.InputErrors

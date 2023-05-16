@@ -12,7 +12,7 @@ import site.felipeschoffen.todoapp.databinding.ItemTaskDayHourBinding
 import site.felipeschoffen.todoapp.tasks.TasksByHour
 
 class TasksFragmentAdapter(
-    var tasksByHour: List<TasksByHour>,
+    private var tasksByHour: List<TasksByHour>,
     val listener: TaskAdapterListener,
     private val supportFragmentManager: FragmentManager,
     private val coroutineScope: CoroutineScope

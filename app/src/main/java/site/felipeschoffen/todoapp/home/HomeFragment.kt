@@ -53,6 +53,18 @@ class HomeFragment : Fragment(), Home.View, TaskAdapterListener {
         binding.homeMyTasksLayout.homeCompleteContainer.completedContainerTaskBackground.setOnClickListener {
             openFolderActivity(Constants.COMPLETED_FOLDER)
         }
+
+        binding.homeMyTasksLayout.homeCanceledContainer.canceledContainerTaskBackground.setOnClickListener {
+            openFolderActivity(Constants.CANCELED_FOLDER)
+        }
+
+        binding.homeMyTasksLayout.homeOnGoingContainer.canceledContainerTaskAmountOnGoingText.setOnClickListener {
+            openFolderActivity(Constants.ON_GOING_FOLDER)
+        }
+
+        binding.homeMyTasksLayout.homePendingContainer.canceledContainerTaskBackground.setOnClickListener {
+            openFolderActivity(Constants.PENDING_FOLDER)
+        }
     }
 
     override fun showSnackbar(message: String) {
@@ -71,17 +83,7 @@ class HomeFragment : Fragment(), Home.View, TaskAdapterListener {
         binding.homeTodayTaskLayout.homeNoTaskDisplayText.visibility = View.GONE
         binding.homeTodayTaskLayout.homeTasksRV.visibility = View.VISIBLE
 
-        adapter.userTasks = userTasks.sortedWith(
-            compareBy<UserTask> {
-                val calendar = Calendar.getInstance()
-                calendar.time = it.timestamp.toDate()
-                calendar.get(Calendar.HOUR_OF_DAY)
-            }.thenBy {
-                val calendar = Calendar.getInstance()
-                calendar.time = it.timestamp.toDate()
-                calendar.get(Calendar.MINUTE)
-            }
-        )
+        adapter.userTasks = userTasks.sortedBy { it.timestamp.toDate() }
 
         adapter.notifyDataSetChanged()
     }

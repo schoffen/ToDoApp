@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.fragment.app.FragmentManager
 import kotlinx.coroutines.CoroutineScope
 import site.felipeschoffen.todoapp.R
-import site.felipeschoffen.todoapp.common.Callback
+import site.felipeschoffen.todoapp.common.util.Callback
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.dialogs.CreateTaskDialog
 

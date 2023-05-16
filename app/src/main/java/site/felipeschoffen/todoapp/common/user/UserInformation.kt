@@ -18,6 +18,10 @@ object UserInformation {
         return userInfo.foldersList
     }
 
+    fun getUserTasks(): List<UserTask> {
+        return userInfo.userTasksList
+    }
+
     fun setUserInfo(userInfo: UserInfo) {
         this.userInfo = userInfo
         Log.d("User", userInfo.userTasksList.toString())

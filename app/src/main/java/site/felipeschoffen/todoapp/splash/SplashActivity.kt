@@ -3,20 +3,14 @@ package site.felipeschoffen.todoapp.splash
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
-import site.felipeschoffen.todoapp.R
-import site.felipeschoffen.todoapp.common.Callback
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.databinding.ActivitySplashBinding
 import site.felipeschoffen.todoapp.login.LoginActivity
 import site.felipeschoffen.todoapp.main.MainActivity
 import site.felipeschoffen.todoapp.register.RegisterActivity
-import java.util.Timer
-import kotlin.concurrent.timerTask
-import kotlin.system.exitProcess
 
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding

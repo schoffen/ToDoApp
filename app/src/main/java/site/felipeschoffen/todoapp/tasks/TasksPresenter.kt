@@ -1,9 +1,7 @@
 package site.felipeschoffen.todoapp.tasks
 
-import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import site.felipeschoffen.todoapp.common.Callback
 import site.felipeschoffen.todoapp.common.SelectedDate
 import site.felipeschoffen.todoapp.common.database.DataSource
 import site.felipeschoffen.todoapp.common.datas.TaskStatus
